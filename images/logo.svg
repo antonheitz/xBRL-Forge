@@ -1,0 +1,65 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon -->
+  <polygon 
+    points="200,0 27,100 27,300 200,400 200,370 53,285 53,115 200,30" 
+    fill="gray" 
+  />
+  <polygon 
+    points="200,400 373,300 373,100 200,0 200,30 347,115 347,285 200,370" 
+    fill="gray" 
+  />
+  <!-- Anvil -->
+  <polygon 
+    points="
+    130,125
+    130,170
+    60,125" 
+    fill="gray" 
+    stroke="black"
+  />
+  <polygon 
+    points="
+    140,125
+    140,175
+    130,175
+    130,125"
+    fill="gray" 
+    stroke="black"
+  />
+  <polygon 
+    points="
+    129.5,125.5
+    129.5,135
+    62,125.5" 
+    fill="darkgray" 
+  />
+  <polygon 
+    points="
+    129.5,160
+    129.5,169.5
+    61.5,125.5" 
+    fill="darkgray" 
+  />
+  <polygon 
+    points="
+    340,125
+    340,130 
+    240,190 
+    230,215 
+    240,240 
+    275,270 
+    275,285
+    250,285
+    200,270
+    150,285 
+    125,285 
+    125,270 
+    160,240 
+    170,215 
+    160,190 
+    142,179
+    142,125" 
+    fill="gray" 
+    stroke="black"
+  />
+</svg>
