@@ -17,6 +17,9 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent"
 ]
+dependencies = [
+    "lxml>=5.2.1"
+]
 
 [project.urls]
 Homepage = "https://github.com/antonheitz/xBRL-Forge"

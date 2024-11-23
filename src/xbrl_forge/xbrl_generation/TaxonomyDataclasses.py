@@ -10,10 +10,10 @@ class TaxonomyDocument:
     prefix: str
     metadata: 'TaxonomyMetadata'
     namespaces: Dict[str, str]
-    namespace_imports: Dict[str, str]
+    schema_imports: Dict[str, str]
     elements: List['TaxonomyElement']
     linkbase_imports: Dict[str, str]
-    definition_arcroles: Dict[str, str]
+    arc_roles_import: Dict[str, str]
     roles: List['TaxonomyRole']
     labels: Dict[str, List['LabelElement']]
 
@@ -39,10 +39,10 @@ class TaxonomyDocument:
             prefix=data.get("prefix"), 
             metadata=TaxonomyMetadata.from_dict(data.get("metadata", {})),
             namespaces=data.get("namespaces", {}),
-            namespace_imports=data.get("namespace_imports", {}),
+            schema_imports=data.get("schema_imports", {}),
             elements=[TaxonomyElement.from_dict(element_data) for element_data in data.get("elements", [])],
             linkbase_imports=data.get("linkbase_imports", {}),
-            definition_arcroles=data.get("definition_arcroles", {}),
+            arc_roles_import=data.get("arc_roles_import", {}),
             roles=[TaxonomyRole.from_dict(role_data) for role_data in data.get("roles", [])],
             labels={labels_lang:[LabelElement.from_dict(label_element) for label_element in labels_data] for labels_lang, labels_data in data.get("labels", {}).items()}
         )
@@ -52,10 +52,10 @@ class TaxonomyDocument:
             "prefix": cls.prefix,
             "metadata": cls.metadata.to_dict(),
             "namespaces": cls.namespaces,
-            "namespace_imports": cls.namespace_imports,
+            "schema_imports": cls.schema_imports,
             "linkbase_imports": cls.linkbase_imports,
             "elements": [element.to_dict() for element in cls.elements],
-            "definition_arcroles": cls.definition_arcroles,
+            "arc_roles_import": cls.arc_roles_import,
             "roles": [role.to_dict() for role in cls.roles],
             "labels": {labels_lang:[label_element.to_dict() for label_element in labels_data] for labels_lang, labels_data in cls.labels.items()}
         }
@@ -196,6 +196,7 @@ class TaxonomyRole:
 class LinkbaseElement:
     element_id: str
     schema_location: str
+    arc_role: str
     children: List['LinkbaseElement']
 
     @classmethod
@@ -203,6 +204,7 @@ class LinkbaseElement:
         return cls(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
+            arc_role=data.get("arc_role"),
             children=[LinkbaseElement.from_dict(child) for child in data.get("children", [])]
         )
     
@@ -210,6 +212,7 @@ class LinkbaseElement:
         return {
             "element_id": cls.element_id,
             "schema_location": cls.schema_location,
+            "arc_role": cls.arc_role,
             "children": [child.to_dict() for child in cls.children]
         }
     
@@ -224,6 +227,7 @@ class PresentationElement(LinkbaseElement):
         return cls(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
+            arc_role=data.get("arc_role"),
             order=data.get("order", 0),
             preferred_label=data.get("preferred_label"),
             children=[PresentationElement.from_dict(child) for child in data.get("children", [])]
@@ -233,6 +237,7 @@ class PresentationElement(LinkbaseElement):
         return {
             "element_id": cls.element_id,
             "schema_location": cls.schema_location,
+            "arc_role": cls.arc_role,
             "order": cls.order,
             "preferred_label": cls.preferred_label,
             "children": [child.to_dict() for child in cls.children]
@@ -248,6 +253,7 @@ class CalculationElement(LinkbaseElement):
         return cls(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
+            arc_role=data.get("arc_role"),
             weight=data.get("weight", 0),
             children=[CalculationElement.from_dict(child) for child in data.get("children", [])]
         )
@@ -256,13 +262,13 @@ class CalculationElement(LinkbaseElement):
         return {
             "element_id": cls.element_id,
             "schema_location": cls.schema_location,
+            "arc_role": cls.arc_role,
             "weight": cls.weight,
             "children": [child.to_dict() for child in cls.children]
         }
     
 @dataclass
 class DefinitionElement(LinkbaseElement):
-    arcrole: str
     context_element: str
     closed: bool
     children: List['DefinitionElement']
@@ -272,7 +278,7 @@ class DefinitionElement(LinkbaseElement):
         return cls(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
-            arcrole=data.get("arcrole"),
+            arc_role=data.get("arc_role"),
             context_element=data.get("context_element"),
             closed=data.get("closed"),
             children=[DefinitionElement.from_dict(child) for child in data.get("children", [])]
@@ -282,7 +288,7 @@ class DefinitionElement(LinkbaseElement):
         return {
             "element_id": cls.element_id,
             "schema_location": cls.schema_location,
-            "arcrole": cls.arcrole,
+            "arc_role": cls.arc_role,
             "context_element": cls.context_element,
             "closed": cls.closed,
             "children": [child.to_dict() for child in cls.children]

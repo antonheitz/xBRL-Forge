@@ -1,6 +1,6 @@
 import json
 
-from xbrl_forge import create_xbrl
+from src.xbrl_forge import create_xbrl
 
 with open("examples/stylesheet.css", "r") as f:
     style_data = f.read()

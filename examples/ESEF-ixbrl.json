@@ -25,7 +25,7 @@
             "http://www.xbrl.org/2003/instance": "xbrli",
             "http://www.xbrl.org/dtr/type/non-numeric": "nonum"
         },
-        "namespace_imports": {
+        "schema_imports": {
             "http://www.xbrl.org/2003/instance": "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd",
             "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
             "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd",
@@ -106,7 +106,7 @@
             "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-lab-de.xml": "http://www.xbrl.org/2003/role/labelLinkbaseRef",
             "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-gen-de.xml": null
         },
-        "definition_arcroles": {
+        "arc_roles_import": {
             "http://xbrl.org/int/dim/arcrole/domain-member": "http://www.xbrl.org/2005/xbrldt-2005.xsd#domain-member",
             "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd#wider-narrower",
             "http://xbrl.org/int/dim/arcrole/dimension-domain": "http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-domain",
@@ -126,16 +126,19 @@
                             {
                                 "element_id": "CompleteSection",
                                 "order": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                 "children": []
                             },
                             {
                                 "element_id": "FirstPart",
                                 "order": 2,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                 "children": []
                             },
                             {
                                 "element_id": "PartlyFirstPartAndSecondPart",
                                 "order": 3,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                 "children": []
                             }
                         ]
@@ -157,21 +160,25 @@
                                 "element_id": "ifrs-full_StatementOfChangesInEquityTable",
                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                 "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                 "children": [
                                     {
                                         "element_id": "ifrs-full_ComponentsOfEquityAxis",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                         "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                         "children": [
                                             {
                                                 "element_id": "ifrs-full_EquityMember",
                                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                                 "order": 0,
+                                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                                 "children": [
                                                     {
                                                         "element_id": "ifrs-full_NoncontrollingInterestsMember",
                                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                                         "order": 0,
+                                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                                         "children": []
                                                     }
                                                 ]
@@ -184,22 +191,26 @@
                                 "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                 "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                 "children": [
                                     {
                                         "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                         "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                         "children": []
                                     },
                                     {
                                         "element_id": "InvestmentPropertyExtension",
                                         "order": 1,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                         "children": []
                                     },
                                     {
                                         "element_id": "ifrs-full_PropertyPlantAndEquipment",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                         "order": 2,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
                                         "preferred_label": "http://www.xbrl.org/2003/role/verboseLabel",
                                         "children": []
                                     }
@@ -212,29 +223,28 @@
                     {
                         "element_id": "ifrs-full_StatementOfChangesInEquityAbstract",
                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                        "arcrole": null,
                         "children": [
                             {
                                 "element_id": "ifrs-full_StatementOfChangesInEquityTable",
                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                "arcrole": "http://xbrl.org/int/dim/arcrole/all",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/all",
                                 "context_element": "scenario",
                                 "closed": true,
                                 "children": [
                                     {
                                         "element_id": "ifrs-full_ComponentsOfEquityAxis",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                        "arcrole": "http://xbrl.org/int/dim/arcrole/hypercube-dimension",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/hypercube-dimension",
                                         "children": [
                                             {
                                                 "element_id": "ifrs-full_EquityMember",
                                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                                "arcrole": "http://xbrl.org/int/dim/arcrole/dimension-domain",
+                                                "arc_role": "http://xbrl.org/int/dim/arcrole/dimension-domain",
                                                 "children": [
                                                     {
                                                         "element_id": "ifrs-full_NoncontrollingInterestsMember",
                                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                                        "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                                         "children": []
                                                     }
                                                 ]
@@ -246,23 +256,23 @@
                             {
                                 "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                 "children": [
                                     {
                                         "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                        "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                         "children": []
                                     },
                                     {
                                         "element_id": "InvestmentPropertyExtension",
-                                        "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                         "children": []
                                     },
                                     {
                                         "element_id": "ifrs-full_PropertyPlantAndEquipment",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                        "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                         "children": []
                                     }
                                 ]
@@ -280,11 +290,13 @@
                                 "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
                                 "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
                                 "weight": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
                                 "children": []
                             },
                             {
                                 "element_id": "InvestmentPropertyExtension",
                                 "weight": -1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
                                 "children": []
                             }
                         ]
@@ -301,21 +313,21 @@
                     {
                         "element_id": "esef_cor_LineItemsNotDimensionallyQualifiedPlaceholder",
                         "schema_location": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
-                        "arcrole": null,
+                        "arc_role": null,
                         "children": [
                             {
                                 "element_id": "CompleteSection",
-                                "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                 "children": []
                             },
                             {
                                 "element_id": "FirstPart",
-                                "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                 "children": []
                             },
                             {
                                 "element_id": "PartlyFirstPartAndSecondPart",
-                                "arcrole": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
                                 "children": []
                             }
                         ]
@@ -331,16 +343,15 @@
                     {
                         "element_id": "ifrs-full_PropertyPlantAndEquipment",
                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                        "arcrole": null,
                         "children": [
                             {
                                 "element_id": "InvestmentPropertyExtension",
-                                "arcrole": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
                                 "children": [
                                     {
                                         "element_id": "ifrs-full_InvestmentProperty",
                                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                                        "arcrole": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                        "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
                                         "children": []
                                     }
                                 ]
@@ -350,21 +361,20 @@
                     {
                         "element_id": "ifrs-full_DisclosureOfAccountingJudgementsAndEstimatesExplanatory",
                         "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                        "arcrole": null,
                         "children": [
                             {
                                 "element_id": "CompleteSection",
-                                "arcrole": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
                                 "children": []
                             },
                             {
                                 "element_id": "FirstPart",
-                                "arcrole": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
                                 "children": []
                             },
                             {
                                 "element_id": "PartlyFirstPartAndSecondPart",
-                                "arcrole": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
                                 "children": []
                             }
                         ]
