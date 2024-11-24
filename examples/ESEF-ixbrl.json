@@ -451,6 +451,7 @@
         {
             "name": "Example ESEF iXBRL Report",
             "lang": "de",
+            "inline": true,
             "priority": 1,
             "namespaces": {
                 "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full": "ifrs-full",

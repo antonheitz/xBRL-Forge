@@ -9,3 +9,9 @@ with open("examples/ESEF-ixbrl.json", "r") as f:
 
 results = create_xbrl(data, styles=style_data)
 results.save_file("examples/result", True)
+
+with open("examples/xbrl.json", "r") as f:
+    data_xbrl = json.loads(f.read())
+
+results_xbrl = create_xbrl(data_xbrl)
+results_xbrl.save_file("examples/result", True)

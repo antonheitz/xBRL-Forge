@@ -12,6 +12,7 @@ class ContentDocument:
     name: str
     taxonomy_schema: str
     lang: str
+    inline: bool
     priority: int
     namespaces: Dict[str, str]
     contexts: Dict[str, 'DocumentContext']
@@ -24,6 +25,7 @@ class ContentDocument:
             name=data.get("name"),
             taxonomy_schema=data.get("taxonomy_schema"),
             lang=data.get("lang"),
+            inline=data.get("inline", True),
             priority=data.get("priority", 100),
             namespaces=data.get("namespaces"),
             contexts={context_id:DocumentContext.from_dict(context_data) for context_id, context_data in data.get("contexts", {}).items()},
@@ -36,6 +38,7 @@ class ContentDocument:
             "name": cls.name,
             "taxonomy_schema": cls.taxonomy_schema,
             "lang": cls.lang,
+            "inline": cls.inline,
             "priority": cls.priority,
             "namespaces": cls.namespaces,
             "contexts": {context_id:context.to_dict() for context_id, context in cls.contexts.items()},
@@ -249,6 +252,7 @@ class CONTENT_ITEM_TYPES:
     TABLE: str = "TABLE"
     IMAGE: str = "IMAGE"
     LIST: str = "LIST"
+    BASE_XBRL: str = "BASE_XBRL"
 
 @dataclass
 class ContentItem:
@@ -268,6 +272,8 @@ class ContentItem:
                 return ImageItem.from_dict(data)
             case CONTENT_ITEM_TYPES.LIST:
                 return ListItem.from_dict(data)
+            case CONTENT_ITEM_TYPES.BASE_XBRL:
+                return BaseXbrlItem.from_dict(data)
             case _:
                 logger.error(f"Content Item Type '{data.get("type")}' is not implemented yet.")
                 return cls(
@@ -428,4 +434,23 @@ class ListElement:
     def to_dict(cls) -> dict:
         return {
             "content": [content_item.to_dict() for content_item in cls.content]
+        }
+    
+@dataclass
+class BaseXbrlItem(ContentItem):
+    content: str
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'BaseXbrlItem':
+        return cls(
+            type=data.get("type"),
+            content=data.get("content"),
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+        )
+        
+    def to_dict(cls) -> dict:
+        return {
+            "type": cls.type,
+            "content": cls.content,
+            "tags": [tag.to_dict() for tag in cls.tags]
         }

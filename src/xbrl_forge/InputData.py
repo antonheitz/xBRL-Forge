@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from .HtmlDataclasses import ContentDocument
+from .ContentDataclasses import ContentDocument
 from .TaxonomyDataclasses import TaxonomyDocument
 
 @dataclass

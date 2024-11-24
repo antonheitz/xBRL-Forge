@@ -2,8 +2,10 @@ from typing import Dict, Tuple
 from lxml import etree
 import logging
 
+from .ElementRender import render_content
+
 from .PackageDataclasses import File
-from .HtmlDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem, CONTENT_ITEM_TYPES, ImageItem, ListItem, ParagraphItem, TableItem, TitleItem, IXBRL_TAG_TYPES
+from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem, IXBRL_TAG_TYPES
 from .utils import xml_to_string
 
 logger = logging.getLogger(__name__)
@@ -49,7 +51,8 @@ class HtmlProducer:
                 "xbrli": INSTANCE_NAMESPACE,
                 "xbrldi": DIMENSIONS_NAMESPACE
             })
-            namespace_map[cls.local_namespace_prefix] = cls.local_namespace
+            if cls.local_namespace:
+                namespace_map[cls.local_namespace_prefix] = cls.local_namespace
             for namespace, prefix in cls.content_document.namespaces.items():
                 namespace_map[prefix] = namespace
 
@@ -144,64 +147,13 @@ class HtmlProducer:
         # prepare part tags for the application to the text
         part_tags = [tag for tag in content_item.tags if tag.end_index or tag.start_index]
         # add content based on type
-        match content_item.type:
-            case CONTENT_ITEM_TYPES.TITLE:
-                title_item: TitleItem = content_item
-                # levels 1 - 6 are available
-                level = title_item.level
-                if level < 1: level = 1
-                if level > 6: level = 6
-                heading: etree.Element = etree.SubElement(parent, f"{{{XHTML_NAMESPACE}}}h{level}")
-                tag_tree: AppliedTagTree = AppliedTag.create_tree(part_tags, len(title_item.content))
-                cls._add_text_with_tags_to_element(heading, tag_tree, title_item.content)
-            case CONTENT_ITEM_TYPES.PARAGRAPH:
-                paragraph_item: ParagraphItem = content_item
-                paragraph_element: etree.Element = etree.SubElement(parent, f"{{{XHTML_NAMESPACE}}}p")
-                tag_tree: AppliedTagTree = AppliedTag.create_tree(part_tags, len(paragraph_item.content))
-                cls._add_text_with_tags_to_element(paragraph_element, tag_tree, paragraph_item.content)
-            case CONTENT_ITEM_TYPES.TABLE:
-                table_item: TableItem = content_item
-                # part tags are ignored for this item, a table can only be tagged as a whole or individual cells
-                table_element: etree.Element = etree.SubElement(parent, f"{{{XHTML_NAMESPACE}}}table")
-                # create a row for every row in the item
-                for row_item in table_item.rows:
-                    row_element: etree.Element = etree.SubElement(table_element, f"{{{XHTML_NAMESPACE}}}tr")
-                    # create a cell for every cell element, depending on header or not
-                    for cell_item in row_item.cells:
-                        if cell_item.header:
-                            cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}th")
-                        else:
-                            cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}td")
-                        # add content to cell
-                        for cell_content_item in cell_item.content:
-                            cls._convert_element(cell_content_item, cell_element)                    
-            case CONTENT_ITEM_TYPES.IMAGE:
-                image_item: ImageItem = content_item
-                # part tags are ignored for this item, a image can only be tagged as a whole
-                image_element: etree.Element = etree.SubElement(
-                    parent, 
-                    f"{{{XHTML_NAMESPACE}}}img",
-                    {
-                        "src": image_item.image_data,
-                        "alt": "image"
-                    }
-                )
-            case CONTENT_ITEM_TYPES.LIST:
-                list_item: ListItem = content_item
-                # part tags are ignored for this item, a image can only be tagged as a whole or the content of each list element
-                # the container element depends on ordered or unordered
-                if list_item.ordered:
-                    list_element: etree.Element = etree.SubElement(parent, f"{{{XHTML_NAMESPACE}}}ol")
-                else:
-                    list_element: etree.Element = etree.SubElement(parent, f"{{{XHTML_NAMESPACE}}}ul")
-                # add list items to the list element
-                for list_content_item in list_item.elements:
-                    list_content_element: etree.Element = etree.SubElement(list_element, f"{{{XHTML_NAMESPACE}}}li")
-                    # add the content of the element to the list item elemnet
-                    for list_element_content_item in list_content_item.content:
-                        cls._convert_element(list_element_content_item, list_content_element)
-            case _:
-                logger.error(f"Could not convert element of type '{content_item.type}' to XHTML.")
+        render_content(
+            content_item,
+            parent,
+            cls._add_text_with_tags_to_element,
+            cls._convert_element,
+            part_tags
+        )
 
     def _create_ixbrl_tag(cls, tag: AppliedTag, parent: etree.Element) -> Tuple[etree.Element, etree.Element]:
         prefixed_name: str = tag.to_prefixed_name(cls.content_document.namespaces, cls.local_namespace_prefix)
