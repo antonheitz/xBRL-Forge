@@ -67,7 +67,7 @@ This documentation decribes the structure and functionalities of the input JSON.
         },
 
         // in some cases additional roles and schemas need to be imported to be usable by the taxonomy
-        "namespace_imports": {
+        "schema_imports": {
             "http://<namespace-uri>": "http://external_schema.xsd"
         },
 
@@ -117,7 +117,7 @@ This documentation decribes the structure and functionalities of the input JSON.
         },
 
         // the definition linkbase may require additional arcrole that need to be imported from external schemas
-        "definition_arcroles": {
+        "arc_roles_import": {
         
             // key: the arcrole 
             // value: the import of the definition
@@ -164,6 +164,9 @@ This documentation decribes the structure and functionalities of the input JSON.
                         // presentation content will be odered in an ascending order to the "order" value
                         "order": 0,
 
+                        // presentation arcrole to be used
+                        "arc_role": "https://arcrole",
+
                         // children of the presentation object forming hierarchical relationships
                         "children": []
                     }
@@ -185,7 +188,7 @@ This documentation decribes the structure and functionalities of the input JSON.
                         // the arcrole to be used in this relationship
                         // the object defining this is the target of the relationship, it only may be null for the top level element
                         // it may be necessary to import the arcrole via the definition_arcroles key
-                        "arcrole": "<arcrole>",
+                        "arc_role": "<arcrole>",
                         
                         // in case of an hypercube definition, a context element and closed attribute may be necessary
                         "context_element": "scenario",
@@ -212,6 +215,9 @@ This documentation decribes the structure and functionalities of the input JSON.
 
                         // weight of the calculation relationship. The relationship weight is defined by the child (target) of the relationship 
                         "weight": 1,
+
+                        // calculation arcrole to be used
+                        "arc_role": "https://arcrole",
                         
                         // recursive calculation object forming the relationship
                         "children": []
@@ -269,6 +275,11 @@ This documentation decribes the structure and functionalities of the input JSON.
             
             // every instance can only carry one language
             "lang": "de",
+
+            // boolean: if true the document will be a inline XBRL document, if not a simple xBRL instance
+            // ATTENTION: if false: only transformations "num-comma-decimal", "fixed-zero" and "num-dot-decimal" can be used
+            // ATTENTION: Only tag-wide (start and end index null) tags can be used and they cannot be nested! Currently no escaped text is available
+            "inline": true,
                     
             // each report can be constructed from multiple resource objects, each carrying all the information like an isolated report
             // in case of multiple resources for the file the content will be ordered depending on this key, ascending when combined
@@ -518,6 +529,21 @@ This documentation decribes the structure and functionalities of the input JSON.
                             "content": []
                         }
                     ],
+
+                    // please refer to the tags section of the "TITLE" type
+                    // only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys)
+                    "tags": []
+                },
+
+                // the BASE_XBRL content is there for two cases, bot ONLY for xbrl instances (no inline)
+                // 1) to tag numbers
+                // 2) to tag strings without HTML elements (unescaped)
+                {
+                    // the identifier
+                    "type": "BASE_XBRL",
+
+                    // the text content
+                    "content": "<content placed herer>",
 
                     // please refer to the tags section of the "TITLE" type
                     // only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys)
