@@ -1,5 +1,6 @@
 {
     "taxonomy": {
+        "priority": 300,
         "prefix": "test",
         "metadata": {
             "name": "Example XBRL Report",

@@ -89,7 +89,7 @@
                 }
             },
             {
-                "balance": "credit",
+                "balance": "debit",
                 "period_type": "instant",
                 "name": "InvestmentPropertyExtension",
                 "nillable": true,

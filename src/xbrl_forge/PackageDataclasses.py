@@ -49,6 +49,9 @@ class Tag:
             name=cls.name
         )
     
+    def to_uname(cls) -> str:
+        return f"{{{cls.namespace}}}{cls.name}"
+
     def to_prefixed_name(cls, prefixes: Dict[str, str], local_taxonomy_prefix: str = None) -> str:
         if not cls.namespace:
             return f"{local_taxonomy_prefix}:{cls.name}"
