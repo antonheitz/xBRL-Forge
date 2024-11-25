@@ -1,14 +1,19 @@
 from typing import List
 
+from .ContentDataclasses import ContentDocument
+
 from .XbrlProducer import XbrlProducer
 from .PackageDataclasses import File
 from .InputData import InputData
 from .HtmlProducer import HtmlProducer
 from .TaxonomyProducer import TaxonomyProducer
-    
-def create_xbrl(data: dict, styles: str = None) -> File:
+
+def load_data(data: dict) -> InputData:
+    return InputData.from_dict(data)
+
+def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
     # load data
-    loaded_data: InputData = InputData.from_dict(data)
+    loaded_data: InputData = InputData.combine(input_data_list)
     local_namespace = None
     local_namespace_prefix = None
     local_taxonomy_schema = None

@@ -14,6 +14,9 @@ This documentation decribes the structure and functionalities of the input JSON.
     // if only reports should be generated with no extension taxonomy, this key is omitted
     "taxonomy": {
 
+        // priority for combining taxonomies, the higher one wins!
+        "priority": 400,
+
         // this is the preferred prefix used for the taxonomy
         "prefix": "test",
         
