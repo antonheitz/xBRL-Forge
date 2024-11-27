@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, List, Tuple
 import os
 import shutil
 import logging
+import zipfile
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class File:
         cls.content = content
         cls.contained_files = [] if contained_files == None else contained_files
 
-    def save_file(cls, folder_path: str, remove_existing_files: bool = False) -> None:
+    def save_files(cls, folder_path: str, remove_existing_files: bool = False) -> None:
         new_path: str = os.path.join(folder_path, cls.name)
         if remove_existing_files:
             if os.path.isdir(new_path):
@@ -26,10 +27,31 @@ class File:
         if cls.contained_files:
             os.mkdir(new_path)
             for file in cls.contained_files:
-                file.save_file(new_path, remove_existing_files)
+                file.save_files(new_path, remove_existing_files)
         else:
             with open(new_path, "w+") as f:
                 f.write(cls.content)
+
+    def create_package(cls, folder_path: str, remove_existing_package: bool = False) -> None:
+        file_ending: str = "zip"
+        file_path: str = os.path.join(folder_path, f"{cls.name}.{file_ending}")
+        if remove_existing_package:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+        with zipfile.ZipFile(file_path, "w") as zip:
+            for path, file in cls._list_files():
+                zip.writestr(path, file.content)
+
+    def _list_files(cls, prepend_path: str = None) -> List[Tuple[str, "File"]]:
+        file_path: str = cls.name
+        if prepend_path:
+            file_path = os.path.join(prepend_path, file_path)
+        file_list: List[Tuple[str, "File"]] = []
+        if cls.content:
+            file_list.append((file_path, cls))
+        for child in cls.contained_files:
+            file_list += child._list_files(file_path)
+        return file_list
 
 @dataclass
 class Tag:
