@@ -486,7 +486,11 @@ This documentation decribes the structure and functionalities of the input JSON.
                                     
                                     // header cells can be identified with this key
                                     // in case of data cell, set this to false
-                                    "header": true
+                                    "header": true,
+
+                                    // row an col span attributes will be ignored if they are 1 or below
+                                    "rowspan": 1,
+                                    "colspan": 1
                                 }
                             ]
                         }

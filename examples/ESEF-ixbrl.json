@@ -565,8 +565,24 @@
                                             "tags": []
                                         }
                                     ],
-                                    "header": true
+                                    "header": true,
+                                    "rowspan": 2
                                 },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Values",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true,
+                                    "colspan": 3
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
                                 {
                                     "content": [
                                         {

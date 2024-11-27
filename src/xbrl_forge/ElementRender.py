@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable, Dict, List
 from venv import logger
 from .ContentDataclasses import CONTENT_ITEM_TYPES, AppliedTag, AppliedTagTree, BaseXbrlItem, ContentItem, ImageItem, ListItem, ParagraphItem, TableItem, TitleItem
 from lxml import etree
@@ -30,10 +30,15 @@ def render_content(content_item: ContentItem, parent: etree.Element, add_text: C
                 row_element: etree.Element = etree.SubElement(table_element, f"{{{XHTML_NAMESPACE}}}tr")
                 # create a cell for every cell element, depending on header or not
                 for cell_item in row_item.cells:
+                    attributes: Dict[str, str] = {}
+                    if cell_item.colspan > 1:
+                        attributes["colspan"] = str(cell_item.colspan)
+                    if cell_item.rowspan > 1:
+                        attributes["rowspan"] = str(cell_item.rowspan)
                     if cell_item.header:
-                        cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}th")
+                        cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}th", attributes)
                     else:
-                        cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}td")
+                        cell_element: etree.Element = etree.SubElement(row_element, f"{{{XHTML_NAMESPACE}}}td", attributes)
                     # add content to cell
                     for cell_content_item in cell_item.content:
                         recusive(cell_content_item, cell_element)                    

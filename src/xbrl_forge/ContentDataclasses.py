@@ -540,12 +540,16 @@ class TableRow:
 class TableCell:
     content: List[ContentItem]
     header: bool
+    rowspan: int
+    colspan: int
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TableCell':
         return cls(
             content=[ContentItem.from_dict(content_data) for content_data in data.get("content", [])],
-            header=data.get("header", False)
+            header=data.get("header", False),
+            rowspan=data.get("rowspan", 1),
+            colspan=data.get("colspan", 1)
         )
     
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -559,7 +563,9 @@ class TableCell:
     def to_dict(cls) -> dict:
         return {
             "content": [item.to_dict() for item in cls.content],
-            "header": cls.header
+            "header": cls.header,
+            "rowspan": cls.rowspan,
+            "colspan": cls.colspan
         }
 
 
