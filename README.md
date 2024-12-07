@@ -41,6 +41,8 @@ This project is licensed under the APACHE 2.0 License - see the [LICENSE](LICENS
 
 If you encounter any issues or have questions, feel free to open an issue in the GitHub repository or reach out via [email](mailto:anton.j.heitz@gmail.com).
 
+Also you can join the discussion on [Discord](https://discord.gg/Wa3R7JBayw).
+
 ---
 
 Thank you for using xBRL Forge! We look forward to your feedback and contributions!
