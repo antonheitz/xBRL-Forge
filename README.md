@@ -1,7 +1,5 @@
 # xBRL Forge
 
-![xBRL Forge Image](images/High-quality.webp)
-
 ## Overview
 
 **xBRL Forge** is an open-source software solution designed to streamline the process of creating final XBRL (eXtensible Business Reporting Language) and iXBRL (Inline XBRL) reports by integrating data from multiple software applications. With xBRL Forge, users can effortlessly generate XBRL taxonomies and compile comprehensive reports using a simple JSON structure for integration.
@@ -15,41 +13,7 @@
 
 ## Getting Started
 
-### Prerequisites
-
-- Python 3
-- lxml
-
-### Installation
-
-#### from github
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/antonheitz/xBRL-Forge.git
-   cd xBRL-Forge
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip3 install -r requirements.txt
-   ```
-
-#### Via PyPI as package
-
-```bash
-pip install xbrl-forge
-```
-
-### Usage
-
-1. Prepare your data in the JSON structure according to [the documentation](docs/JSON_INPUT.md).
-
-2. Pass the data to the generation function defined [here](src/xbrl_forge/__init__.py).
-
-### Example
-
-See the [example file](run_example.py)
+Please refer to [this small guide](docs/getting_started.md)
 
 ## Documentation
 
