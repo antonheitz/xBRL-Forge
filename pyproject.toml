@@ -18,7 +18,8 @@ classifiers = [
     "Operating System :: OS Independent"
 ]
 dependencies = [
-    "lxml>=5.2.1"
+    "lxml>=5.2.1",
+    "jsonschema>=4.23.0"
 ]
 
 [project.urls]

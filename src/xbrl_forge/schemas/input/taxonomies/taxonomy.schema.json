@@ -1,0 +1,92 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy",
+    "title": "Taxonomy Data",
+    "description": "Taxonomy object representing the taxonomy content",
+    "type": "object",
+    "required": ["priority", "prefix", "metadata", "namespaces", "schema_imports", "elements", "linkbase_imports", "roles"],
+    "properties": {
+        "priority": {
+            "type": "number",
+            "description": "Priority for combining taxonomies, the higher one wins!"
+        },
+        "prefix": {
+            "type": "string",
+            "description": "This is the preferred prefix used for the taxonomy"
+        },
+        "metadata": {
+            "description": "The taxonomy json key contains all data necessary to generate a taxonomy or extension taxonomy. If only reports should be generated with no extension taxonomy, this key is omitted",
+            "$ref": "https://xbrl-forge.org/schema/input/taxonomies/metadata"
+        },
+        "namespaces": {
+            "type": "object",
+            "description": "Every namespace used in the following (taxonomy) parts of the json must be profided with a prefix here. The key must be the namespace URI, while the value must be the namespace prefix.",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "string",
+                    "description": "Prefix for the namespace URI stored in the key of this value"
+                }
+            }
+        },
+        "schema_imports": {
+            "type": "object",
+            "description": "In some cases, additional schemas need to be imported to be usable by the taxonomy. The Key should represent the schema namespace URI while the value should be the URL to the XSI of the schema.",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "string",
+                    "description": "URL path to the XSD file for the namespace URI stored in the key of this value"
+                }
+            }
+        },
+        "elements": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy-element"
+            },
+            "minItems": 0,
+            "description": "Elements defined by this taxonomy"
+        },
+        "linkbase_imports": {
+            "type": "object",
+            "description": "In some cases external linkbases need to be imported. The key is the url for the linkbase,the value, if provided and not 'null' is the role of the linkbase (e.g. label linkbase: http://www.xbrl.org/2003/role/labelLinkbaseRef). In case of a value null, no dedicated role will be used",
+            "patternProperties": {
+                "^.*$": {
+                    "type": ["string", "null"],
+                    "description": "Role URI or null for the linkbase URL provided in the key"
+                }
+            }
+        },
+        "arc_roles_import": {
+            "type": "object",
+            "description": "Creating Structures in the linkbsaes may require additional arc roles for definting relationships between concepts. They may need to be imported from external sources. The key is the arcrole while the vale is the destinct localtion from which it is imported.",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "string",
+                    "description": "Destinct location (normally URL#ID) for the arcrole named in the key"
+                }
+            }
+        },
+        "roles": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/role"
+            },
+            "minItems": 0,
+            "description": "Roles are the broadest structural items and can be used in diffenet linkbases. They can be either imported or defined by the taxonomy iteself."
+        },
+        "labels": {
+            "type": "object",
+            "description": "Labels for elements used in the taxonomy. The Keys of this object represent the language codes for the labels defined in each language.",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://xbrl-forge.org/schema/input/taxonomies/element-labels"
+                    }, 
+                    "minItems": 0,
+                    "description": "Each language (code in the key of this value) carries label information for that language."
+                }
+            }    
+        }
+    }
+}

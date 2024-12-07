@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/image",
+    "title": "Content: Image",
+    "description": "Image Content Element",
+    "type": "object",
+    "required": ["type", "image_data", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'IMAGE'",
+            "type": "string",
+            "pattern": "^IMAGE$"
+        },
+        "image_data": {
+            "description": "The image encoded in base64 (as data uri).",
+            "type": "string"
+        },
+        "tags": {
+            "description": "Applied Tags for this content. Only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys).",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

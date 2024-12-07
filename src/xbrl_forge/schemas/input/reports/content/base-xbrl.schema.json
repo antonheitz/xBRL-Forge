@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/base-xbrl",
+    "title": "Content: Base XBRL",
+    "description": "Base XBRL Content Element",
+    "type": "object",
+    "required": ["type", "content", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'BASE_XBRL'",
+            "type": "string",
+            "pattern": "^BASE_XBRL$"
+        },
+        "content": {
+            "description": "Text content.",
+            "type": "string"
+        },
+        "tags": {
+            "description": "Applied Tags for this content. Only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys).",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/role",
+    "title": "Taxonomy Role",
+    "description": "Role defined or used by this Taxonomy",
+    "type": "object",
+    "required": ["role_name", "role_id", "presentation_linkbase", "definition_linkbase", "calculation_linkbase"],
+    "properties": {
+        "role_name": {
+            "type": "string",
+            "description": "the human readable description for the role"
+        },
+        "role_id": {
+            "type": "string",
+            "description": "In case of an external role, the id must represent the id used in the external schema. This is used to merge roles coming from different taxonomy inputs. It may only consist of characters a-z and numbers and '-' and '_'. "
+        },
+        "role_uri": {
+            "type": "string",
+            "description": "The uri only needs to be provided if an imported role is used (not defined by this taxonomy). The value must match the role URI from the heriatage taxonomy."
+        },
+        "schema_location": {
+            "type": "string",
+            "description": "The schema location only needs to be provided if an imported role is used (not defined by this taxonomy). The value must be the URL to the schema defining the role."
+        },
+        "presentation_linkbase": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/relationships/presentation"
+            },
+            "minItems": 0,
+            "description": "Presentation relationships for this role, if empty the role will not be used in the presentation linkbase"
+        },
+        "definition_linkbase": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/relationships/definition"
+            },
+            "minItems": 0,
+            "description": "Definition relationships for this role, if empty the role will not be used in the definition linkbase"
+        }, 
+        "calculation_linkbase": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/relationships/calculation"
+            },
+            "minItems": 0,
+            "description": "Calculation relationships for this role, if empty the role will not be used in the calculation linkbase"
+        }
+    }
+}

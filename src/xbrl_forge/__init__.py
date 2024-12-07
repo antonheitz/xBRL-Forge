@@ -1,14 +1,24 @@
 from typing import List
+import os
 
-from .ContentDataclasses import ContentDocument
+from .xbrl_generation.ContentDataclasses import ContentDocument
 
-from .XbrlProducer import XbrlProducer
-from .PackageDataclasses import File
-from .InputData import InputData
-from .HtmlProducer import HtmlProducer
-from .TaxonomyProducer import TaxonomyProducer
+from .xbrl_generation.XbrlProducer import XbrlProducer
+from .xbrl_generation.PackageDataclasses import File
+from .xbrl_generation.InputData import InputData
+from .xbrl_generation.HtmlProducer import HtmlProducer
+from .xbrl_generation.TaxonomyProducer import TaxonomyProducer
 
-def load_data(data: dict) -> InputData:
+from .utils.schema_validation import validate_schema
+
+SCHEMA_FOLDER: str = os.path.join(os.path.dirname(os.path.realpath(__file__)), "schemas")
+
+def validate_input_data(data: dict) -> None:
+    # get schemas
+    input_schema_folder = os.path.join(SCHEMA_FOLDER, "input")
+    validate_schema(data, "https://xbrl-forge.org/schema/input/wrapper", input_schema_folder)
+
+def load_input_data(data: dict) -> InputData:
     return InputData.from_dict(data)
 
 def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:

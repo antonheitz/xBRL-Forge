@@ -1,0 +1,38 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/dimension",
+    "title": "Dimension Mapping",
+    "description": "Using a Member for a Axis",
+    "type": "object",
+    "required": ["axis", "member"],
+    "properties": {
+        "axis": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of the concept. In caso of a element created by the taxonomy provided in this file, omit this key."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the concept."
+                }
+            }
+        },
+        "member": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": "The namespace of the concept. In caso of a element created by the taxonomy provided in this file, omit this key."
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the concept."
+                }
+            }
+        }
+    }
+}

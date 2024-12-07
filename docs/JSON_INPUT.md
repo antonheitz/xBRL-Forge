@@ -246,7 +246,7 @@ This documentation decribes the structure and functionalities of the input JSON.
                     "schema_location": "https://schema_url.xsd",
 
                     // one or more labels for the element
-                    "lables": [
+                    "labels": [
                         {
                             // each label must have a role
                             // the role must be unique for the combination of element and language

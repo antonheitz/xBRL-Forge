@@ -389,7 +389,7 @@
                 {
                     "element_id": "ifrs-full_PropertyPlantAndEquipment",
                     "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/verboseLabel",
                             "label": "Verbose label for Assets"
@@ -398,7 +398,7 @@
                 },
                 {
                     "element_id": "FirstSectionAbstract",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/label",
                             "label": "Abstract for the first Section [Abstract]"
@@ -407,7 +407,7 @@
                 },
                 {
                     "element_id": "CompleteSection",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/label",
                             "label": "This Tag contains the whole first section"
@@ -420,7 +420,7 @@
                 },
                 {
                     "element_id": "FirstPart",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/label",
                             "label": "First Part of the Paragraph"
@@ -429,7 +429,7 @@
                 },
                 {
                     "element_id": "PartlyFirstPartAndSecondPart",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/label",
                             "label": "Partly the First Part of the Paragraph and the second part"
@@ -438,7 +438,7 @@
                 },
                 {
                     "element_id": "InvestmentPropertyExtension",
-                    "lables": [
+                    "labels": [
                         {
                             "label_role": "http://www.xbrl.org/2003/role/label",
                             "label": "Extension built for Investment Proterty with something additional"
@@ -505,8 +505,7 @@
                     "numerator": {
                         "namespace": "http://www.xbrl.org/2003/iso4217",
                         "name": "EUR"
-                    },
-                    "denominator": null
+                    }
                 }
             },
             "content": [

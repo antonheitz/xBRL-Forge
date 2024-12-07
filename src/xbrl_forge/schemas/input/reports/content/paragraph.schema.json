@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/paragraph",
+    "title": "Content: Paragraph",
+    "description": "Paragraph Content Element",
+    "type": "object",
+    "required": ["type", "content", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'PARAGRAPH'",
+            "type": "string",
+            "pattern": "^PARAGRAPH$"
+        },
+        "content": {
+            "description": "Text content for the paragraph.",
+            "type": "string"
+        },
+        "tags": {
+            "description": "Applied Tags for this content.",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

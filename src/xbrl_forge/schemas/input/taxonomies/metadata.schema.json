@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/metadata",
+    "title": "Taxonomy Metadata",
+    "description": "Taxonomy object representing the taxonomy content",
+    "type": "object",
+    "required": ["name", "description", "publisher", "publisher_url", "publication_date", "publisher_country", "entrypoints"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the taxonomy or report package"
+        },
+        "description": {
+            "type": "string",
+            "description": "A small description on the reason for this taxonomy"
+        },
+        "publisher": {
+            "type": "string",
+            "description": "Name of the publisher or publishing organisation"
+        },
+        "publisher_url": {
+            "type": "string",
+            "description": "The url from the publisher, this will be used for the taxonomy namespace, do not include the protokoll 'http://'"
+        },
+        "publication_date": {
+            "type": "string",
+            "format": "date",
+            "description": "The date of the taxonomy, this needs to be in the format YYYY-MM-DD"
+        },
+        "publisher_country": {
+            "type": "string",
+            "description": "Country of publication"
+        },
+        "entrypoints": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/entrypoint"
+            },
+            "minItems": 1,
+            "description": "Entrypoints to the taxonomy"
+        }
+    }
+}

@@ -571,7 +571,7 @@ class TaxonomyProducer:
                 label_element_data.element_id,
                 locators
             )
-            for label_data in label_element_data.lables:
+            for label_data in label_element_data.labels:
                 label_label: str = f"label_{label_id}"
                 label_id += 1
                 label_element: etree.Element = etree.SubElement(

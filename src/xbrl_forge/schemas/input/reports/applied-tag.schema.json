@@ -1,0 +1,86 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/applied-tag",
+    "title": "Applied Tag",
+    "description": "Tag applied to a piece of information. In case of multiple usages of NON-NUMERIC (see type below) concepts with the same context, continuations will be handled automatically.",
+    "type": "object",
+    "required": ["name", "context_id", "type"],
+    "properties": {
+        "namespace": {
+            "description": "The namespace of the concept (line item) used for the tag. In case of an element from the taxonomy created by this json, omit the namespace attribute.",
+            "type": "string"
+        },
+        "name": {
+            "description": "The name of the concept (line item) used for the tag.",
+            "type": "string"
+        },
+        "context_id": {
+            "description": "The context id must be included in the contexts section of this resource.",
+            "type": "string"
+        },
+        "start_index": {
+            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
+            "type": ["number", "null"]
+        },
+        "end_index": {
+            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
+            "type": ["number", "null"]
+        },
+        "type": {
+            "description": "The type of tag, NUMERIC or NONNUMERIC are currently supported.",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "pattern": "^NONNUMERIC$"
+                },
+                {
+                    "type": "string",
+                    "pattern": "^NUMERIC$"
+                }
+            ]
+        },
+        "attributes": {
+            "description": "Each tag is enhances by attributes, depending on their type",
+            "oneOf": [
+                {
+                    "description": "NONNUMERIC attributes",
+                    "type": "object",
+                    "required": ["escape"],
+                    "properties": {
+                        "escape": {
+                            "description": "Ecaping includes xhtml strucural elements into the fact value for nonnumeric tags. Only the escaping flag from the first ocurrance of a concept for each context will read this attribute and then apply to all continuations for that fact.",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                {
+                    "description": "NUMERIC attributes",
+                    "type": "object",
+                    "required": ["decimals", "scale", "unit", "format", "sign"],
+                    "properties": {
+                        "decimals": {
+                            "description": "Decimals declare the accuracy of the tagged value.",
+                            "type": "number"
+                        },
+                        "scale": {
+                            "description": "Scale declare the scale of the tagged value, VALUE*10^scale",
+                            "type": "number"
+                        },
+                        "unit": {
+                            "description": "This references to a unit defined in the 'units' object of this resource.",
+                            "type": "string"
+                        },
+                        "format": {
+                            "description": "The format of the number decribing how it should be transformed to a number for the mashine. For this normally transformation registries are used. The namespace must be defined with a prefix in the namespaces object of the resource.",
+                            "$ref": "https://xbrl-forge.org/schema/input/general/xml-element"
+                        },
+                        "sign": {
+                            "description": "The sign attribute reverses the mashine readable value, which is by default always positive. This is necessary if the human readable logic differs from the xbrl logic in regards to the used concept.",
+                            "type": "boolean"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

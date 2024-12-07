@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/table",
+    "title": "Content: Table",
+    "description": "Table Content Element",
+    "type": "object",
+    "required": ["type", "rows", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'TABLE'",
+            "type": "string",
+            "pattern": "^TABLE$"
+        },
+        "rows": {
+            "description": "Each table contains of one or more rows.",
+            "tpye": "array",
+            "items": {
+                "description": "Row Data.",
+                "type": "object",
+                "required": ["cells"],
+                "properties": {
+                    "cells": {
+                        "description": "Cell Data",
+                        "type": "array",
+                        "items": {
+                            "description": "Cell Data.",
+                            "type": "object",
+                            "required": ["content"],
+                            "properties": {
+                                "content": {
+                                    "description": "The content of a cell is a nested (recursive) structure. This contains any strucural content type such as TABLE PARAGRAPH TITLE etc.",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "https://xbrl-forge.org/schema/input/reports/content/all-contents"
+                                    },
+                                    "minItems": 0
+                                },
+                                "header": {
+                                    "description": "Header cells can be identified with this key.",
+                                    "type": "boolean"
+                                },
+                                "rowspan": {
+                                    "description": "Optional rowspan for the cell.",
+                                    "type": "number",
+                                    "minimum": 1
+                                },
+                                "colspan": {
+                                    "description": "Optional colspan for the cell.",
+                                    "type": "number",
+                                    "minimum": 1
+                                }
+                            }
+                        },
+                        "minItems": 1
+                    }
+                }
+            },
+            "minItems": 1
+        },
+        "tags": {
+            "description": "Applied Tags for this content. Only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys).",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

@@ -532,14 +532,14 @@ class DefinitionElement(LinkbaseElement):
 class LabelElement:
     element_id: str
     schema_location: str
-    lables: List['LabelData']
+    labels: List['LabelData']
     
     @classmethod
     def from_dict(cls, data: dict) -> 'LabelElement':
         return cls(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
-            lables=[LabelData.from_dict(label_data) for label_data in data.get("lables", [])]
+            labels=[LabelData.from_dict(label_data) for label_data in data.get("labels", [])]
         )
     
     def update_element(cls, update_element_map: Dict[str, str]) -> None:
@@ -547,10 +547,10 @@ class LabelElement:
             cls.element_id = update_element_map[cls.element_id]
     
     def combine(cls, new_label_element: "LabelElement") -> None:
-        used_label_roles: List[str] = [label_data.label_role for label_data in cls.lables]
-        for new_label in new_label_element.lables:
+        used_label_roles: List[str] = [label_data.label_role for label_data in cls.labels]
+        for new_label in new_label_element.labels:
             if not new_label.label_role in used_label_roles:
-                cls.lables.append(new_label)
+                cls.labels.append(new_label)
 
     @property
     def uname(cls) -> str:
@@ -560,7 +560,7 @@ class LabelElement:
         return {
             "element_id": cls.element_id,
             "schema_location": cls.schema_location,
-            "labels": [label_data.to_dict() for label_data in cls.lables]
+            "labels": [label_data.to_dict() for label_data in cls.labels]
         }
 
 @dataclass

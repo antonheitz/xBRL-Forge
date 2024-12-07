@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/all-contents",
+    "title": "Report Contents",
+    "description": "All report contents.",
+    "type": "object",
+    "oneOf": [
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/title"
+        },
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/paragraph"
+        },
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/table"
+        },
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/image"
+        },
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/list"
+        },
+        {
+            "$ref": "https://xbrl-forge.org/schema/input/reports/content/base-xbrl"
+        }
+    ]
+}

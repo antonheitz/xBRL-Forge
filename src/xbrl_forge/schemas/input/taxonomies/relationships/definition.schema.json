@@ -1,0 +1,38 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/relationships/definition",
+    "title": "Definition Relationship",
+    "description": "Definition Relationship between Elements",
+    "type": "object",
+    "required": ["element_id", "children"],
+    "properties": {
+        "element_id": {
+            "type": "string",
+            "description": "The id of the element to be used. In case of an external element (not defined by this taxonomy) this must be the id of the element as it is defined in the external schema. In case of an element defined by this taxonomy, this must reflect the 'technical_name' value of the defined element"
+        },
+        "schema_location": {
+            "type": "string",
+            "description": "In case of an external element (not defined by this taxonomy) this must be the URL of the schema it was defined in."
+        },
+        "context_element": {
+            "type": "string",
+            "description": "Only for the Root of a Hypercube definition! If not, please omit this key. The type of context element must be namend. Mostly this will be 'scenario'."
+        },
+        "closed": {
+            "type": "boolean",
+            "description": "Only for the Root of a Hypercube definition! If not, please omit this key. Hypercubes can be open or closed by this key."
+        },
+        "arc_role": {
+            "type": ["string", "null"],
+            "description": "Definition arcrole to be used. It may be necessary to import it!"
+        },
+        "children": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/relationships/definition"
+            },
+            "minItems": 0,
+            "description": "Children of the definition object forming hierarchical relationships"
+        }
+    }
+}

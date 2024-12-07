@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy-element",
+    "title": "Taxonomy Element",
+    "description": "Element defined by this taxonomy",
+    "type": "object",
+    "required": ["name", "period_type", "substitution_group", "type"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Technical name of the element - must be unique for the elements defined by this taxonomy"
+        },
+        "period_type": {
+            "type": "string",
+            "description": "each element carries a period type 'duration' or 'instant'"
+        },
+        "abstract": {
+            "type": "boolean",
+            "description": "Abstract elements are strucural elements not directly used for tagging"
+        },
+        "nillable": {
+            "type": "boolean",
+            "description": "Element is nillable or not"
+        },
+        "substitution_group": {
+            "$ref": "https://xbrl-forge.org/schema/input/general/xml-element",
+            "description": "The substitutuon group defines the basic element type. The namespace must be a key in the 'namespaces' attribute of the taxonomy json"
+        },
+        "type": {
+            "$ref": "https://xbrl-forge.org/schema/input/general/xml-element",
+            "description": "The type defines the specific item type (like String or Monetary etc.). The namespace must be a key in the 'namespaces' attribute of the taxonomy json"
+        }
+    }
+}
