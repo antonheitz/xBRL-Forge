@@ -24,9 +24,9 @@ For detailed documentation on how to use xBRL Forge, including API references an
 We welcome contributions from the community! To contribute:
 
 1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/YourFeature`
-3. Make your changes and commit them: `git commit -m 'Add your feature'`
-4. Push to the branch: `git push origin feature/YourFeature`
+2. Create a new branch: `git checkout -b <ISSUE_NUMBER>-feature/YourFeature`
+3. Make your changes and commit them: `git commit -m 'Add your feature #<ISSUE_NUMBER>'`
+4. Push to the branch: `git push origin <ISSUE_NUMBER>-feature/YourFeature`
 5. Create a pull request.
 
 PLEASE NOTE: this project uses the **REBASE STRATEGY**
