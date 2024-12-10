@@ -395,7 +395,7 @@ class ContentItem:
             case CONTENT_ITEM_TYPES.BASE_XBRL:
                 return BaseXbrlItem.from_dict(data)
             case _:
-                logger.error(f"Content Item Type '{data.get("type")}' is not implemented yet.")
+                logger.error(f"Content Item Type '{data.get('type')}' is not implemented yet.")
                 return cls(
                     data.get("type"), 
                     [AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]

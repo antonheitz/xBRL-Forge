@@ -64,8 +64,9 @@ class HtmlProducer:
         xhtml_body: etree.Element = etree.SubElement(xhtml_root, f"{{{XHTML_NAMESPACE}}}body")
        
         # add basic style information
-        xhtml_style: etree.Element = etree.SubElement(xhtml_head, f"{{{XHTML_NAMESPACE}}}style", {"type": "text/css"})
-        xhtml_style.text = cls.styles
+        if cls.styles:
+            xhtml_style: etree.Element = etree.SubElement(xhtml_head, f"{{{XHTML_NAMESPACE}}}style", {"type": "text/css"})
+            xhtml_style.text = cls.styles
 
         if cls.ixbrl:
             # create ixbrl header information
@@ -157,7 +158,7 @@ class HtmlProducer:
 
     def _create_ixbrl_tag(cls, tag: AppliedTag, parent: etree.Element) -> Tuple[etree.Element, etree.Element]:
         prefixed_name: str = tag.to_prefixed_name(cls.content_document.namespaces, cls.local_namespace_prefix)
-        tag_id_base = f"{prefixed_name.replace(":", "_")}_{tag.context_id}_-_"
+        tag_id_base = f'{prefixed_name.replace(":", "_")}_{tag.context_id}_-_'
         id_number: int = 0
         # get previous is if known
         previous_element: etree.Element = None

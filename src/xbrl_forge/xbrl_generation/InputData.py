@@ -49,6 +49,6 @@ class InputData:
 
     def to_dict(cls) -> dict:
         return {
-            "taxonomy": cls.taxonomy.to_dict(),
+            "taxonomy": cls.taxonomy.to_dict() if cls.taxonomy else None,
             "reports": [report.to_dict() for report in cls.reports]
         }

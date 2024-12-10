@@ -28,7 +28,7 @@ class TaxonomyProducer:
 
     def create_files(cls, reports: List[File] = None) -> File:
         # create base folder structure
-        root_folder = File(name=f"{"_".join(cls.taxonomy_document.metadata.name.split())}")
+        root_folder = File(name=f'{"_".join(cls.taxonomy_document.metadata.name.split())}')
         if reports:
             reports_folder = File(name="reports", contained_files=reports)
             root_folder.contained_files.append(reports_folder)

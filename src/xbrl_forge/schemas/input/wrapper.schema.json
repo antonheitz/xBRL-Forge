@@ -7,7 +7,14 @@
     "properties": {
         "taxonomy": {
             "description": "The taxonomy json key contains all data necessary to generate a taxonomy or extension taxonomy. If only reports should be generated with no extension taxonomy, this key is omitted",
-            "$ref": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy"
+            "oneOf": [
+                {
+                    "$ref": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy"
+                },
+                {
+                    "type": "null"
+                }
+            ]
         }, 
         "reports": {
             "type": "array",
