@@ -12,10 +12,13 @@ e**x**pandable **B**ridged **R**eporting **L**ayer **Forge**
 - **XBRL Taxonomy Generation**: Create customizable XBRL taxonomies to meet your reporting needs.
 - **Easy JSON Structure**: Integrate data using an intuitive and straightforward JSON format.
 - **Open Source**: Contribute to the community and enhance the functionality of xBRL Forge.
+- **Data conversion**: Prepare your data in a Word file (docx) and then convert it to the xBRL Forge data structure to enhance it with tags!
 
-## Getting Started
+## Guides
 
-Please refer to [this small guide](docs/getting_started.md)
+Please refer to [this small guide to get Started](docs/getting_started.md)
+
+Learn how to convert other files to the necessary data structures [here](docs/document_conversion.md)
 
 ## Documentation
 

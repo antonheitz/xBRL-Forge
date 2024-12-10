@@ -11,7 +11,14 @@ from .xbrl_generation.TaxonomyProducer import TaxonomyProducer
 
 from .utils.schema_validation import validate_schema
 
+from .file_conversion import doc_to_data
+
 SCHEMA_FOLDER: str = os.path.join(os.path.dirname(os.path.realpath(__file__)), "schemas")
+
+def convert_document(document_path: str) -> InputData:
+    input_data_object = doc_to_data(document_path)
+    validate_input_data(input_data_object.to_dict())
+    return input_data_object
 
 def validate_input_data(data: dict) -> None:
     # get schemas

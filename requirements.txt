@@ -1,3 +1,4 @@
 lxml == 5.2.1
 jsonschema == 4.23.0
 argparse == 1.4.0
+mammoth == 1.9.0
