@@ -6,7 +6,7 @@ import math
 from .ElementRender import render_content
 
 from .PackageDataclasses import File
-from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem, CONTENT_ITEM_TYPES, ImageItem, ListItem, ParagraphItem, TableItem, TitleItem, IXBRL_TAG_TYPES
+from .ContentDataclasses import AppliedTagTree, ContentDocument, ContentItem, IXBRL_TAG_TYPES
 from .utils import xml_to_string
 
 logger = logging.getLogger(__name__)

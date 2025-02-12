@@ -366,33 +366,32 @@ class AppliedTagTree:
         # if not a subchild, add as new child to this one
         cls.children.append(AppliedTagTree(new_tag, []))
 
-class CONTENT_ITEM_TYPES:
-    TITLE: str = "TITLE"
-    PARAGRAPH: str = "PARAGRAPH"
-    TABLE: str = "TABLE"
-    IMAGE: str = "IMAGE"
-    LIST: str = "LIST"
-    BASE_XBRL: str = "BASE_XBRL"
-
-@dataclass
+@dataclass(kw_only=True)
 class ContentItem:
     type: str
     tags: List[AppliedTag]
 
+    TYPE_TITLE: str = "TITLE"
+    TYPE_PARAGRAPH: str = "PARAGRAPH"
+    TYPE_TABLE: str = "TABLE"
+    TYPE_IMAGE: str = "IMAGE"
+    TYPE_LIST: str = "LIST"
+    TYPE_BASE_XBRL: str = "BASE_XBRL"
+
     @classmethod
     def from_dict(cls, data: dict) -> 'ContentItem':
         match data.get("type"):
-            case CONTENT_ITEM_TYPES.TITLE:
+            case cls.TYPE_TITLE:
                 return TitleItem.from_dict(data)
-            case CONTENT_ITEM_TYPES.PARAGRAPH:
+            case cls.TYPE_PARAGRAPH:
                 return ParagraphItem.from_dict(data)
-            case CONTENT_ITEM_TYPES.TABLE:
+            case cls.TYPE_TABLE:
                 return TableItem.from_dict(data)
-            case CONTENT_ITEM_TYPES.IMAGE:
+            case cls.TYPE_IMAGE:
                 return ImageItem.from_dict(data)
-            case CONTENT_ITEM_TYPES.LIST:
+            case cls.TYPE_LIST:
                 return ListItem.from_dict(data)
-            case CONTENT_ITEM_TYPES.BASE_XBRL:
+            case cls.TYPE_BASE_XBRL:
                 return BaseXbrlItem.from_dict(data)
             case _:
                 logger.error(f"Content Item Type '{data.get('type')}' is not implemented yet.")

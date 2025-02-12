@@ -3,7 +3,7 @@ import mammoth
 from lxml import etree
 import re
 
-from ..xbrl_generation.ContentDataclasses import ContentItem, CONTENT_ITEM_TYPES, ListElement, ListItem, TitleItem, ParagraphItem, ImageItem, TableRow, TableCell, TableItem
+from ..xbrl_generation.ContentDataclasses import ContentItem, ListElement, ListItem, TitleItem, ParagraphItem, ImageItem, TableRow, TableCell, TableItem
 from .BaseLoader import BaseLoader
 
 DATA_WRAPPER_NAME: str = "dataWrapper"
@@ -33,20 +33,20 @@ class DocxLoader(BaseLoader):
             if children and children[0].tag == "img":
                 image_element = children[0]
                 content.append(ImageItem(
-                    type=CONTENT_ITEM_TYPES.IMAGE,
+                    type=ContentItem.TYPE_IMAGE,
                     tags=[],
                     image_data=image_element.attrib.get("src", "")
                 ))
             else:
                 content.append(ParagraphItem(
-                    type=CONTENT_ITEM_TYPES.PARAGRAPH,
+                    type=ContentItem.TYPE_PARAGRAPH,
                     tags=[],
                     content=element.text
                 ))
         # add title
         elif re.match(r"h[0-9]", element.tag):
             content.append(TitleItem(
-                type=CONTENT_ITEM_TYPES.TITLE,
+                type=ContentItem.TYPE_TITLE,
                 tags=[],
                 content=element.text,
                 level=int(element.tag[1]) 
@@ -59,7 +59,7 @@ class DocxLoader(BaseLoader):
                 list_data_elemet: ListElement = ListElement([])
                 if list_child_element.text:
                     list_data_elemet.content.append(ParagraphItem(
-                        type=CONTENT_ITEM_TYPES.PARAGRAPH,
+                        type=ContentItem.TYPE_PARAGRAPH,
                         tags=[],
                         content=list_child_element.text
                     ))
@@ -67,7 +67,7 @@ class DocxLoader(BaseLoader):
                     list_data_elemet.content += cls._add_to_content(list_child_sub_child)
                 list_data.append(list_data_elemet)
             content.append(ListItem(
-                type=CONTENT_ITEM_TYPES.LIST,
+                type=ContentItem.TYPE_LIST,
                 tags=[],
                 elements=list_data,
                 ordered=element.tag[0] == "o"
@@ -83,7 +83,7 @@ class DocxLoader(BaseLoader):
                     cell_content: List[ContentItem] = []
                     if cell_element.text:
                         cell_content.append(ParagraphItem(
-                            type=CONTENT_ITEM_TYPES.PARAGRAPH,
+                            type=ContentItem.TYPE_PARAGRAPH,
                             tags=[],
                             content=cell_element.text
                         ))
@@ -98,7 +98,7 @@ class DocxLoader(BaseLoader):
                     ))
                 table_rows.append(row_data)
             content.append(TableItem(
-                type=CONTENT_ITEM_TYPES.TABLE,
+                type=ContentItem.TYPE_TABLE,
                 tags=[],
                 rows=table_rows
             ))
