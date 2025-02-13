@@ -6,7 +6,61 @@ e**x**pandable **B**ridged **R**eporting **L**ayer **Forge**
 
 **xBRL Forge** is an open-source software solution designed to streamline the process of creating final XBRL (eXtensible Business Reporting Language) and iXBRL (Inline XBRL) reports by integrating data from multiple software applications. With xBRL Forge, users can effortlessly generate XBRL taxonomies and compile comprehensive reports using a simple JSON structure for integration.
 
-## Features
+## Biggest strengths
+
+Combine strengths of different source systems creating reports (but hey, it's also easy to use for very simple use cases):
+
+```mermaid
+flowchart TD
+    s1[[Reporting System A]]
+    s2[[Reporting System B]]
+    s1 --> d1
+    s1 --> d2
+    s2 --> d3
+    s2 --> d4
+    d1[("Part of iXBRL 
+    Report 1 as JSON")]
+    d2[("Untagged XHTML 
+    Report 2 as JSON")]
+    d3[("Part of iXBRL 
+    Report 1 as JSON")]
+    d4[("xBRL Report 3 
+    as JSON")]
+    d1 --> combined
+    d2 --> combined
+    d3 --> combined
+    d4 --> combined
+    combined[["`**xBRL Forge**
+    - create different reports, even from parts
+    - merge extension taxonomy structures`"]]
+    combined --> package
+    package{{Combined xBRL Report Package}}
+    package --> rp4
+    package --> rp1
+    package --> rp2
+    package --> rp3
+    rp4(["merged extension 
+    Taxonomy"])
+    rp1([iXBRL Report 1])
+    rp2([XHTML Report 2])
+    rp3([xBRL Report 3])
+```
+
+Tag data imported from other files
+
+```mermaid
+flowchart TD
+    docx[Word File]
+    docx --> forge
+    forge[["`**xBRL Forge**
+    - convert to JSON Structure`"]]
+    forge --> json1
+    json1[("**Document Contents in 
+    Target JSON strucutre**
+    - edit (tag) with any Tool and feed back into xBRL Forge to create xBRL Package")]
+```
+
+## All the Features
 
 - **Multi-Source Integration**: Seamlessly gather data from various software solutions and compile them into a unified XBRL or iXBRL report.
 - **XBRL Taxonomy Generation**: Create customizable XBRL taxonomies to meet your reporting needs.
