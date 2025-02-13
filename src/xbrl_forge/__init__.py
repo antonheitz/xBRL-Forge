@@ -38,8 +38,13 @@ def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
         local_namespace=loaded_data.taxonomy.namespace
         local_namespace_prefix=loaded_data.taxonomy.prefix 
         local_taxonomy_schema=loaded_data.taxonomy.schema_url
-    report_files: List[File] = []
+    reports_folder: File = None
+    untagged_reports_folder: File = None
+    inline_instances: int = 0
+    non_inline_instances: int = 0
     for report in loaded_data.reports:
+        if not reports_folder:        
+            reports_folder = File("reports", contained_files=[])
         if report.inline:
             html_producer: HtmlProducer = HtmlProducer(
                 report, 
@@ -48,7 +53,14 @@ def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
                 local_namespace_prefix=local_namespace_prefix, 
                 local_taxonomy_schema=local_taxonomy_schema
             )
-            report_files.append(html_producer.create_html())
+            if html_producer.ixbrl:
+                reports_folder.contained_files.append(html_producer.create_html())
+                inline_instances += 1
+            else:
+                if not untagged_reports_folder:
+                    untagged_reports_folder: File = File("untagged_reports", contained_files=[])
+                    reports_folder.contained_files.append(untagged_reports_folder)
+                untagged_reports_folder.contained_files.append(html_producer.create_html())
         else:
             xbrl_producer: XbrlProducer = XbrlProducer(
                 report, 
@@ -56,8 +68,12 @@ def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
                 local_namespace_prefix=local_namespace_prefix, 
                 local_taxonomy_schema=local_taxonomy_schema
             )
-            report_files.append(xbrl_producer.create_xbrl())
+            reports_folder.contained_files.append(xbrl_producer.create_xbrl())
+            non_inline_instances += 1
     if not loaded_data.taxonomy:
-        return File("reports", contained_files=report_files)
+        return reports_folder
     taxonomy_producer: TaxonomyProducer = TaxonomyProducer(loaded_data.taxonomy)
-    return taxonomy_producer.create_files(report_files)
+    package_extension: str = "zip"
+    if inline_instances == 1 and non_inline_instances == 0: package_extension = "xbri"
+    if inline_instances == 0 and non_inline_instances == 1: package_extension = "xbr"
+    return taxonomy_producer.create_files(reports_folder, package_extension)

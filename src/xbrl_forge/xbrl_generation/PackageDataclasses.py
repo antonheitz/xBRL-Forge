@@ -11,11 +11,13 @@ class File:
     name: str
     content: str 
     contained_files: List['File'] 
+    zip_extension: str
 
-    def __init__(cls, name: str, content: str = None, contained_files: List['File'] = None):
+    def __init__(cls, name: str, content: str = None, contained_files: List['File'] = None, zip_extension: str = "zip"):
         cls.name = name
         cls.content = content
         cls.contained_files = [] if contained_files == None else contained_files
+        cls.zip_extension = zip_extension
 
     def save_files(cls, folder_path: str, remove_existing_files: bool = False) -> None:
         new_path: str = os.path.join(folder_path, cls.name)
@@ -33,8 +35,7 @@ class File:
                 f.write(cls.content)
 
     def create_package(cls, folder_path: str, remove_existing_package: bool = False) -> None:
-        file_ending: str = "zip"
-        file_path: str = os.path.join(folder_path, f"{cls.name}.{file_ending}")
+        file_path: str = os.path.join(folder_path, f"{cls.name}.{cls.zip_extension}")
         if remove_existing_package:
             if os.path.isfile(file_path):
                 os.remove(file_path)

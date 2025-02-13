@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple
 from lxml import etree
+import json
 
 from .utils import xml_to_string
 from .TaxonomyDataclasses import CalculationElement, DefinitionElement, PresentationElement, TaxonomyDocument, TaxonomyElement
@@ -26,11 +27,10 @@ class TaxonomyProducer:
     def __init__(cls, document: TaxonomyDocument):
         cls.taxonomy_document = document
 
-    def create_files(cls, reports: List[File] = None) -> File:
+    def create_files(cls, reports_folder: File = None, package_extension: str = "zip") -> File:
         # create base folder structure
-        root_folder = File(name=f'{"_".join(cls.taxonomy_document.metadata.name.split())}')
-        if reports:
-            reports_folder = File(name="reports", contained_files=reports)
+        root_folder = File(name=f'{"_".join(cls.taxonomy_document.metadata.name.split())}', zip_extension=package_extension)
+        if reports_folder:
             root_folder.contained_files.append(reports_folder)
         # create taxonomy files
         taxonomy_folder = root_folder
@@ -40,11 +40,11 @@ class TaxonomyProducer:
             parent_folder.contained_files.append(taxonomy_folder)
         cls._create_taxonomy_files(taxonomy_folder)
         # create meta information
-        meta_inf_folder = File(name="META-INF", contained_files=cls._create_meta_inf_files())
+        meta_inf_folder = File(name="META-INF", contained_files=cls._create_meta_inf_files(package_extension if reports_folder else None))
         root_folder.contained_files.append(meta_inf_folder)
         return root_folder
 
-    def _create_meta_inf_files(cls) -> List[File]:
+    def _create_meta_inf_files(cls, package_extension: str = None) -> List[File]:
         # create catalog file
         catalog_namespace: str = "urn:oasis:names:tc:entity:xmlns:xml:catalog"
         catalog_namespace_map = {
@@ -151,7 +151,7 @@ class TaxonomyProducer:
             )
             ep_lang_element.text = entrypoint.language
 
-        return [
+        return_files: List[File] = [
             File(
                 name="catalog.xml", 
                 content=xml_to_string(
@@ -166,6 +166,22 @@ class TaxonomyProducer:
                 )
             )
         ]
+
+        if package_extension:
+            supported_package_extensions: Dict[str, str] = {
+                "zip": "https://xbrl.org/report-package/2023",
+                "xbri": "https://xbrl.org/report-package/2023/xbri",
+                "xbr": "https://xbrl.org/report-package/2023/xbr"
+            }
+            return_files.append(File(
+                name="reportPackage.json",
+                content=json.dumps({
+                    "documentInfo": {
+                        "documentType": supported_package_extensions.get(package_extension)
+                    }
+                })
+            ))
+        return return_files
 
     def _create_taxonomy_files(cls, taxonomy_folder: File) -> None:
         cls._create_schema(taxonomy_folder)
