@@ -48,7 +48,7 @@ class XbrlProducer:
             namespace_map[prefix] = namespace
 
         # create base xbrl element
-        root_element: etree.Element = etree.Element(
+        root_element: etree._Element = etree.Element(
             f"{{{INSTANCE_NAMESPACE}}}xbrl",
             nsmap=namespace_map
         )
@@ -57,7 +57,7 @@ class XbrlProducer:
 
         # add schema ref
         schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
-        schema_ref: etree.Element = etree.SubElement(
+        schema_ref: etree._Element = etree.SubElement(
             root_element, 
             f"{{{LINK_NAMESPACE}}}schemaRef",
             {
@@ -68,16 +68,16 @@ class XbrlProducer:
               
         # add contexts to header
         for context_id, context in cls.content_document.contexts.items():
-            context_element: etree.Element = etree.SubElement(
+            context_element: etree._Element = etree.SubElement(
                 root_element, 
                 f"{{{INSTANCE_NAMESPACE}}}context", 
                 {"id":context_id}
             )
-            entity_element: etree.Element = etree.SubElement(
+            entity_element: etree._Element = etree.SubElement(
                 context_element, 
                 f"{{{INSTANCE_NAMESPACE}}}entity"
             )
-            entity_identifier_element: etree.Element = etree.SubElement(
+            entity_identifier_element: etree._Element = etree.SubElement(
                 entity_element, 
                 f"{{{INSTANCE_NAMESPACE}}}identifier",
                 {
@@ -85,65 +85,79 @@ class XbrlProducer:
                 }
             )
             entity_identifier_element.text = context.entity
-            period_element: etree.Element = etree.SubElement(
+            period_element: etree._Element = etree.SubElement(
                 context_element, 
                 f"{{{INSTANCE_NAMESPACE}}}period"
             )
             if context.start_date:
-                period_start_element: etree.Element = etree.SubElement(
+                period_start_element: etree._Element = etree.SubElement(
                     period_element, 
                     f"{{{INSTANCE_NAMESPACE}}}startDate"
                 )
                 period_start_element.text = context.start_date
-                period_end_element: etree.Element = etree.SubElement(
+                period_end_element: etree._Element = etree.SubElement(
                     period_element, 
                     f"{{{INSTANCE_NAMESPACE}}}endDate"
                 )
                 period_end_element.text = context.end_date
             else:
-                period_instant_element: etree.Element = etree.SubElement(
+                period_instant_element: etree._Element = etree.SubElement(
                     period_element, 
                     f"{{{INSTANCE_NAMESPACE}}}instant"
                 )
                 period_instant_element.text = context.end_date
             if len(context.dimensions):
-                scenario_element: etree.Element = etree.SubElement(
+                scenario_element: etree._Element = etree.SubElement(
                     context_element, 
                     f"{{{INSTANCE_NAMESPACE}}}scenario"
                 )
                 for dimension in context.dimensions:
-                    dimension_element: etree.Element = etree.SubElement(
-                        scenario_element, 
-                        f"{{{DIMENSIONS_NAMESPACE}}}explicitMember",
-                        {
-                            "dimension": dimension.axis.to_prefixed_name(
-                                cls.content_document.namespaces, 
-                                cls.local_namespace_prefix
-                            )
-                        }
-                    )
-                    dimension_element.text = dimension.member.to_prefixed_name(
-                        cls.content_document.namespaces, 
-                        cls.local_namespace_prefix
-                    )
+                    if dimension.typed_member_value == None:
+                        explicit_dimension_element: etree._Element = etree.SubElement(
+                            scenario_element, 
+                            f"{{{DIMENSIONS_NAMESPACE}}}explicitMember",
+                            {
+                                "dimension": dimension.axis.to_prefixed_name(
+                                    cls.content_document.namespaces, 
+                                    cls.local_namespace_prefix
+                                )
+                            }
+                        )
+                        explicit_dimension_element.text = dimension.member.to_prefixed_name(
+                            cls.content_document.namespaces, 
+                            cls.local_namespace_prefix
+                        )
+                    else:
+                        typed_dimension_element: etree._Element = etree.SubElement(
+                            scenario_element, 
+                            f"{{{DIMENSIONS_NAMESPACE}}}typedMember",
+                            {
+                                "dimension": dimension.axis.to_prefixed_name(cls.content_document.namespaces, cls.local_namespace_prefix)
+                            }
+                        )
+                        typed_member_element: etree._Element = etree.SubElement(
+                            typed_dimension_element,
+                            f"{{{dimension.member.namespace}}}{dimension.member.name}"
+                        )
+                        typed_member_element.text = dimension.typed_member_value
 
         # Add Units
         for unit_id, unit in cls.content_document.units.items():
-            unit_element: etree.Element = etree.SubElement(
+            unit_element: etree._Element = etree.SubElement(
                 root_element, 
                 f"{{{INSTANCE_NAMESPACE}}}unit", 
                 {"id": unit_id}
             )
             if unit.denominator:
-                divide_element: etree.Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}divide")
-                numerator_element: etree.Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitNumerator")
-                numerator_measure_element: etree.Element = etree.SubElement(numerator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
+                divide_element: etree._Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}divide")
+                numerator_element: etree._Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitNumerator")
+                numerator_measure_element: etree._Element = etree.SubElement(numerator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
                 numerator_measure_element.text = unit.numerator.to_prefixed_name(cls.content_document.namespaces)
-                denominator_element: etree.Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitDenominator")
-                denominator_measure_element: etree.Element = etree.SubElement(denominator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
+                denominator_element: etree._Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitDenominator")
+                denominator_measure_element: etree._Element = etree.SubElement(denominator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
                 denominator_measure_element.text = unit.denominator.to_prefixed_name(cls.content_document.namespaces)
             else:
-                measure_element: etree.Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}measure")
+                measure_element: etree._Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}measure")
                 measure_element.text = unit.numerator.to_prefixed_name(cls.content_document.namespaces)
 
         # Add Facts
@@ -166,10 +180,10 @@ class XbrlProducer:
             if tag.type == IXBRL_TAG_TYPES.NUMERIC:
                 attributes["unitRef"] = tag.attributes.unit
                 attributes["decimals"] = str(tag.attributes.decimals)
-                tmp_element: etree.Element = etree.Element("tmp")
+                tmp_element: etree._Element = etree.Element("tmp")
                 cls._rec_render_content(content_item, tmp_element)
                 value = float(tmp_element.text) * (10**tag.attributes.scale)
-                tag_element: etree.Element = etree.SubElement(
+                tag_element: etree._Element = etree.SubElement(
                     root_element,
                     uname,
                     attributes
@@ -178,9 +192,9 @@ class XbrlProducer:
             else:
                 # get previous is if known
                 tag_id_base = f"{uname}_{tag.context_id}"
-                tag_element: etree.Element = cls.tag_id_tracker.get(tag_id_base, None)
+                tag_element: etree._Element = cls.tag_id_tracker.get(tag_id_base, None)
                 if tag_element == None:
-                    tag_element: etree.Element = etree.SubElement(
+                    tag_element: etree._Element = etree.SubElement(
                         root_element,
                         uname,
                         attributes

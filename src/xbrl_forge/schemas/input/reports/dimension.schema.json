@@ -4,7 +4,7 @@
     "title": "Dimension Mapping",
     "description": "Using a Member for a Axis",
     "type": "object",
-    "required": ["axis", "member"],
+    "required": ["axis", "member", "typed_member_value"],
     "properties": {
         "axis": {
             "type": "object",
@@ -33,6 +33,10 @@
                     "description": "The name of the concept."
                 }
             }
+        },
+        "typed_member_value": {
+            "type": ["string", "null"],
+            "description": "The Value of the typed Axis that will be nested into the member if given. If the member shoud be a explicitmember, set this key to null."
         }
     }
 }

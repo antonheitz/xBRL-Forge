@@ -145,28 +145,33 @@ class DocumentContext:
 class DocumentDimension:
     axis: 'Tag'
     member: 'Tag'
+    typed_member_value: str
 
     @classmethod
     def from_dict(cls, data: dict) -> 'DocumentDimension':
         return cls(
             axis=Tag.from_dict(data.get("axis", {})),
-            member=Tag.from_dict(data.get("member", {}))
+            member=Tag.from_dict(data.get("member", {})),
+            typed_member_value=data.get("typed_member_value", None)
         )
     
     def to_dict(cls) -> dict:
         return {
             "axis": cls.axis.to_dict(),
-            "member": cls.member.to_dict()
+            "member": cls.member.to_dict(),
+            "typed_member_value": cls.typed_member_value
         }
 
     @staticmethod
     def equal_dimensions(dimensions_a: List["DocumentDimension"], dimensions_b: List["DocumentDimension"]) -> bool:
-        axis_unames_a: Dict[str, str] = {dim.axis.to_uname():dim.member.to_uname() for dim in dimensions_a}
-        axis_unames_b: Dict[str, str] = {dim.axis.to_uname():dim.member.to_uname() for dim in dimensions_b}
+        axis_unames_a: Dict[str, DocumentDimension] = {dim.axis.to_uname():dim for dim in dimensions_a}
+        axis_unames_b: Dict[str, DocumentDimension] = {dim.axis.to_uname():dim for dim in dimensions_b}
         if set(axis_unames_a.keys()) != set(axis_unames_b.keys()):
             return False
         for axis in axis_unames_a.keys():
-            if axis_unames_a[axis] != axis_unames_b[axis]:
+            if axis_unames_a[axis].typed_member_value != axis_unames_b[axis].typed_member_value:
+                return False
+            if axis_unames_a[axis].member.to_uname() != axis_unames_b[axis].member.to_uname():
                 return False
         return True
 

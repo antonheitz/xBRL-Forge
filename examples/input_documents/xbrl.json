@@ -488,7 +488,8 @@
                             "member": {
                                 "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                 "name": "NoncontrollingInterestsMember"
-                            }
+                            },
+                            "typed_member_value": null
                         }
                     ]
                 },
