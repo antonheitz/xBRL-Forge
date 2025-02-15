@@ -17,7 +17,7 @@
 
 ## Installation
 
-Pyhton 3 is needed.
+Python 3 is needed.
 
 To use `xbrl-forge`, install it via pip:
 
@@ -141,7 +141,7 @@ Here is a complete example that ties the endpoints together. This assumes the de
 import requests, json, re
 
 url = "http://localhost:8000"
-docx_file = "/data/Projects/xBRL-Forge/examples/file_conversions/Testing Docx document.docx"
+docx_file = "examples/file_conversions/Testing Docx document.docx"
 
 conversion_result = requests.post(
     url + "/convert_document", 

@@ -17,7 +17,7 @@
 
 ## Installation
 
-Pyhton 3 is needed.
+Python 3 is needed.
 
 To use `xbrl-forge`, install it via pip:
 

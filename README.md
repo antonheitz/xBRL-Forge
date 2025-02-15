@@ -78,10 +78,17 @@ flowchart TD
 
 ## Guides
 
-Learn how to convert files and use this project in differnt ways:
+There are two ways of using this project.
 
- - [How to use the python Package API](docs/python_api.md)
- - [How to use the Web (REST) API](docs/web_api.md)
+1) [Standalone use of this tool] Lern how to run the tool for simple usage:
+
+ - [How to deploy the application in docker](docs/tool-guides/docker_deployment.md)
+
+2) [Integration into other tools] Learn how to convert files and use the engine of this project in differnt ways:
+
+ - [How to use the python Package API](docs/engine_guides/python_api.md)
+ - [How to use the Web (REST) API](docs/engine_guides/web_api.md)
+ - [How to use the Docker Engine API](docs/engine_guides/docker_api.md)
 
 ## Documentation
 
