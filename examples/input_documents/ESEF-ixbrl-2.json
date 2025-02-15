@@ -525,7 +525,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }
@@ -535,7 +534,6 @@
                             "context_id": "context_1",
                             "start_index": 52,
                             "end_index": 115,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": false
                             }
@@ -545,7 +543,6 @@
                             "context_id": "context_1",
                             "start_index": 94,
                             "end_index": 180,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": false
                             }
@@ -622,7 +619,6 @@
                                                     "context_id": "context_3",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -650,7 +646,6 @@
                                                     "context_id": "context_2",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -678,7 +673,6 @@
                                                     "context_id": "context_4",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -718,7 +712,6 @@
                                                     "context_id": "context_3",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -745,7 +738,6 @@
                                                     "context_id": "context_2",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -772,7 +764,6 @@
                                                     "context_id": "context_4",
                                                     "start_index": 0,
                                                     "end_index": 7,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -813,7 +804,6 @@
                                                     "context_id": "context_3",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -841,7 +831,6 @@
                                                     "context_id": "context_2",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -869,7 +858,6 @@
                                                     "context_id": "context_4",
                                                     "start_index": 0,
                                                     "end_index": 8,
-                                                    "type": "NUMERIC",
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
@@ -894,7 +882,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }
@@ -910,7 +897,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }
@@ -971,7 +957,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }

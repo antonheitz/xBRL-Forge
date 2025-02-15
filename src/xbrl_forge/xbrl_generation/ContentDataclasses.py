@@ -234,53 +234,88 @@ class DocumentUnit:
             update_map[unit_id] = new_unit_id
         return target_units, update_map
 
-class IXBRL_TAG_TYPES:
-    NUMERIC: str = "NUMERIC"
-    NONNUMERIC: str = "NONNUMERIC"
+@dataclass
+class EnumerationValue:
+    element_id: str
+    schema_location: str
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'EnumerationValue':
+        return cls(
+            element_id = data.get("element_id"),
+            schema_location = data.get("schema_location")
+        )
     
+    def value(cls, extension_schema_url: str) -> str:
+        if cls.schema_location:
+            return f"{cls.schema_location}#{cls.element_id}"
+        return f"{extension_schema_url}#{cls.element_id}"
+
+    def copy(cls) -> 'EnumerationValue':
+        return cls.__class__(
+            element_id=cls.element_id,
+            schema_location=cls.schema_location
+        )
+
+    def to_dict(cls) -> dict:
+        return {
+            "element_id": cls.element_id,
+            "schema_location": cls.schema_location
+        }
+
 @dataclass
 class TagAttributes:
+    # only non-numeric
     escape: bool
+    enumeration_values: List['EnumerationValue']
+    # both
+    format: Tag
+    nil: bool
+    # only numeric
     decimals: int
     scale: int
     unit: str
-    format: Tag
     sign: bool
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TagAttributes':
         return cls(
             escape=data.get("escape", False),
+            enumeration_values=[EnumerationValue.from_dict(d) for d in data.get("enumeration_values", [])],
+            format=Tag.from_dict(data.get("format")) if "format" in data else None,
+            nil=data.get("nil", False),
             decimals=data.get("decimals", 0),
             scale=data.get("scale", 0),
-            unit=data.get("unit", ""),
-            format=Tag.from_dict(data.get("format", {})),
+            unit=data.get("unit", None),
             sign=data.get("sign", False)
         )
     
     def copy(cls) -> 'TagAttributes':
         return cls.__class__(
             escape=cls.escape,
+            enumeration_values=[ev.copy() for ev in cls.enumeration_values],
+            format=cls.format.copy() if cls.format else None,
+            nil=cls.nil,
             decimals=cls.decimals,
             scale=cls.scale,
             unit=cls.unit,
-            format=cls.format.copy(),
             sign=cls.sign
         )
     
     def to_dict(cls) -> dict:
         return {
             "escape": cls.escape,
+            "enumeration_values": [ev.to_dict() for ev in cls.enumeration_values],
+            "format": cls.format.to_dict() if cls.format else None,
+            "nil": cls.nil,
             "decimals": cls.decimals,
             "scale": cls.scale,
             "unit": cls.unit,
-            "format": cls.format.to_dict(),
             "sign": cls.sign
         }
 
 @dataclass
 class AppliedTag(Tag):
-    type: str
     context_id: str
     attributes: TagAttributes
     start_index: int = None
@@ -291,7 +326,6 @@ class AppliedTag(Tag):
         return cls(
             namespace=data.get("namespace"),
             name=data.get("name"),
-            type=data.get("type"),
             context_id=data.get("context_id"),
             attributes=TagAttributes.from_dict(data.get("attributes", {})),
             start_index=data.get("start_index", None),
@@ -302,8 +336,8 @@ class AppliedTag(Tag):
         return cls.start_index <= compare_tag.start_index and compare_tag.end_index <= cls.end_index
 
     def find_intercept(cls, compare_tag: 'AppliedTag') -> int:
-        #  |---------------------|         
-        #        |--------------------|
+        #  |---------------------|         cls
+        #        |--------------------|    compare tag
         #                        x this index
         if compare_tag.start_index < cls.end_index and cls.end_index < compare_tag.end_index:
             return cls.end_index
@@ -313,7 +347,6 @@ class AppliedTag(Tag):
         splitted_tag = cls.__class__(
                 namespace=cls.namespace,
                 name=cls.name,
-                type=cls.type,
                 context_id=cls.context_id,
                 attributes=cls.attributes.copy(),
                 start_index=index,
@@ -326,7 +359,6 @@ class AppliedTag(Tag):
         return {
             "namespace": cls.namespace,
             "name": cls.name,
-            "type": cls.type,
             "context_id": cls.context_id,
             "attributes": cls.attributes.to_dict(),
             "start_index": cls.start_index,
@@ -335,7 +367,7 @@ class AppliedTag(Tag):
     
     @staticmethod
     def _sort(tags: List['AppliedTag']) -> List['AppliedTag']:
-        return sorted(tags, key=lambda x: (x.start_index, reversor(x.end_index), x.type))
+        return sorted(tags, key=lambda x: (x.start_index, reversor(x.end_index), x.attributes.unit != None))
 
     @staticmethod
     def create_tree(tags: List['AppliedTag'], content_len: int) -> 'AppliedTagTree':
@@ -351,7 +383,7 @@ class AppliedTag(Tag):
             tags += new_tags
             tags = AppliedTag._sort(tags)
             current_index += 1
-        tree_wrapper: AppliedTagTree = AppliedTagTree(AppliedTag("", "", "", "", {}, 0, content_len), [], True)
+        tree_wrapper: AppliedTagTree = AppliedTagTree(AppliedTag("", "", "", {}, 0, content_len), [], True)
         for tag in tags:
             tree_wrapper.add_tag(tag)
         return tree_wrapper

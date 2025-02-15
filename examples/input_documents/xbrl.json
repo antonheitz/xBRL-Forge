@@ -519,7 +519,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": false
                             }
@@ -535,7 +534,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }
@@ -551,7 +549,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": false
                             }
@@ -732,7 +729,6 @@
                             "context_id": "context_1",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NONNUMERIC",
                             "attributes": {
                                 "escape": true
                             }
@@ -749,7 +745,6 @@
                             "context_id": "context_2",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NUMERIC",
                             "attributes": {
                                 "decimals": -2,
                                 "scale": 3,
@@ -773,7 +768,6 @@
                             "context_id": "context_3",
                             "start_index": null,
                             "end_index": null,
-                            "type": "NUMERIC",
                             "attributes": {
                                 "decimals": -2,
                                 "scale": 3,

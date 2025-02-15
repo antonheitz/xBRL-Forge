@@ -5,7 +5,7 @@ import logging
 from .ElementRender import render_content
 
 from .PackageDataclasses import File
-from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem, IXBRL_TAG_TYPES
+from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem
 from .utils import xml_to_string
 
 logger = logging.getLogger(__name__)
@@ -17,6 +17,7 @@ LINK_NAMESPACE: str = "http://www.xbrl.org/2003/linkbase"
 XLINK_NAMESPACE: str = "http://www.w3.org/1999/xlink"
 INSTANCE_NAMESPACE: str = "http://www.xbrl.org/2003/instance"
 DIMENSIONS_NAMESPACE: str = "http://xbrl.org/2006/xbrldi"
+XSI_NAMESPACE: str = "http://www.w3.org/2001/XMLSchema-instance"
 
 class HtmlProducer:
     content_document: ContentDocument
@@ -49,7 +50,8 @@ class HtmlProducer:
                 "link": LINK_NAMESPACE,
                 "xlink": XLINK_NAMESPACE,
                 "xbrli": INSTANCE_NAMESPACE,
-                "xbrldi": DIMENSIONS_NAMESPACE
+                "xbrldi": DIMENSIONS_NAMESPACE,
+                "xsi": XSI_NAMESPACE
             })
             if cls.local_namespace:
                 namespace_map[cls.local_namespace_prefix] = cls.local_namespace
@@ -71,18 +73,19 @@ class HtmlProducer:
         if cls.ixbrl:
             # create ixbrl header information
             ixbrl_header_container: etree._Element = etree.SubElement(xhtml_body, f"{{{XHTML_NAMESPACE}}}div", {"style":"display:none;"})
-            ixbrl_header: etree._Element = etree.SubElement(ixbrl_header_container, f"{{{IXBRL_NAMESPACE}}}header")
-            ixbrl_references: etree._Element = etree.SubElement(ixbrl_header, f"{{{IXBRL_NAMESPACE}}}references", {f"{{{XML_NAMESPACE}}}lang": cls.content_document.lang})
-            schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
+            cls.ixbrl_header: etree._Element = etree.SubElement(ixbrl_header_container, f"{{{IXBRL_NAMESPACE}}}header")
+            cls.ixbrl_hidden: etree._Element = None
+            ixbrl_references: etree._Element = etree.SubElement(cls.ixbrl_header, f"{{{IXBRL_NAMESPACE}}}references", {f"{{{XML_NAMESPACE}}}lang": cls.content_document.lang})
+            cls.schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
             schema_ref: etree._Element = etree.SubElement(
                 ixbrl_references, 
                 f"{{{LINK_NAMESPACE}}}schemaRef",
                 {
-                    f"{{{XLINK_NAMESPACE}}}href": schema_url,
+                    f"{{{XLINK_NAMESPACE}}}href": cls.schema_url,
                     f"{{{XLINK_NAMESPACE}}}type": "simple"
                 }
             )
-            ixbrl_resources: etree._Element = etree.SubElement(ixbrl_header, f"{{{IXBRL_NAMESPACE}}}resources")
+            ixbrl_resources: etree._Element = etree.SubElement(cls.ixbrl_header, f"{{{IXBRL_NAMESPACE}}}resources")
         
             # add contexts to header
             for context_id, context in cls.content_document.contexts.items():
@@ -186,8 +189,30 @@ class HtmlProducer:
             previous_element = cls.tag_id_tracker[tag_id_base]
             id_number = int(previous_element.attrib["id"].split("_")[-1]) + 1
         # add tag
-        match tag.type:
-            case IXBRL_TAG_TYPES.NONNUMERIC:
+        # if the tag attributes contain a unit, then it must be a numeric tag
+        if tag.attributes.unit:
+            new_element: etree._Element = etree.SubElement(
+                parent,
+                f"{{{IXBRL_NAMESPACE}}}nonFraction",
+                {
+                    "id": f"{tag_id_base}{id_number}",
+                    "name": prefixed_name,
+                    "contextRef": tag.context_id,
+                    "unitRef": tag.attributes.unit,
+                    "scale": str(tag.attributes.scale),
+                    "decimals": str(tag.attributes.decimals)
+                }
+            )
+            if tag.attributes.sign:
+                new_element.attrib["sign"] = "-"
+            if tag.attributes.format:
+                new_element.attrib["format"] = tag.attributes.format.to_prefixed_name(cls.content_document.namespaces)
+            if tag.attributes.nil:
+                new_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
+        # otherwise it must be a non-numeric tag
+        else:
+            # if its not an enum, it can be tagged inline
+            if not tag.attributes.enumeration_values:
                 if previous_element == None:
                     new_element = etree.SubElement(
                         parent,
@@ -195,10 +220,15 @@ class HtmlProducer:
                         {
                             "id": f"{tag_id_base}{id_number}",
                             "name": prefixed_name,
-                            "contextRef": tag.context_id,
-                            "escape": "true" if tag.attributes.escape else "false"
+                            "contextRef": tag.context_id
                         }
                     )
+                    if tag.attributes.escape:
+                        new_element.attrib["escape"] = "true"
+                    if tag.attributes.format:
+                        new_element.attrib["format"] = tag.attributes.format.to_prefixed_name(cls.content_document.namespaces)
+                    if tag.attributes.nil:
+                        new_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
                 else:
                     previous_element.attrib["continuedAt"] = f"{tag_id_base}{id_number}"
                     new_element = etree.SubElement(
@@ -208,24 +238,25 @@ class HtmlProducer:
                             "id": f"{tag_id_base}{id_number}"
                         }
                     )
-            case IXBRL_TAG_TYPES.NUMERIC:
-                new_element = etree.SubElement(
-                    parent,
-                    f"{{{IXBRL_NAMESPACE}}}nonFraction",
+            # enumerations
+            else:
+                # check if the hidden element already exists
+                if cls.ixbrl_hidden == None:
+                    cls.ixbrl_hidden = etree.SubElement(
+                        cls.ixbrl_header,
+                        f"{{{IXBRL_NAMESPACE}}}hidden"
+                    )
+                hidden_tag_element: etree._Element = etree.SubElement(
+                    cls.ixbrl_hidden,
+                    f"{{{IXBRL_NAMESPACE}}}nonNumeric",
                     {
                         "id": f"{tag_id_base}{id_number}",
                         "name": prefixed_name,
-                        "contextRef": tag.context_id,
-                        "unitRef": tag.attributes.unit,
-                        "scale": str(tag.attributes.scale),
-                        "decimals": str(tag.attributes.decimals),
-                        "format": tag.attributes.format.to_prefixed_name(cls.content_document.namespaces)
+                        "contextRef": tag.context_id
                     }
                 )
-                if tag.attributes.sign:
-                    new_element.attrib["sign"] = "-"
-            case _:
-                logger.error(f"Could not create tag for '{tag.name}' in Namespace '{tag.namespace}' with type '{tag.type}'.")
+                # add enum values
+                hidden_tag_element.text = " ".join([enum.value(cls.schema_url) for enum in tag.attributes.enumeration_values])
                 new_element = parent
         # add element to known ids
         cls.tag_id_tracker[tag_id_base] = new_element

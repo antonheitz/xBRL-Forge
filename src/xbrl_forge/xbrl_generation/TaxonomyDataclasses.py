@@ -147,7 +147,7 @@ class TaxonomyMetadata:
             "publisher_url": cls.publisher_url,
             "publisher_country": cls.publisher_country,
             "publication_date": cls.publication_date,
-            "entrypoint": [entrypoint.to_dict() for entrypoint in cls.entrypoints]
+            "entrypoints": [entrypoint.to_dict() for entrypoint in cls.entrypoints]
         }
 
 @dataclass

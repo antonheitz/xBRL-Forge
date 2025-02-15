@@ -6,7 +6,7 @@ import math
 from .ElementRender import render_content
 
 from .PackageDataclasses import File
-from .ContentDataclasses import AppliedTagTree, ContentDocument, ContentItem, IXBRL_TAG_TYPES
+from .ContentDataclasses import AppliedTagTree, ContentDocument, ContentItem
 from .utils import xml_to_string
 
 logger = logging.getLogger(__name__)
@@ -56,12 +56,12 @@ class XbrlProducer:
         #TODO: xsi:schemaLocation="http://mycompany.com/xbrl/taxonomy 102-01-SpecExample.xsd"
 
         # add schema ref
-        schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
+        cls.schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
         schema_ref: etree._Element = etree.SubElement(
             root_element, 
             f"{{{LINK_NAMESPACE}}}schemaRef",
             {
-                f"{{{XLINK_NAMESPACE}}}href": schema_url,
+                f"{{{XLINK_NAMESPACE}}}href": cls.schema_url,
                 f"{{{XLINK_NAMESPACE}}}type": "simple"
             }
         )
@@ -171,39 +171,58 @@ class XbrlProducer:
         tags = [tag for tag in content_item.tags if not tag.end_index and not tag.start_index]
         # create xbrl tag
         for tag in tags:
-            uname: str = f"{{{cls.local_namespace}}}{tag.name}"
+            applicable_namespace: str = cls.local_namespace
             if tag.namespace:
-                uname: str = f"{{{tag.namespace}}}{tag.name}"
-            attributes: Dict[str, str] = {
-                "contextRef": tag.context_id
-            }
-            if tag.type == IXBRL_TAG_TYPES.NUMERIC:
-                attributes["unitRef"] = tag.attributes.unit
-                attributes["decimals"] = str(tag.attributes.decimals)
+                applicable_namespace = tag.namespace
+            # numeric fact
+            if tag.attributes.unit:
+                new_element: etree._Element = etree.SubElement(
+                    root_element,
+                    f"{{{applicable_namespace}}}{tag.name}",
+                    {
+                        "contextRef": tag.context_id,
+                        "unitRef": tag.attributes.unit,
+                        "decimals": str(tag.attributes.decimals)
+                    }
+                )
+                if tag.attributes.nil:
+                    new_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
                 tmp_element: etree._Element = etree.Element("tmp")
                 cls._rec_render_content(content_item, tmp_element)
                 value = float(tmp_element.text) * (10**tag.attributes.scale)
-                tag_element: etree._Element = etree.SubElement(
-                    root_element,
-                    uname,
-                    attributes
-                )
-                tag_element.text = str(value)
+                new_element.text = str(value)
+            # otherwise it must be non-numeric
             else:
-                # get previous is if known
-                tag_id_base = f"{uname}_{tag.context_id}"
-                tag_element: etree._Element = cls.tag_id_tracker.get(tag_id_base, None)
-                if tag_element == None:
-                    tag_element: etree._Element = etree.SubElement(
-                        root_element,
-                        uname,
-                        attributes
+                # if it is not a enum
+                if not tag.attributes.enumeration_values:
+                    # get previous is if known
+                    tag_id_base = f"{applicable_namespace}_{tag.name}_{tag.context_id}"
+                    tag_element: etree._Element = cls.tag_id_tracker.get(tag_id_base, None)
+                    if tag_element == None:
+                        tag_element: etree._Element = etree.SubElement(
+                            root_element,
+                            f"{{{applicable_namespace}}}{tag.name}",
+                            {
+                                "contextRef": tag.context_id
+                            }
+                        )
+                        cls.tag_id_tracker[tag_id_base] = tag_element
+                    if tag.attributes.nil:
+                        tag_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
+                    cls._rec_render_content(
+                        content_item,
+                        tag_element
                     )
-                    cls.tag_id_tracker[tag_id_base] = tag_element
-                cls._rec_render_content(
-                    content_item,
-                    tag_element
-                )
+                # enumerations value
+                else:
+                    enum_tag_element: etree._Element = etree.SubElement(
+                        root_element,
+                        f"{{{applicable_namespace}}}{tag.name}",
+                        {
+                            "contextRef": tag.context_id
+                        }
+                    )
+                    enum_tag_element.text = " ".join([enum.value(cls.schema_url) for enum in tag.attributes.enumeration_values])
     
     def _rec_render_content(cls, content_item: ContentItem, tag_element: etree.Element) -> None:
         render_content(
