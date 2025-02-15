@@ -1,10 +1,8 @@
-# xBRL Forge
-
-e**x**pandable **B**ridged **R**eporting **L**ayer **Forge**
+# xBRL-Forge
 
 ## Overview
 
-**xBRL Forge** is an open-source software solution designed to streamline the process of creating final XBRL (eXtensible Business Reporting Language) and iXBRL (Inline XBRL) reports by integrating data from multiple software applications. With xBRL Forge, users can effortlessly generate XBRL taxonomies and compile comprehensive reports using a simple JSON structure for integration.
+**xBRL-Forge** is an open-source software solution designed to streamline the process of creating final XBRL (eXtensible Business Reporting Language) and iXBRL (Inline XBRL) reports by integrating data from multiple software applications. With xBRL-Forge, users can effortlessly generate XBRL taxonomies and compile comprehensive reports using a simple JSON structure for integration.
 
 ## Biggest strengths
 
@@ -30,7 +28,7 @@ flowchart TD
     d2 --> combined
     d3 --> combined
     d4 --> combined
-    combined[["`**xBRL Forge**
+    combined[["`**xBRL-Forge**
     - create different reports, even from parts
     - merge extension taxonomy structures`"]]
     combined --> package
@@ -52,12 +50,12 @@ Tag data imported from other files
 flowchart TD
     docx[Word File]
     docx --> forge
-    forge[["`**xBRL Forge**
+    forge[["`**xBRL-Forge**
     - convert to JSON Structure`"]]
     forge --> json1
     json1[("**Document Contents in 
     Target JSON strucutre**
-    - edit (tag) with any Tool and feed back into xBRL Forge to create xBRL Package")]
+    - edit (tag) with any Tool and feed back into xBRL-Forge to create xBRL Package")]
 ```
 
 ## All the Features
@@ -68,9 +66,9 @@ flowchart TD
 
 - **Easy JSON Structure**: Integrate data using an intuitive and straightforward JSON format.
 
-- **Open Source**: Contribute to the community and enhance the functionality of xBRL Forge.
+- **Open Source**: Contribute to the community and enhance the functionality of xBRL-Forge.
 
-- **Data conversion**: Prepare your data in a Word file (docx) and then convert it to the xBRL Forge data structure to enhance it with tags!
+- **Data conversion**: Prepare your data in a Word file (docx) and then convert it to the xBRL-Forge data structure to enhance it with tags!
 
 - **Supported Data Types**: 
   - Numeric Data (monetary, emissions, etc.)
@@ -80,13 +78,14 @@ flowchart TD
 
 ## Guides
 
-Please refer to [this small guide to get Started](docs/getting_started.md)
+Learn how to convert files and use this project in differnt ways:
 
-Learn how to convert other files to the necessary data structures [here](docs/document_conversion.md)
+ - [How to use the python Package API](docs/python_api.md)
+ - [How to use the Web (REST) API](docs/web_api.md)
 
 ## Documentation
 
-For detailed documentation on how to use xBRL Forge, including API references and examples, please refer to the [docs](docs/) folder.
+For detailed documentation on how to use xBRL-Forge, including API references and examples, please refer to the [docs](docs/) folder.
 
 ## Contributing
 
@@ -114,4 +113,4 @@ Also you can join the discussion on [Discord](https://discord.gg/Wa3R7JBayw).
 
 ---
 
-Thank you for using xBRL Forge! We look forward to your feedback and contributions!
+Thank you for using xBRL-Forge! We look forward to your feedback and contributions!

@@ -34,7 +34,7 @@ class File:
             with open(new_path, "w+") as f:
                 f.write(cls.content)
 
-    def create_package(cls, folder_path: str, remove_existing_package: bool = False) -> None:
+    def create_package(cls, folder_path: str, remove_existing_package: bool = False) -> str:
         file_path: str = os.path.join(folder_path, f"{cls.name}.{cls.zip_extension}")
         if remove_existing_package:
             if os.path.isfile(file_path):
@@ -42,6 +42,7 @@ class File:
         with zipfile.ZipFile(file_path, "w") as zip:
             for path, file in cls._list_files():
                 zip.writestr(path, file.content)
+        return file_path
 
     def _list_files(cls, prepend_path: str = None) -> List[Tuple[str, "File"]]:
         file_path: str = cls.name

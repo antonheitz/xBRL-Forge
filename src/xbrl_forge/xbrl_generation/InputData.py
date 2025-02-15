@@ -12,7 +12,7 @@ class InputData:
     @classmethod
     def from_dict(cls, data: dict) -> 'InputData':
         return cls(
-            taxonomy=TaxonomyDocument.from_dict(data.get("taxonomy")) if "taxonomy" in data else None,
+            taxonomy=TaxonomyDocument.from_dict(data.get("taxonomy")) if "taxonomy" in data and data.get("taxonomy") else None,
             reports=[ContentDocument.from_dict(report) for report in data.get("reports", [])]
         )
     

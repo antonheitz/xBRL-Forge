@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://xbrl-forge.org/schema/input/wrapper",
-    "title": "xBRL Forge Input Data",
+    "title": "xBRL-Forge Input Data",
     "description": "The Input required for the package to create results.",
     "type": "object",
     "properties": {
