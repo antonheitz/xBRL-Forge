@@ -1,0 +1,14 @@
+.app-wrapper {
+    height: 100%;
+    width: 100%;
+
+    .main-wrapper {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+
+        .body-grow-wrapper {
+            flex-grow: 1;
+        }
+    }
+}

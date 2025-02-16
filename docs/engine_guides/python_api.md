@@ -128,28 +128,35 @@ results = convert_document(path_to_source_file)
 
 ## Example Workflow
 
-Here is a complete example that ties the key functions together:
+Here is a complete example that ties the key functions together (create a .py file with this contents in the `src` folder and run it):
 
 ```python
-from xbrl_forge import create_xbrl, validate_input_data, load_input_data
+import json
 
-# lets say we have 2 data jsons from 2 different systems, data_a and data_b
+from xbrl_forge import create_xbrl, validate_input_data, load_input_data, convert_document
 
-# validate both data sets
-validate_input_data(data_a)
-validate_input_data(data_b)
+with open("../examples/input_documents/stylesheet.css", "r") as f:
+    style_data = f.read()
+with open("../examples/input_documents/ESEF-ixbrl.json", "r") as f:
+    data_json = json.loads(f.read())
+    validate_input_data(data_json)
+    data = load_input_data(data_json)
+with open("../examples/input_documents/ESEF-ixbrl-2.json", "r") as f:
+    data2_json = json.loads(f.read())
+    validate_input_data(data2_json)
+    data2 = load_input_data(data2_json)
+with open("../examples/input_documents/xbrl.json", "r") as f:
+    data_xbrl_json = json.loads(f.read())
+    validate_input_data(data_xbrl_json)
+    data_xbrl = load_input_data(data_xbrl_json)
+    
+loaded_docx = convert_document("../examples/file_conversions/Testing Docx document.docx")
 
-# load data objects
-loaded_data_a = load_input_data(data_a)
-loaded_data_b = load_input_data(data_b)
+# this is where you would alter the object to include/edit the tagging, if it is not in the json yet
 
-# run generation
-results = create_xbrl([loaded_data_a, loaded_data_b])
-
-# save either the files
-results.save_files("result_folder")
-# or the package
-results.create_package("result_folder")
+results = create_xbrl([data, data2, data_xbrl, loaded_docx], styles=style_data)
+results.save_files("../examples/result", True)
+results.create_package("../examples/result", True)
 ```
 
 ---

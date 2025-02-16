@@ -1,10 +1,29 @@
+networks:
+  n_xbrl_forge:
+
 services:
+
   engine:
     build:
       context: .
-      dockerfile: docker/Dockerfile.engine
+      dockerfile: $PWD/docker/Dockerfile.engine
     ports: 
       - 8000:8000
     environment:
       XBRL_FORGE_LOGGING: WARNING
       XBRL_FORGE_PORT: 8000
+    networks:
+      n_xbrl_forge:
+        aliases:
+          - xbrl_forge_engine
+
+  web-ui:
+    build:
+      context: src/web_ui
+      dockerfile: $PWD/docker/Dockerfile.web_ui
+    ports:
+      - 80:80
+    networks:
+      n_xbrl_forge:
+        aliases:
+          - xbrl_forge_web_ui
