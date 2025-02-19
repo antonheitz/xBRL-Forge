@@ -6,7 +6,10 @@
     "type": "object",
     "required": [
         "name",
-        "context_id"
+        "attributes",
+        "entity",
+        "entity_scheme",
+        "end_date"
     ],
     "properties": {
         "namespace": {
@@ -16,24 +19,6 @@
         "name": {
             "description": "The name of the concept (line item) used for the tag.",
             "type": "string"
-        },
-        "context_id": {
-            "description": "The context id must be included in the contexts section of this resource.",
-            "type": "string"
-        },
-        "start_index": {
-            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
-            "type": [
-                "number",
-                "null"
-            ]
-        },
-        "end_index": {
-            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
-            "type": [
-                "number",
-                "null"
-            ]
         },
         "attributes": {
             "description": "Each tag is enhances by attributes, depending on their type",
@@ -79,14 +64,54 @@
                     "type": "number"
                 },
                 "unit": {
-                    "description": "CHECK IF NUMERIC: This references to a unit defined in the 'units' object of this resource. This will determine if it is numeric or not.",
-                    "type": "string"
+                    "description": "CHECK IF NUMERIC: The unit to be used. Omit if not nummeric tag. This will determine if it is numeric or not.",
+                    "$ref": "https://xbrl-forge.org/schema/input/reports/unit"
                 },
                 "sign": {
                     "description": "NUMERIC: The sign attribute reverses the mashine readable value, which is by default always positive. This is necessary if the human readable logic differs from the xbrl logic in regards to the used concept.",
                     "type": "boolean"
                 }
             }
+        },
+        "entity": {
+            "description": "The Entity Identifier the fact refers to",
+            "type": "string"
+        },
+        "entity_scheme": {
+            "description": "The Schema of the Entity Identifier",
+            "type": "string"
+        },
+        "end_date": {
+            "description": "The Date must be provided in YYYY-MM-DD format. The end date is always required and refers to the end of the given day.",
+            "type": "string",
+            "format": "date"
+        },
+        "start_date": {
+            "description": "The start date is only to be used for duration concepts. This date must be provided in YYYY-MM-DD format and always refers to the start of the given day.",
+            "type": ["string", "null"],
+            "format": "date"
+        },
+        "dimensions": {
+            "description": "Zero to N dimensions can be provided. Every axis must only be used once per fact. Omit Default members of axis.",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/dimension"
+            },
+            "minItems": 0
+        },
+        "start_index": {
+            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
+            "type": [
+                "number",
+                "null"
+            ]
+        },
+        "end_index": {
+            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
+            "type": [
+                "number",
+                "null"
+            ]
         }
     }
 }

@@ -36,15 +36,6 @@
                 }
             }
         },
-        "contexts": {
-            "type": "object",
-            "description": "Every XBRL Fact needs a context. If no contexts are declared (key omitted), the resource will be treated as XHTML only.",
-            "patternProperties": {
-                "^.*$": {
-                    "$ref": "https://xbrl-forge.org/schema/input/reports/context"
-                }
-            }
-        },
         "units": {
             "type": "object",
             "description": "Every numeric XBRL Fact needs a unit.",

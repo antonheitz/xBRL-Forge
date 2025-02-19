@@ -15,8 +15,6 @@ class ContentDocument:
     inline: bool
     priority: int
     namespaces: Dict[str, str]
-    contexts: Dict[str, 'DocumentContext']
-    units: Dict[str, 'DocumentUnit']
     content: List['ContentItem']
     
     @classmethod
@@ -28,8 +26,6 @@ class ContentDocument:
             inline=data.get("inline", True),
             priority=data.get("priority", 100),
             namespaces=data.get("namespaces"),
-            contexts={context_id:DocumentContext.from_dict(context_data) for context_id, context_data in data.get("contexts", {}).items()},
-            units={unit_id:DocumentUnit.from_dict(unit_data) for unit_id, unit_data in data.get("units", {}).items()},
             content=[ContentItem.from_dict(item_data) for item_data in data.get("content")]
         )
 
@@ -46,15 +42,10 @@ class ContentDocument:
         for doc_namespaces in [doc.namespaces for doc in document_list]:
             if doc_namespaces:
                 namespaces.update(doc_namespaces)
-        # merge content of each document, updating context and unit ids
-        contexts: Dict[str, 'DocumentContext'] = {}
-        units: Dict[str, 'DocumentUnit'] = {}
+        # merge content of each document
         content: List['ContentItem'] = []
         for document in document_list:
-            contexts, context_update_map = DocumentContext.combine(contexts, document.contexts)
-            units, unit_update_map = DocumentUnit.combine(units, document.units)
             for content_item in document.content:
-                content_item.update_tags_meta(context_update_map, unit_update_map)
                 content.append(content_item)
         return cls(
             name=document_list[0].name,
@@ -63,11 +54,15 @@ class ContentDocument:
             inline=any([doc.inline for doc in document_list]),
             priority=document_list[0].priority,
             namespaces=namespaces,
-            contexts=contexts,
-            units=units,
             content=content
         )
     
+    def _get_applied_tags(cls) -> List['AppliedTag']:
+        tags: List['AppliedTag'] = []
+        for content_element in cls.content:       
+            tags += content_element._get_applied_tags()
+        return tags
+
     def to_dict(cls) -> dict:
         return {
             "name": cls.name,
@@ -76,8 +71,6 @@ class ContentDocument:
             "inline": cls.inline,
             "priority": cls.priority,
             "namespaces": cls.namespaces,
-            "contexts": {context_id:context.to_dict() for context_id, context in cls.contexts.items()},
-            "units": {unit_id:unit.to_dict() for unit_id, unit in cls.units.items()},
             "content": [content_item.to_dict() for content_item in cls.content],
         }
 
@@ -88,16 +81,6 @@ class DocumentContext:
     end_date: str
     start_date: str
     dimensions: List['DocumentDimension']
-
-    @classmethod
-    def from_dict(cls, data: dict) -> 'DocumentContext':
-        return cls(
-            entity=data.get("entity"),
-            entity_scheme=data.get("entity_scheme"),
-            end_date=data.get("end_date"),
-            start_date=data.get("start_date", None),
-            dimensions=[DocumentDimension.from_dict(dimension) for dimension in data.get("dimensions", [])]
-        )
     
     def euqals(cls, compare_context: "DocumentContext") -> bool:
         if cls.entity != compare_context.entity:
@@ -112,35 +95,6 @@ class DocumentContext:
             return False
         return True
 
-    def to_dict(cls) -> dict:
-        return {
-            "entity": cls.entity,
-            "entity_scheme": cls.entity_scheme,
-            "end_date": cls.end_date,
-            "start_date": cls.start_date,
-            "dimensions": [dimension.to_dict() for dimension in cls.dimensions]
-        }
-    
-    @staticmethod
-    def combine(target_contexts: Dict[str, "DocumentContext"], new_contexts: Dict[str, "DocumentContext"]) -> Tuple[Dict[str, "DocumentContext"], Dict[str, str]]:
-        # update map: { old_context_id: new_context_id }
-        update_map: Dict[str, str] = {}
-        # iterate new contexts
-        for context_id, context in new_contexts.items():
-            # check for already existing, equal context
-            new_context_id: str = None
-            for existing_context_id, existing_context in target_contexts.items():
-                if context.euqals(existing_context):
-                    new_context_id = existing_context_id
-                    break
-            # if not existing, create an id and add the context
-            if not new_context_id:
-                new_context_id = f"c-{len(target_contexts.keys())}"
-                target_contexts[new_context_id] = context
-            # add to update map for content updating
-            update_map[context_id] = new_context_id
-        return target_contexts, update_map
-
 @dataclass
 class DocumentDimension:
     axis: 'Tag'
@@ -153,6 +107,13 @@ class DocumentDimension:
             axis=Tag.from_dict(data.get("axis", {})),
             member=Tag.from_dict(data.get("member", {})),
             typed_member_value=data.get("typed_member_value", None)
+        )
+    
+    def copy(cls) -> 'DocumentDimension':
+        return cls.__class__(
+            axis=cls.axis.copy(),
+            member=cls.member.copy(),
+            typed_member_value=cls.typed_member_value
         )
     
     def to_dict(cls) -> dict:
@@ -179,12 +140,20 @@ class DocumentDimension:
 class DocumentUnit:
     numerator: 'Tag'
     denominator: 'Tag'
+    unit_id: str = None
 
     @classmethod
     def from_dict(cls, data: dict) -> 'DocumentUnit':
         return cls(
             numerator=Tag.from_dict(data.get("numerator", {})),
             denominator=Tag.from_dict(data.get("denominator", {})) if data.get("denominator", False) else None
+        )
+    
+    def copy(cls) -> 'DocumentUnit':
+        return cls.__class__(
+            numerator=cls.numerator.copy(),
+            denominator=cls.denominator.copy() if cls.denominator else None,
+            unit_id=cls.unit_id
         )
 
     def equals(cls, compare_unit: "DocumentUnit") -> bool:
@@ -207,32 +176,12 @@ class DocumentUnit:
         if denominator_a != denominator_b:
             return False
         return True
-
+    
     def to_dict(cls) -> dict:
         return {
             "numerator": cls.numerator.to_dict(),
             "denominator": cls.denominator.to_dict() if cls.denominator else None
         }
-    
-    @staticmethod
-    def combine(target_units: Dict[str, "DocumentUnit"], new_units: Dict[str, "DocumentUnit"]) -> Tuple[Dict[str, "DocumentUnit"], Dict[str, str]]:
-        # update map: { old_unit_id: new_unit_id }
-        update_map: Dict[str, str] = {}
-        # iterate new units
-        for unit_id, unit in new_units.items():
-            # check if unit already exists:
-            new_unit_id: str = None
-            for existing_unit_id, existing_unit in target_units.items():
-                if unit.equals(existing_unit):
-                    new_unit_id = existing_unit_id
-                    break
-            # if not existing, create an id and add the unit
-            if not new_unit_id:
-                new_unit_id = f"u-{len(target_units.keys())}"
-                target_units[new_unit_id] = unit
-            # add to update map for content updating
-            update_map[unit_id] = new_unit_id
-        return target_units, update_map
 
 @dataclass
 class EnumerationValue:
@@ -274,19 +223,21 @@ class TagAttributes:
     # only numeric
     decimals: int
     scale: int
-    unit: str
+    unit: DocumentUnit
     sign: bool
+    # will be filled automatically
+    unit_ref: str = None
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TagAttributes':
         return cls(
             escape=data.get("escape", False),
             enumeration_values=[EnumerationValue.from_dict(d) for d in data.get("enumeration_values", [])],
-            format=Tag.from_dict(data.get("format")) if "format" in data else None,
+            format=Tag.from_dict(data.get("format")) if "format" in data and data["format"] else None,
             nil=data.get("nil", False),
             decimals=data.get("decimals", 0),
             scale=data.get("scale", 0),
-            unit=data.get("unit", None),
+            unit=DocumentUnit.from_dict(data.get("unit")) if "unit" in data and data["unit"] else None,
             sign=data.get("sign", False)
         )
     
@@ -298,7 +249,7 @@ class TagAttributes:
             nil=cls.nil,
             decimals=cls.decimals,
             scale=cls.scale,
-            unit=cls.unit,
+            unit=cls.unit.copy() if cls.unit else None,
             sign=cls.sign
         )
     
@@ -310,26 +261,60 @@ class TagAttributes:
             "nil": cls.nil,
             "decimals": cls.decimals,
             "scale": cls.scale,
-            "unit": cls.unit,
+            "unit": cls.unit.to_dict() if cls.unit else None,
             "sign": cls.sign
         }
 
 @dataclass
 class AppliedTag(Tag):
-    context_id: str
     attributes: TagAttributes
+    entity: str
+    entity_scheme: str
+    start_date: str
+    end_date: str
+    dimensions: List['DocumentDimension']
     start_index: int = None
     end_index: int = None
+    # this is generated while the production of the file
+    context_id: str = None
 
     @classmethod
     def from_dict(cls, data: dict) -> 'AppliedTag':
         return cls(
             namespace=data.get("namespace"),
             name=data.get("name"),
-            context_id=data.get("context_id"),
             attributes=TagAttributes.from_dict(data.get("attributes", {})),
+            entity=data.get("entity"),
+            entity_scheme=data.get("entity_scheme"),
+            start_date=data.get("start_date"),
+            end_date=data.get("end_date"),
+            dimensions=[DocumentDimension.from_dict(dd) for dd in data.get("dimensions", [])],
             start_index=data.get("start_index", None),
             end_index=data.get("end_index", None)
+        )
+    
+    @classmethod
+    def empty(cls, start_index: int = 0, end_index: int = 0) -> 'AppliedTag':
+        return cls(
+            namespace="",
+            name="",
+            attributes={},
+            entity="",
+            entity_scheme="",
+            start_date="",
+            end_date="",
+            dimensions=[],
+            start_index=start_index,
+            end_index=end_index
+        )
+    
+    def to_document_context(cls) -> DocumentContext:
+        return DocumentContext(
+            entity=cls.entity,
+            entity_scheme=cls.entity_scheme,
+            end_date=cls.end_date,
+            start_date=cls.start_date,
+            dimensions=cls.dimensions
         )
 
     def contains_tag(cls, compare_tag: 'AppliedTag') -> bool:
@@ -347,10 +332,15 @@ class AppliedTag(Tag):
         splitted_tag = cls.__class__(
                 namespace=cls.namespace,
                 name=cls.name,
-                context_id=cls.context_id,
                 attributes=cls.attributes.copy(),
+                entity=cls.entity,
+                entity_scheme=cls.entity_scheme,
+                start_date=cls.start_date,
+                end_date=cls.end_date,
+                dimensions=[dd.copy() for dd in cls.dimensions],
                 start_index=index,
-                end_index=cls.end_index
+                end_index=cls.end_index,
+                context_id=cls.context_id
             )
         cls.end_index = index
         return splitted_tag
@@ -359,8 +349,12 @@ class AppliedTag(Tag):
         return {
             "namespace": cls.namespace,
             "name": cls.name,
-            "context_id": cls.context_id,
             "attributes": cls.attributes.to_dict(),
+            "entity": cls.entity,
+            "entity_scheme": cls.entity_scheme,
+            "start_date": cls.start_date,
+            "end_date": cls.end_date,
+            "dimensions": [dd.to_dict() for dd in cls.dimensions],
             "start_index": cls.start_index,
             "end_index": cls.end_index
         }
@@ -383,7 +377,11 @@ class AppliedTag(Tag):
             tags += new_tags
             tags = AppliedTag._sort(tags)
             current_index += 1
-        tree_wrapper: AppliedTagTree = AppliedTagTree(AppliedTag("", "", "", {}, 0, content_len), [], True)
+        tree_wrapper: AppliedTagTree = AppliedTagTree(
+            AppliedTag.empty(end_index=content_len), 
+            [], 
+            True
+        )
         for tag in tags:
             tree_wrapper.add_tag(tag)
         return tree_wrapper
@@ -437,11 +435,11 @@ class ContentItem:
                     [AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
                 )
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        raise Exception(f"The function update_tags_meta was not implemented for the content type {cls.type}.")
-
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
         raise Exception(f"The function update_tags_elements was not implemented for the content type {cls.type}.")
+
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        raise Exception(f"The function _get_applied_tags was not implemented for the content type {cls.type}.")
 
     def to_dict(cls) -> dict:
         return {
@@ -468,12 +466,8 @@ class TitleItem(ContentItem):
             if not tag.namespace and tag.name in element_update_map:
                 tag.name = element_update_map[tag.name]
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        return cls.tags
 
     def to_dict(cls) -> dict:
         return {
@@ -500,12 +494,8 @@ class ParagraphItem(ContentItem):
             if not tag.namespace and tag.name in element_update_map:
                 tag.name = element_update_map[tag.name]
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        return cls.tags
 
     def to_dict(cls) -> dict:
         return {
@@ -532,16 +522,13 @@ class TableItem(ContentItem):
                 tag.name = element_update_map[tag.name]
         for row in cls.rows:
             row.update_tags_elements(element_update_map)
-    
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
-        for row in cls.rows:
-            row.update_tags_meta(context_id_map, unit_id_map)
 
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        tags: List[AppliedTag] = cls.tags
+        for row in cls.rows:
+            tags += row._get_applied_tags()
+        return tags
+    
     def to_dict(cls) -> dict:
         return {
             "type": cls.type,
@@ -563,9 +550,11 @@ class TableRow:
         for cell in cls.cells:
             cell.update_tags_elements(element_update_map)
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        tags: List[AppliedTag] = []
         for cell in cls.cells:
-            cell.update_tags_meta(context_id_map, unit_id_map)
+            tags += cell._get_applied_tags()
+        return tags
 
     def to_dict(cls) -> dict:
         return {
@@ -592,10 +581,12 @@ class TableCell:
         for content_item in cls.content:
             content_item.update_tags_elements(element_update_map)
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for content_item in cls.content:
-            content_item.update_tags_meta(context_id_map, unit_id_map)
-
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        tags: List[AppliedTag] = []
+        for content_element in cls.content:
+            tags += content_element._get_applied_tags()
+        return tags
+    
     def to_dict(cls) -> dict:
         return {
             "content": [item.to_dict() for item in cls.content],
@@ -622,12 +613,8 @@ class ImageItem(ContentItem):
             if not tag.namespace and tag.name in element_update_map:
                 tag.name = element_update_map[tag.name]
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        return cls.tags
 
     def to_dict(cls) -> dict:
         return {
@@ -657,15 +644,12 @@ class ListItem(ContentItem):
         for element in cls.elements:
             element.update_tags_elements(element_update_map)
 
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
-        for element in cls.elements:
-            element.update_tags_meta(context_id_map, unit_id_map)
-
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        tags: List[AppliedTag] = cls.tags
+        for list_element in cls.elements:
+            tags += list_element._get_applied_tags()
+        return tags
+    
     def to_dict(cls) -> dict:
         return {
             "type": cls.type,
@@ -687,10 +671,12 @@ class ListElement:
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
         for content_item in cls.content:
             content_item.update_tags_elements(element_update_map)
-    
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for content_item in cls.content:
-            content_item.update_tags_meta(context_id_map, unit_id_map)
+
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        tags: List[AppliedTag] = []
+        for content_element in cls.content:
+            tags += content_element._get_applied_tags()
+        return tags
 
     def to_dict(cls) -> dict:
         return {
@@ -713,14 +699,10 @@ class BaseXbrlItem(ContentItem):
         for tag in cls.tags:
             if not tag.namespace and tag.name in element_update_map:
                 tag.name = element_update_map[tag.name]
-    
-    def update_tags_meta(cls, context_id_map: Dict[str, str], unit_id_map: Dict[str, str]) -> None:
-        for tag in cls.tags:
-            if tag.context_id and tag.context_id in context_id_map:
-                tag.context_id = context_id_map[tag.context_id]
-            if tag.attributes.unit and tag.attributes.unit in unit_id_map:
-                tag.attributes.unit = unit_id_map[tag.attributes.unit]
         
+    def _get_applied_tags(cls) -> List[AppliedTag]:
+        return cls.tags
+    
     def to_dict(cls) -> dict:
         return {
             "type": cls.type,

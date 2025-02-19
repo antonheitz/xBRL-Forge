@@ -27,8 +27,6 @@ def doc_to_data(path: str, lang: str = "en") -> InputData:
         inline=True,
         priority=0,
         namespaces={},
-        contexts={},
-        units={},
         content=content_data
     )
     return InputData(taxonomy=None, reports=[report_data])

@@ -459,56 +459,6 @@
                 "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12": "ixt4",
                 "http://www.xbrl.org/2003/iso4217": "iso4217"
             },
-            "contexts": {
-                "context_1": {
-                    "entity": "984500DBCD59QD9E6F76",
-                    "entity_scheme": "http://standards.iso.org/iso/17442",
-                    "end_date": "2024-12-31",
-                    "start_date": "2024-01-01",
-                    "dimensions": []
-                },
-                "context_2": {
-                    "entity": "984500DBCD59QD9E6F76",
-                    "entity_scheme": "http://standards.iso.org/iso/17442",
-                    "end_date": "2024-12-31",
-                    "start_date": null,
-                    "dimensions": []
-                },
-                "context_3": {
-                    "entity": "984500DBCD59QD9E6F76",
-                    "entity_scheme": "http://standards.iso.org/iso/17442",
-                    "end_date": "2024-12-31",
-                    "start_date": null,
-                    "dimensions": [
-                        {
-                            "axis": {
-                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
-                                "name": "ComponentsOfEquityAxis"
-                            },
-                            "member": {
-                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
-                                "name": "NoncontrollingInterestsMember"
-                            },
-                            "typed_member_value": null
-                        }
-                    ]
-                },
-                "context_4": {
-                    "entity": "984500DBCD59QD9E6F76",
-                    "entity_scheme": "http://standards.iso.org/iso/17442",
-                    "end_date": "2023-12-31",
-                    "start_date": null,
-                    "dimensions": []
-                }
-            },
-            "units": {
-                "EUR": {
-                    "numerator": {
-                        "namespace": "http://www.xbrl.org/2003/iso4217",
-                        "name": "EUR"
-                    }
-                }
-            },
             "content": [
                 {
                     "type": "TITLE",
@@ -522,7 +472,11 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": null,
                             "end_index": null,
                             "attributes": {
@@ -531,7 +485,11 @@
                         },
                         {
                             "name": "FirstPart",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": 52,
                             "end_index": 115,
                             "attributes": {
@@ -540,7 +498,11 @@
                         },
                         {
                             "name": "PartlyFirstPartAndSecondPart",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": 94,
                             "end_index": 180,
                             "attributes": {
@@ -616,13 +578,34 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "IntangibleAssetsOtherThanGoodwill",
-                                                    "context_id": "context_3",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -643,13 +626,22 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "IntangibleAssetsOtherThanGoodwill",
-                                                    "context_id": "context_2",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -670,13 +662,22 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "IntangibleAssetsOtherThanGoodwill",
-                                                    "context_id": "context_4",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -709,13 +710,34 @@
                                             "tags": [
                                                 {
                                                     "name": "InvestmentPropertyExtension",
-                                                    "context_id": "context_3",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -735,13 +757,22 @@
                                             "tags": [
                                                 {
                                                     "name": "InvestmentPropertyExtension",
-                                                    "context_id": "context_2",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -761,13 +792,22 @@
                                             "tags": [
                                                 {
                                                     "name": "InvestmentPropertyExtension",
-                                                    "context_id": "context_4",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 7,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -801,13 +841,34 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "PropertyPlantAndEquipment",
-                                                    "context_id": "context_3",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -828,13 +889,22 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "PropertyPlantAndEquipment",
-                                                    "context_id": "context_2",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -855,13 +925,22 @@
                                                 {
                                                     "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                                                     "name": "PropertyPlantAndEquipment",
-                                                    "context_id": "context_4",
+                                                    "entity": "984500DBCD59QD9E6F76",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
                                                     "start_index": 0,
                                                     "end_index": 8,
                                                     "attributes": {
                                                         "decimals": -2,
                                                         "scale": 3,
-                                                        "unit": "EUR",
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
                                                         "format": {
                                                             "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
                                                             "name": "num-comma-decimal"
@@ -879,7 +958,11 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": null,
                             "end_index": null,
                             "attributes": {
@@ -894,7 +977,11 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": null,
                             "end_index": null,
                             "attributes": {
@@ -954,7 +1041,11 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "context_id": "context_1",
+                            "entity": "984500DBCD59QD9E6F76",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
                             "start_index": null,
                             "end_index": null,
                             "attributes": {

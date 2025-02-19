@@ -6,36 +6,24 @@ from .ElementRender import render_content
 
 from .PackageDataclasses import File
 from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem
+from .BaseProducer import BaseProducer, XHTML_NAMESPACE, XML_NAMESPACE, IXBRL_NAMESPACE, LINK_NAMESPACE, XLINK_NAMESPACE, INSTANCE_NAMESPACE, DIMENSIONS_NAMESPACE, XSI_NAMESPACE
 from .utils import xml_to_string
 
 logger = logging.getLogger(__name__)
 
-XHTML_NAMESPACE: str = "http://www.w3.org/1999/xhtml"
-XML_NAMESPACE: str = "http://www.w3.org/XML/1998/namespace"
-IXBRL_NAMESPACE: str = "http://www.xbrl.org/2013/inlineXBRL"
-LINK_NAMESPACE: str = "http://www.xbrl.org/2003/linkbase" 
-XLINK_NAMESPACE: str = "http://www.w3.org/1999/xlink"
-INSTANCE_NAMESPACE: str = "http://www.xbrl.org/2003/instance"
-DIMENSIONS_NAMESPACE: str = "http://xbrl.org/2006/xbrldi"
-XSI_NAMESPACE: str = "http://www.w3.org/2001/XMLSchema-instance"
-
-class HtmlProducer:
-    content_document: ContentDocument
-    tag_id_tracker: Dict[str, etree.Element]
+class HtmlProducer(BaseProducer):
     ixbrl: bool
     styles: str
-    local_namespace: str
-    local_namespace_prefix: str
-    local_taxonomy_schema: str
 
     def __init__(cls, document: ContentDocument, styles: str = "", local_namespace: str = None, local_namespace_prefix: str = None, local_taxonomy_schema: str = None):
-        cls.content_document = document
-        cls.tag_id_tracker = {}
-        cls.ixbrl = len(cls.content_document.contexts.keys()) > 0
+        super().__init__(
+            document=document, 
+            local_namespace=local_namespace, 
+            local_namespace_prefix=local_namespace_prefix,
+            local_taxonomy_schema=local_taxonomy_schema
+        )
+        cls.ixbrl = len(cls.contexts) > 0
         cls.styles = styles
-        cls.local_namespace = local_namespace
-        cls.local_namespace_prefix = local_namespace_prefix
-        cls.local_taxonomy_schema = local_taxonomy_schema
 
     def create_html(cls) -> File:
         # Populate Namespaces
@@ -88,73 +76,11 @@ class HtmlProducer:
             ixbrl_resources: etree._Element = etree.SubElement(cls.ixbrl_header, f"{{{IXBRL_NAMESPACE}}}resources")
         
             # add contexts to header
-            for context_id, context in cls.content_document.contexts.items():
-                context_element: etree._Element = etree.SubElement(ixbrl_resources, f"{{{INSTANCE_NAMESPACE}}}context", {"id":context_id})
-                entity_element: etree._Element = etree.SubElement(context_element, f"{{{INSTANCE_NAMESPACE}}}entity")
-                entity_identifier_element: etree._Element = etree.SubElement(
-                    entity_element, 
-                    f"{{{INSTANCE_NAMESPACE}}}identifier",
-                    {
-                        "scheme": context.entity_scheme
-                    }
-                )
-                entity_identifier_element.text = context.entity
-                period_element: etree._Element = etree.SubElement(context_element, f"{{{INSTANCE_NAMESPACE}}}period")
-                if context.start_date:
-                    period_start_element: etree._Element = etree.SubElement(period_element, f"{{{INSTANCE_NAMESPACE}}}startDate")
-                    period_start_element.text = context.start_date
-                    period_end_element: etree._Element = etree.SubElement(period_element, f"{{{INSTANCE_NAMESPACE}}}endDate")
-                    period_end_element.text = context.end_date
-                else:
-                    period_instant_element: etree._Element = etree.SubElement(period_element, f"{{{INSTANCE_NAMESPACE}}}instant")
-                    period_instant_element.text = context.end_date
-                if len(context.dimensions):
-                    scenario_element: etree._Element = etree.SubElement(context_element, f"{{{INSTANCE_NAMESPACE}}}scenario")
-                    for dimension in context.dimensions:
-                        if dimension.typed_member_value == None:
-                            explicit_dimension_element: etree._Element = etree.SubElement(
-                                scenario_element, 
-                                f"{{{DIMENSIONS_NAMESPACE}}}explicitMember",
-                                {
-                                    "dimension": dimension.axis.to_prefixed_name(
-                                        cls.content_document.namespaces, 
-                                        cls.local_namespace_prefix
-                                    )
-                                }
-                            )
-                            explicit_dimension_element.text = dimension.member.to_prefixed_name(
-                                cls.content_document.namespaces, 
-                                cls.local_namespace_prefix
-                            )
-                        else:
-                            typed_dimension_element: etree._Element = etree.SubElement(
-                                scenario_element, 
-                                f"{{{DIMENSIONS_NAMESPACE}}}typedMember",
-                                {
-                                    "dimension": dimension.axis.to_prefixed_name(cls.content_document.namespaces, cls.local_namespace_prefix)
-                                }
-                            )
-                            typed_member_element: etree._Element = etree.SubElement(
-                                typed_dimension_element,
-                                f"{{{dimension.member.namespace}}}{dimension.member.name}"
-                            )
-                            typed_member_element.text = dimension.typed_member_value
-
+            cls._add_context_elements(ixbrl_resources)
+            
             # Add Units
-            for unit_id, unit in cls.content_document.units.items():
-                unit_element: etree._Element = etree.SubElement(ixbrl_resources, f"{{{INSTANCE_NAMESPACE}}}unit", {"id": unit_id})
-                if unit.denominator:
-                    divide_element: etree._Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}divide")
-                    numerator_element: etree._Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitNumerator")
-                    numerator_measure_element: etree._Element = etree.SubElement(numerator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
-                    numerator_measure_element.text = unit.numerator.to_prefixed_name(cls.content_document.namespaces)
-                    denominator_element: etree._Element = etree.SubElement(divide_element, f"{{{INSTANCE_NAMESPACE}}}unitDenominator")
-                    denominator_measure_element: etree._Element = etree.SubElement(denominator_element, f"{{{INSTANCE_NAMESPACE}}}measure")
-                    denominator_measure_element.text = unit.denominator.to_prefixed_name(cls.content_document.namespaces)
-                else:
-                    measure_element: etree._Element = etree.SubElement(unit_element, f"{{{INSTANCE_NAMESPACE}}}measure")
-                    measure_element.text = unit.numerator.to_prefixed_name(cls.content_document.namespaces)
-
+            cls._add_unit_elements(ixbrl_resources)
+            
         # Add html contents
         body_wrapper: etree._Element = etree.SubElement(xhtml_body, f"{{{XHTML_NAMESPACE}}}div", {"class": "main"})
         for content in cls.content_document.content:
@@ -190,7 +116,7 @@ class HtmlProducer:
             id_number = int(previous_element.attrib["id"].split("_")[-1]) + 1
         # add tag
         # if the tag attributes contain a unit, then it must be a numeric tag
-        if tag.attributes.unit:
+        if tag.attributes.unit_ref:
             new_element: etree._Element = etree.SubElement(
                 parent,
                 f"{{{IXBRL_NAMESPACE}}}nonFraction",
@@ -198,7 +124,7 @@ class HtmlProducer:
                     "id": f"{tag_id_base}{id_number}",
                     "name": prefixed_name,
                     "contextRef": tag.context_id,
-                    "unitRef": tag.attributes.unit,
+                    "unitRef": tag.attributes.unit_ref,
                     "scale": str(tag.attributes.scale),
                     "decimals": str(tag.attributes.decimals)
                 }
