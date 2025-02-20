@@ -452,7 +452,7 @@
         {
             "name": "Example xbrl Report",
             "lang": "de",
-            "inline": false,
+            "xhtml": false,
             "priority": 1,
             "namespaces": {
                 "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full": "ifrs-full",
@@ -466,7 +466,7 @@
                     "tags": [
                         {
                             "name": "FirstPart",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": "2024-01-01",
@@ -485,7 +485,7 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": "2024-01-01",
@@ -504,7 +504,7 @@
                     "tags": [
                         {
                             "name": "FirstPart",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": "2024-01-01",
@@ -688,7 +688,7 @@
                     "tags": [
                         {
                             "name": "CompleteSection",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": "2024-01-01",
@@ -708,7 +708,7 @@
                         {
                             "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                             "name": "PropertyPlantAndEquipment",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": null,
@@ -740,7 +740,7 @@
                         {
                             "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
                             "name": "PropertyPlantAndEquipment",
-                            "entity": "984500DBCD59QD9E6F76",
+                            "entity": "254900OPPU84GM83MG36",
                             "entity_scheme": "http://standards.iso.org/iso/17442",
                             "end_date": "2024-12-31",
                             "start_date": null,

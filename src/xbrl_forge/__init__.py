@@ -55,7 +55,7 @@ def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
     for report in loaded_data.reports:
         if not reports_folder:        
             reports_folder = File("reports", contained_files=[])
-        if report.inline:
+        if report.xhtml:
             html_producer: HtmlProducer = HtmlProducer(
                 report, 
                 styles=styles, 

@@ -182,7 +182,7 @@ class HtmlProducer(BaseProducer):
                     }
                 )
                 # add enum values
-                hidden_tag_element.text = " ".join([enum.value(cls.schema_url) for enum in tag.attributes.enumeration_values])
+                hidden_tag_element.text = " ".join([enum.value(cls.local_namespace) for enum in tag.attributes.enumeration_values])
                 new_element = parent
         # add element to known ids
         cls.tag_id_tracker[tag_id_base] = new_element

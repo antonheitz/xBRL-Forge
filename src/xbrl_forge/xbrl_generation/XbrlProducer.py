@@ -124,7 +124,7 @@ class XbrlProducer(BaseProducer):
                             "contextRef": tag.context_id
                         }
                     )
-                    enum_tag_element.text = " ".join([enum.value(cls.schema_url) for enum in tag.attributes.enumeration_values])
+                    enum_tag_element.text = " ".join([enum.value(cls.local_namespace) for enum in tag.attributes.enumeration_values])
     
     def _rec_render_content(cls, content_item: ContentItem, tag_element: etree.Element) -> None:
         render_content(

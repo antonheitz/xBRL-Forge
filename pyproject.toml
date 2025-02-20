@@ -9,7 +9,7 @@ authors = [
   { name="Anton Heitz", email="anton.j.heitz@gmail.com" },
 ]
 description = "Generate XBRL Instances, iXBRL instances, xBRL Taxonomies and xBRL extension taxonomies from distributed sources"
-readme = "README.md"
+readme = "PYPI.md"
 requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",

@@ -80,15 +80,19 @@ flowchart TD
 
 There are two ways of using this project.
 
-1) [Standalone use of this tool] Lern how to run the tool for simple usage:
+1) **Standalone use of this tool**: Lern how to run the tool for simple usage (with ui):
 
  - [How to deploy the application in docker](docs/tool-guides/docker_deployment.md)
 
-2) [Integration into other tools] Learn how to convert files and use the engine of this project in differnt ways:
+2) **Integration into other tools/workflows**: Learn how to convert files and use the engine of this project in differnt ways:
 
  - [How to use the python Package API](docs/engine_guides/python_api.md)
  - [How to use the Web (REST) API](docs/engine_guides/web_api.md)
  - [How to use the Docker Engine API](docs/engine_guides/docker_api.md)
+
+When integrating the tool you will exit the JSON object from other systems. To learn how to Apply Tags to the JSON object please see this:
+
+ - [How to include Tags into the JSON object](docs/engine_guides/including_xbrl_information.md)
 
 ## Documentation
 

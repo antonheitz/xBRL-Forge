@@ -12,7 +12,7 @@ class ContentDocument:
     name: str
     taxonomy_schema: str
     lang: str
-    inline: bool
+    xhtml: bool
     priority: int
     namespaces: Dict[str, str]
     content: List['ContentItem']
@@ -23,7 +23,7 @@ class ContentDocument:
             name=data.get("name"),
             taxonomy_schema=data.get("taxonomy_schema"),
             lang=data.get("lang"),
-            inline=data.get("inline", True),
+            xhtml=data.get("xhtml", True),
             priority=data.get("priority", 100),
             namespaces=data.get("namespaces"),
             content=[ContentItem.from_dict(item_data) for item_data in data.get("content")]
@@ -51,7 +51,7 @@ class ContentDocument:
             name=document_list[0].name,
             taxonomy_schema=taxonomy_schema,
             lang=document_list[0].lang,
-            inline=any([doc.inline for doc in document_list]),
+            xhtml=any([doc.xhtml for doc in document_list]),
             priority=document_list[0].priority,
             namespaces=namespaces,
             content=content
@@ -68,7 +68,7 @@ class ContentDocument:
             "name": cls.name,
             "taxonomy_schema": cls.taxonomy_schema,
             "lang": cls.lang,
-            "inline": cls.inline,
+            "xhtml": cls.xhtml,
             "priority": cls.priority,
             "namespaces": cls.namespaces,
             "content": [content_item.to_dict() for content_item in cls.content],
@@ -184,32 +184,30 @@ class DocumentUnit:
         }
 
 @dataclass
-class EnumerationValue:
-    element_id: str
-    schema_location: str
+class EnumerationValue(Tag):
 
     @classmethod
     def from_dict(cls, data: dict) -> 'EnumerationValue':
         return cls(
-            element_id = data.get("element_id"),
-            schema_location = data.get("schema_location")
+            name = data.get("name"),
+            namespace = data.get("namespace")
         )
     
-    def value(cls, extension_schema_url: str) -> str:
-        if cls.schema_location:
-            return f"{cls.schema_location}#{cls.element_id}"
-        return f"{extension_schema_url}#{cls.element_id}"
+    def value(cls, extension_namespace: str) -> str:
+        if cls.namespace:
+            return f"{cls.namespace}#{cls.name}"
+        return f"{extension_namespace}#{cls.name}"
 
     def copy(cls) -> 'EnumerationValue':
         return cls.__class__(
-            element_id=cls.element_id,
-            schema_location=cls.schema_location
+            name=cls.name,
+            namespace=cls.namespace
         )
 
     def to_dict(cls) -> dict:
         return {
-            "element_id": cls.element_id,
-            "schema_location": cls.schema_location
+            "name": cls.name,
+            "namespace": cls.namespace
         }
 
 @dataclass

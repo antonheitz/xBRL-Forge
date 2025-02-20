@@ -41,18 +41,7 @@
                     "type": "array",
                     "items": {
                         "description": "One enum value",
-                        "type": "object",
-                        "required": ["element_id"],
-                        "properties": {
-                            "element_id": {
-                                "description": "The XML ID of the Value Element in the Schema it is defined in",
-                                "type": "string"
-                            },
-                            "schema_location": {
-                                "description": "The URL to the Schema the Value Element is defined in. If omitted, the extension Schema will be used.",
-                                "type": "string"
-                            }
-                        }
+                        "$ref": "https://xbrl-forge.org/schema/input/general/xml-element"
                     }
                 },
                 "decimals": {

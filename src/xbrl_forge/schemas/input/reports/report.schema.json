@@ -18,8 +18,8 @@
             "description": "The language of the information. Please use the ISO Lang code.",
             "type": "string"
         },
-        "inline": {
-            "description": "If true the document will be a inline XBRL document, if not a simple xBRL instance. In case of a XHTML only document, omit this key. ATTENTION: if false: only transformations 'num-comma-decimal', 'fixed-zero' and 'num-dot-decimal' can be used. ATTENTION: Only tag-wide (start and end index null) tags can be used and they cannot be nested!",
+        "xhtml": {
+            "description": "If true the document will be a inline XBRL document or untagged XHTML, if not a simple xBRL instance. ATTENTION: if false: only transformations 'num-comma-decimal', 'fixed-zero' and 'num-dot-decimal' can be used. ATTENTION: Only tag-wide (start and end index null) tags can be used and they cannot be nested!",
             "type": "boolean"
         },
         "priority": {
@@ -33,15 +33,6 @@
                 "^.*$": {
                     "type": "string",
                     "description": "Prefix for the namespace URI stored in the key of this value"
-                }
-            }
-        },
-        "units": {
-            "type": "object",
-            "description": "Every numeric XBRL Fact needs a unit.",
-            "patternProperties": {
-                "^.*$": {
-                    "$ref": "https://xbrl-forge.org/schema/input/reports/unit"
                 }
             }
         },
