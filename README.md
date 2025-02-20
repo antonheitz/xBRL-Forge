@@ -29,8 +29,8 @@ flowchart TD
     d3 --> combined
     d4 --> combined
     combined[["`**xBRL-Forge**
-    - create different reports, even from parts
-    - merge extension taxonomy structures`"]]
+    create different reports, even from parts;
+    merge extension taxonomy structures`"]]
     combined --> package
     package{{Combined xBRL Report Package}}
     package --> rp4
@@ -51,11 +51,11 @@ flowchart TD
     docx[Word File]
     docx --> forge
     forge[["`**xBRL-Forge**
-    - convert to JSON Structure`"]]
+    convert to JSON Structure`"]]
     forge --> json1
     json1[("**Document Contents in 
     Target JSON strucutre**
-    - edit (tag) with any Tool and feed back into xBRL-Forge to create xBRL Package")]
+    edit (tag) with any Tool and feed back into xBRL-Forge to create xBRL Package")]
 ```
 
 ## All the Features
