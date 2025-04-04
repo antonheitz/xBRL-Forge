@@ -1,9 +1,9 @@
 {
     "taxonomy": {
-        "priority": 500,
+        "priority": 900,
         "prefix": "test",
         "metadata": {
-            "name": "Example ESEF Report",
+            "name": "Example Combined Report",
             "description": "This report is the Example for the non-existent Test Company",
             "publisher": "Test Company Inc",
             "publisher_url": "test-company.com",

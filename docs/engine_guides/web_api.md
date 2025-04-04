@@ -82,7 +82,7 @@ The input data schema is available with descriptions of every key and value [her
 
 #### Returns
 
- - `ValidationRsult` (JSON): The validation results for the provided data structure, containing two keys `valid` (boolean, `true` if valid, `false` if not) and `message` (string) giving detailes on the validation.
+ - `ValidationResult` (JSON): The validation results for the provided data structure, containing two keys `valid` (boolean, `true` if valid, `false` if not) and `message` (string) giving detailes on the validation.
 
 #### Usage
 
@@ -101,12 +101,12 @@ validation_result = result.json()
 
 #### Description
 
-Endpoint to generates the (i)xBRL file based on the input data Object(s) and css styles.
+Endpoint to generates the (i)xBRL file based on the input data Object(s) and optiontal XHTML Template.
 
 #### Parameters
 
  - `input_data_list` (JSON as string): A list of `InputData` JSON objects (1 to N) that will be combined intoop a report/taxonomy package.
- - `styles` (string, optional): A string containing CSS information to style the output XHTML files based on tags and classes.
+ - `xthml_template` (string, optional): Optional XHTML template as string. This must use the XHTML namespace and must provide at least the XHTML tags `head`, `title`, `body` and a `div` inside the body with the id value `xhtml-content-root` (this will be used to place the content).
 
 #### Returns
 
@@ -121,7 +121,7 @@ result = requests.post(
     "http://localhost:8000/create_xbrl", 
     data={
         'input_data_list': json.dumps([input_data_1, input_data_2]),
-        'styles': None # this can be a string with css information to style the output html reports
+        'xhtml_template': None # this can be a string with an xhtml template
     }
 )
 
@@ -162,7 +162,7 @@ if not validate_result_dict.get("valid"):
 
 create_package_request = requests.post(
     url + "/create_xbrl", 
-    data={'input_data_list': json.dumps([data]), 'styles': None}
+    data={'input_data_list': json.dumps([data]), 'xhtml_template': None}
 )
 
 cd_header = create_package_request.headers['content-disposition']

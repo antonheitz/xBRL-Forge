@@ -37,7 +37,7 @@ def load_input_data(data: dict) -> InputData:
     logger.info(f"Loading Input Data")
     return InputData.from_dict(data)
 
-def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
+def create_xbrl(input_data_list: List[InputData], xthml_template: str = None) -> File:
     logger.info(f"Creating XBRL")
     # load data
     loaded_data: InputData = InputData.combine(input_data_list)
@@ -58,7 +58,7 @@ def create_xbrl(input_data_list: List[InputData], styles: str = None) -> File:
         if report.xhtml:
             html_producer: HtmlProducer = HtmlProducer(
                 report, 
-                styles=styles, 
+                xthml_template=xthml_template, 
                 local_namespace=local_namespace, 
                 local_namespace_prefix=local_namespace_prefix, 
                 local_taxonomy_schema=local_taxonomy_schema
