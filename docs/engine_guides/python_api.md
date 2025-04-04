@@ -86,7 +86,7 @@ Generates an XBRL file based on the validated input data.
 #### Parameters
 
 - `input_data_list` (List of `InputData` Objects): The input data to be transformed into an XBRL file.
-- `styles` (str): Optional CSS information stored in a string.
+- `xthml_template` (str): Optional XHTML template as string. This must use the XHTML namespace and must provide at least the XHTML tags `head`, `title`, `body` and a `div` inside the body with the id value `xhtml-content-root` (this will be used to place the content).
 
 #### Returns
 

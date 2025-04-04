@@ -2,20 +2,22 @@ from typing import Dict, Tuple
 from lxml import etree
 import logging
 
+
 from .ElementRender import render_content
 
 from .PackageDataclasses import File
 from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem
 from .BaseProducer import BaseProducer, XHTML_NAMESPACE, XML_NAMESPACE, IXBRL_NAMESPACE, LINK_NAMESPACE, XLINK_NAMESPACE, INSTANCE_NAMESPACE, DIMENSIONS_NAMESPACE, XSI_NAMESPACE
 from .utils import xml_to_string
+from .HtmlTemplate import get_xhtml_template
 
 logger = logging.getLogger(__name__)
 
 class HtmlProducer(BaseProducer):
     ixbrl: bool
-    styles: str
+    xhtml_template: str
 
-    def __init__(cls, document: ContentDocument, styles: str = "", local_namespace: str = None, local_namespace_prefix: str = None, local_taxonomy_schema: str = None):
+    def __init__(cls, document: ContentDocument, xthml_template: str = "", local_namespace: str = None, local_namespace_prefix: str = None, local_taxonomy_schema: str = None):
         super().__init__(
             document=document, 
             local_namespace=local_namespace, 
@@ -23,7 +25,7 @@ class HtmlProducer(BaseProducer):
             local_taxonomy_schema=local_taxonomy_schema
         )
         cls.ixbrl = len(cls.contexts) > 0
-        cls.styles = styles
+        cls.xhtml_template = xthml_template
 
     def create_html(cls) -> File:
         # Populate Namespaces
@@ -47,16 +49,11 @@ class HtmlProducer(BaseProducer):
                 namespace_map[prefix] = namespace
 
         # Create basic XHTML strucure
-        xhtml_root: etree._Element = etree.Element(f"{{{XHTML_NAMESPACE}}}html", nsmap=namespace_map)
-        xhtml_head: etree._Element = etree.SubElement(xhtml_root, f"{{{XHTML_NAMESPACE}}}head")
-        xhtml_title: etree._Element = etree.SubElement(xhtml_head, f"{{{XHTML_NAMESPACE}}}title")
-        xhtml_title.text = cls.content_document.name
-        xhtml_body: etree._Element = etree.SubElement(xhtml_root, f"{{{XHTML_NAMESPACE}}}body")
-       
-        # add basic style information
-        if cls.styles:
-            xhtml_style: etree._Element = etree.SubElement(xhtml_head, f"{{{XHTML_NAMESPACE}}}style", {"type": "text/css"})
-            xhtml_style.text = cls.styles
+        xhtml_root, xhtml_body, xhtml_content_root = get_xhtml_template(
+            name = cls.content_document.name,
+            namespace_map = namespace_map,
+            xhtml_template = cls.xhtml_template
+        )
 
         if cls.ixbrl:
             # create ixbrl header information
@@ -82,9 +79,8 @@ class HtmlProducer(BaseProducer):
             cls._add_unit_elements(ixbrl_resources)
             
         # Add html contents
-        body_wrapper: etree._Element = etree.SubElement(xhtml_body, f"{{{XHTML_NAMESPACE}}}div", {"class": "main"})
         for content in cls.content_document.content:
-            cls._convert_element(content, body_wrapper)
+            cls._convert_element(content, xhtml_content_root)
 
         return File(name=f"{cls.content_document.name}.html", content=xml_to_string(xhtml_root))
     

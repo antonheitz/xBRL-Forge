@@ -26,7 +26,7 @@ class TaxonomyDocument:
     
     @property
     def files_base_name(cls) -> str:
-        return f"{cls.prefix}_{cls.metadata.publication_date}"
+        return f"{cls.prefix}-{cls.metadata.publication_date}"
 
     @property
     def schema_url(cls) -> str:

@@ -48,10 +48,10 @@ async def validate_input_data_endpoint(input_data: str = Form(...)):
     return valdation_result
 
 @app.post("/create_xbrl")
-async def create_xbrl_endpoint(bg_tasks: BackgroundTasks, input_data_list: str = Form(...), styles: str = Form(None)):
+async def create_xbrl_endpoint(bg_tasks: BackgroundTasks, input_data_list: str = Form(...), xthml_template: str = Form(None)):
     loaded_data_dicts: List[dict] = json.loads(input_data_list)
     loaded_data: List[InputData] = [load_input_data(input_data_dict) for input_data_dict in loaded_data_dicts]
-    result = create_xbrl(loaded_data, styles)
+    result = create_xbrl(loaded_data, xthml_template)
     try:
         tmp_dir: str = create_tmp_dir()
         bg_tasks.add_task(remove_tmp_dir, tmp_dir)

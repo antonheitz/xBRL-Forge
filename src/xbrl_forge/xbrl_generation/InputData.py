@@ -42,7 +42,7 @@ class InputData:
         for report_name in sorted_reports:
             combined_documents.append(ContentDocument.combine(sorted_reports[report_name]))
         return cls(
-            taxonomy=input_data_list[0].taxonomy,
+            taxonomy=target_taxonomy,
             reports=combined_documents
         )
         
