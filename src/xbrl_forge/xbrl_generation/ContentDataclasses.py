@@ -363,6 +363,11 @@ class AppliedTag(Tag):
 
     @staticmethod
     def create_tree(tags: List['AppliedTag'], content_len: int) -> 'AppliedTagTree':
+        # if end_index is below 0, set it to the end of the content
+        for tag in tags:
+            if tag.end_index < 0:
+                tag.end_index = content_len
+        # sort and nest tags
         tags = AppliedTag._sort(tags)
         current_index: int = 0
         while current_index < len(tags):
@@ -522,7 +527,7 @@ class TableItem(ContentItem):
             row.update_tags_elements(element_update_map)
 
     def _get_applied_tags(cls) -> List[AppliedTag]:
-        tags: List[AppliedTag] = cls.tags
+        tags: List[AppliedTag] = [tag for tag in cls.tags]
         for row in cls.rows:
             tags += row._get_applied_tags()
         return tags
@@ -643,7 +648,7 @@ class ListItem(ContentItem):
             element.update_tags_elements(element_update_map)
 
     def _get_applied_tags(cls) -> List[AppliedTag]:
-        tags: List[AppliedTag] = cls.tags
+        tags: List[AppliedTag] = [tag for tag in cls.tags]
         for list_element in cls.elements:
             tags += list_element._get_applied_tags()
         return tags

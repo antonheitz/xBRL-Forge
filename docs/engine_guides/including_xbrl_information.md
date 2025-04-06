@@ -49,6 +49,7 @@ The number should be tagged with the concept `ifrs-full:IntangibleAssetsOtherTha
     // for numeric values please make sure only digits, spaces, dots and commas are part of the string
     // on some structures only tags without these attributes will be considered. Please check with the JSON Schema of the respective content element
     "start_index": 26,
+    // the end index can also be -1, which leads to the end of the content of the structure 
     "end_index": 30,
 
     // the namespace of the 2022 IFRS taxonomy in which the concept is defined

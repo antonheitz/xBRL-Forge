@@ -22,7 +22,7 @@ with open("examples/input_documents/xbrl_example.json", "r") as f:
     validate_input_data(xbrl_json)
     xbrl_loaded = load_input_data(xbrl_json)
 loaded_docx_xhtml = convert_document("examples/file_conversions/Testing Docx document.docx")
-    
+
 # create example esef file
 results_esef = create_xbrl([esef_loaded], xthml_template=xthml_template)
 results_esef.save_files("examples/result", True)
