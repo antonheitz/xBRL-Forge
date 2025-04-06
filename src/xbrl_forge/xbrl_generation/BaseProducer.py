@@ -105,7 +105,7 @@ class BaseProducer:
                         )
                         typed_member_element: etree._Element = etree.SubElement(
                             typed_dimension_element,
-                            f"{{{dimension.member.namespace}}}{dimension.member.name}"
+                            dimension.member.to_uname(cls.local_namespace)
                         )
                         typed_member_element.text = dimension.typed_member_value
 

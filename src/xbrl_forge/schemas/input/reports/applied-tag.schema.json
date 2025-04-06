@@ -96,7 +96,7 @@
             ]
         },
         "end_index": {
-            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0. The end index is the index of the character after the last character which is to be tagged.",
+            "description": "start_index and end_index define the applicable content for this tag. If both are omitted, the tag will be applied to the whole structue including the structural elements. If provided, the indexes will count in characters of the content, indexed beginning with 0 (-1 for the end). The end index is the index of the character after the last character which is to be tagged..",
             "type": [
                 "number",
                 "null"

@@ -86,12 +86,12 @@ class HtmlProducer(BaseProducer):
     
     def _convert_element(cls, content_item: ContentItem, parent: etree.Element) -> None:
         # check if tags are applied to the whole structure
-        complete_tags = [tag for tag in content_item.tags if not tag.end_index and not tag.start_index]
+        complete_tags = [tag for tag in content_item.tags if tag.end_index == None and tag.start_index == None]
         for tag in complete_tags:
             parent, new_element = cls._create_ixbrl_tag(tag, parent)
             parent = new_element
         # prepare part tags for the application to the text
-        part_tags = [tag for tag in content_item.tags if tag.end_index or tag.start_index]
+        part_tags = [tag for tag in content_item.tags if tag.end_index != None or tag.start_index != None]
         # add content based on type
         render_content(
             content_item,
