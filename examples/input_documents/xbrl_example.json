@@ -457,7 +457,8 @@
             "namespaces": {
                 "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full": "ifrs-full",
                 "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12": "ixt4",
-                "http://www.xbrl.org/2003/iso4217": "iso4217"
+                "http://www.xbrl.org/2003/iso4217": "iso4217",
+                "http://www.w3.org/1999/xhtml": "xhtml"
             },
             "content": [
                 {

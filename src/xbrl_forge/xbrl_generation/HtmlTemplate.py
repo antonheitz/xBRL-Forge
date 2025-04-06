@@ -14,7 +14,7 @@ DEFAULT_TEMPLATE: str = """
     <title>DEFAULT_TEMPLATE</title>
     <style type="text/css">
         body { background-color: gray; padding-left: 10px; padding-right: 10px; padding-top: 0px; padding-bottom: 0px; font-size: 16px; }
-        #xhtml-content-root { background-color: white; box-shadow: 5px 5px 5px black; padding: 10px; width: 90%; }
+        .main { background-color: white; box-shadow: 5px 5px 5px black; padding: 10px; width: 90%; margin: 0 auto; }
         h1 { border-bottom: 1px solid black; font-size: 20px; }
         h2, h3, h4, h5, h6 {}
         p {}
@@ -26,7 +26,9 @@ DEFAULT_TEMPLATE: str = """
     </style>
 </head>
 <body>
-    <div id="xhtml-content-root"></div>
+    <div class="main">
+        <div id="xhtml-content-root"></div>
+    </div>
 </body>
 </html>
 """
@@ -52,4 +54,5 @@ def _load_template(name: str, namespace_map: Dict[str, str], xhtml_template: str
     xhtml_title: etree._Element = xhtml_root.find(".//title", { None: XHTML_NAMESPACE })
     xhtml_title.text = name
     xhtml_content_root: etree._Element = xhtml_root.find(".//div[@id='xhtml-content-root']", { None: XHTML_NAMESPACE })
+    xhtml_content_root.text = ""
     return xhtml_root, xhtml_body, xhtml_content_root
