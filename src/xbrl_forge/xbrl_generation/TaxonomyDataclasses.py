@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-from .PackageDataclasses import Tag
+from .PackageDataclasses import Tag, TagLocation
 
 @dataclass
 class TaxonomyDocument:
@@ -173,7 +173,7 @@ class Entrypoint:
             "documents": cls.documents,
             "language": cls.language
         }
-    
+
 @dataclass
 class TaxonomyElement:
     balance: str
@@ -183,6 +183,7 @@ class TaxonomyElement:
     abstract: bool
     substitution_group: Tag
     type: Tag
+    typed_domain_ref: TagLocation
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TaxonomyElement':
@@ -192,8 +193,9 @@ class TaxonomyElement:
             name=data.get("name"),
             nillable=data.get("nillable"),
             abstract=data.get("abstract"),
-            substitution_group=Tag.from_dict(data.get("substitution_group", {})),
+            substitution_group=Tag.from_dict(data.get("substitution_group")) if "substitution_group" in data else None,
             type=Tag.from_dict(data.get("type", {})),
+            typed_domain_ref=TagLocation.from_dict(data.get("typed_domain_ref")) if "typed_domain_ref" in data else None
         )
 
     def equals(cls, compare_element: "TaxonomyElement") -> bool:
@@ -205,10 +207,18 @@ class TaxonomyElement:
             return False
         if cls.abstract != compare_element.abstract:
             return False
-        if cls.substitution_group.to_uname() != compare_element.substitution_group.to_uname():
-            return False
+        if cls.substitution_group or compare_element.substitution_group:
+            if not cls.substitution_group or not compare_element.substitution_group:
+                return False
+            if cls.substitution_group.to_uname() != compare_element.substitution_group.to_uname():
+                return False
         if cls.type.to_uname() != compare_element.type.to_uname():
             return False
+        if cls.typed_domain_ref or compare_element.typed_domain_ref:
+            if not cls.typed_domain_ref or not compare_element.typed_domain_ref:
+                return False
+            if cls.typed_domain_ref.to_url() != compare_element.typed_domain_ref.to_url():
+                return False
         return True
 
     def to_dict(cls) -> dict:
@@ -218,8 +228,9 @@ class TaxonomyElement:
             "name": cls.name,
             "nillable": cls.nillable,
             "abstract": cls.abstract,
-            "substitution_group": cls.substitution_group.to_dict(),
-            "type": cls.type.to_dict()
+            "substitution_group": cls.substitution_group.to_dict() if cls.substitution_group else None,
+            "type": cls.type.to_dict(),
+            "typed_domain_ref": cls.typed_domain_ref.to_dict() if cls.typed_domain_ref else None
         }
 
 @dataclass
@@ -326,9 +337,7 @@ class TaxonomyRole:
         }
 
 @dataclass
-class LinkbaseElement:
-    element_id: str
-    schema_location: str
+class LinkbaseElement(TagLocation):
     arc_role: str
     children: List['LinkbaseElement']
 
