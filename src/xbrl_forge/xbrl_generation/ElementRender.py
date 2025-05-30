@@ -45,12 +45,15 @@ def render_content(content_item: ContentItem, parent: etree.Element, add_text: C
         case ContentItem.TYPE_IMAGE:
             image_item: ImageItem = content_item
             # part tags are ignored for this item, a image can only be tagged as a whole
+            image_alt: str = "Image"
+            if image_item.alt_text:
+                image_alt = image_item.alt_text
             image_element: etree.Element = etree.SubElement(
                 parent, 
                 f"{{{XHTML_NAMESPACE}}}img",
                 {
                     "src": image_item.image_data,
-                    "alt": "image"
+                    "alt": image_alt
                 }
             )
         case ContentItem.TYPE_LIST:

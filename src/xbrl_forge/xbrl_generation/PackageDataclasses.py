@@ -88,3 +88,27 @@ class Tag:
             "namespace": cls.namespace,
             "name": cls.name
         }
+
+@dataclass
+class TagLocation:
+    element_id: str
+    schema_location: str
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Tag':
+        return cls(
+            schema_location=data.get("schema_location"),
+            element_id=data.get("element_id")
+        )
+    
+    def to_url(cls) -> str:
+        schema_location: str = ""
+        if cls.schema_location:
+            schema_location = cls.schema_location
+        return f"{schema_location}#{cls.element_id}"
+    
+    def to_dict(cls) -> dict:
+        return {
+            "schema_location": cls.schema_location,
+            "element_id": cls.element_id
+        }

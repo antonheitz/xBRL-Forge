@@ -20,6 +20,8 @@ XBRLI_NAMESPACE: str = "http://www.xbrl.org/2003/instance"
 XBRLI_PREFIX: str = "xbrli"
 SCHEMA_NAMESPACE: str = "http://www.w3.org/2001/XMLSchema"
 SCHEMA_PREFIX: str = "xs"
+XBRLDT_NAMESPACE: str = "http://xbrl.org/2005/xbrldt"
+XBRLDT_PREFIX: str = "xbrldt"
 
 class TaxonomyProducer:
     taxonomy_document: TaxonomyDocument
@@ -309,16 +311,20 @@ class TaxonomyProducer:
         for element_data in cls.taxonomy_document.elements:
             attributes: Dict[str, str] = {
                     "id": element_data.name,
-                    f"{{{XBRLI_NAMESPACE}}}periodType": element_data.period_type,
                     "name": element_data.name,
                     "nillable": "true" if element_data.nillable else "false",
-                    "substitutionGroup": element_data.substitution_group.to_prefixed_name(cls.taxonomy_document.namespaces),
                     "type": element_data.type.to_prefixed_name(cls.taxonomy_document.namespaces)
             }
+            if element_data.substitution_group:
+                attributes["substitutionGroup"] = element_data.substitution_group.to_prefixed_name(cls.taxonomy_document.namespaces)
+            if element_data.period_type:
+                attributes[f"{{{XBRLI_NAMESPACE}}}periodType"] = element_data.period_type
             if element_data.abstract:
                 attributes["abstract"] = "true"
             if element_data.balance:
                 attributes[f"{{{XBRLI_NAMESPACE}}}balance"] = element_data.balance
+            if element_data.typed_domain_ref:
+                attributes[f"{{{XBRLDT_NAMESPACE}}}typedDomainRef"] = element_data.typed_domain_ref.to_url()
             element_element: etree.Element = etree.SubElement(
                 schema_root,
                 f"{{{SCHEMA_NAMESPACE}}}element",
@@ -537,9 +543,8 @@ class TaxonomyProducer:
             locators
         )
         if parent_element_locator:
-            xbrldt_namespace = "http://xbrl.org/2005/xbrldt"
             nsmp = {
-                "xbrldt": xbrldt_namespace
+                XBRLDT_PREFIX: XBRLDT_NAMESPACE
             }
             arc_attributes = {
                 f"{{{XLINK_NAMESPACE}}}type": "arc",
@@ -550,9 +555,9 @@ class TaxonomyProducer:
             if definition_element.arc_role:
                 used_arcroles.append(definition_element.arc_role)
             if definition_element.closed != None:
-                arc_attributes[f"{{{xbrldt_namespace}}}closed"] = "true" if definition_element.closed else "false"
+                arc_attributes[f"{{{XBRLDT_NAMESPACE}}}closed"] = "true" if definition_element.closed else "false"
             if definition_element.context_element != None:
-                arc_attributes[f"{{{xbrldt_namespace}}}contextElement"] = definition_element.context_element
+                arc_attributes[f"{{{XBRLDT_NAMESPACE}}}contextElement"] = definition_element.context_element
             definition_arc_element: etree.Element = etree.SubElement(
                 parent_element,
                 f"{{{LINKBASE_NAMESPACE}}}definitionArc",

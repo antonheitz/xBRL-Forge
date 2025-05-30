@@ -602,12 +602,14 @@ class TableCell:
 @dataclass
 class ImageItem(ContentItem):
     image_data: str
+    alt_text: str
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TitleItem':
         return cls(
             type=data.get("type"),
             image_data=data.get("image_data"),
+            alt_text=data.get("alt_text"),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
         )
     
@@ -623,6 +625,7 @@ class ImageItem(ContentItem):
         return {
             "type": cls.type,
             "image_data": cls.image_data,
+            "alt_text": cls.alt_text,
             "tags": [tag.to_dict() for tag in cls.tags]
         }
     
