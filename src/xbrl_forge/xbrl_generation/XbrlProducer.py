@@ -98,7 +98,7 @@ class XbrlProducer(BaseProducer):
                 # if it is not a enum
                 if not tag.attributes.enumeration_values:
                     # get previous is if known
-                    tag_id_base = f"{applicable_namespace}_{tag.name}_{tag.context_id}"
+                    tag_id_base = f"{applicable_namespace}_{tag.name}_{tag.context_id}_{tag.attributes.continuation_correlation_id or ''}"
                     tag_element: etree._Element = cls.tag_id_tracker.get(tag_id_base, None)
                     if tag_element == None:
                         tag_element: etree._Element = etree.SubElement(

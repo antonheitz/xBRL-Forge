@@ -215,6 +215,7 @@ class TagAttributes:
     # only non-numeric
     escape: bool
     enumeration_values: List['EnumerationValue']
+    continuation_correlation_id: str
     # both
     format: Tag
     nil: bool
@@ -231,6 +232,7 @@ class TagAttributes:
         return cls(
             escape=data.get("escape", False),
             enumeration_values=[EnumerationValue.from_dict(d) for d in data.get("enumeration_values", [])],
+            continuation_correlation_id=data.get("continuation_correlation_id", None),
             format=Tag.from_dict(data.get("format")) if "format" in data and data["format"] else None,
             nil=data.get("nil", False),
             decimals=data.get("decimals", 0),
@@ -243,6 +245,7 @@ class TagAttributes:
         return cls.__class__(
             escape=cls.escape,
             enumeration_values=[ev.copy() for ev in cls.enumeration_values],
+            continuation_correlation_id=cls.continuation_correlation_id,
             format=cls.format.copy() if cls.format else None,
             nil=cls.nil,
             decimals=cls.decimals,
@@ -255,6 +258,7 @@ class TagAttributes:
         return {
             "escape": cls.escape,
             "enumeration_values": [ev.to_dict() for ev in cls.enumeration_values],
+            "continuation_correlation_id": cls.continuation_correlation_id,
             "format": cls.format.to_dict() if cls.format else None,
             "nil": cls.nil,
             "decimals": cls.decimals,

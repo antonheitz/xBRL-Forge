@@ -103,7 +103,7 @@ class HtmlProducer(BaseProducer):
 
     def _create_ixbrl_tag(cls, tag: AppliedTag, parent: etree.Element) -> Tuple[etree.Element, etree.Element]:
         prefixed_name: str = tag.to_prefixed_name(cls.content_document.namespaces, cls.local_namespace_prefix)
-        tag_id_base = f'{prefixed_name.replace(":", "_")}_{tag.context_id}_-_'
+        tag_id_base = f'{prefixed_name.replace(":", "_")}_{tag.context_id}_{tag.attributes.continuation_correlation_id or ""}_-_'
         id_number: int = 0
         # get previous is if known
         previous_element: etree._Element = None
