@@ -44,6 +44,10 @@
                         "$ref": "https://xbrl-forge.org/schema/input/general/xml-element"
                     }
                 },
+                "continuation_correlation_id": {
+                    "description": "NONNUMERIC: By default all nonnumerics of the same concept and context get continuated automatically. To break this behaviour, other continuation chains or duplicate facts can be achieved by setting a value here. All tags with the same value, context and concept will be merged seperatly to continuation chains. If this key is not set or null, it will be merged with all other facts of same concept and context with non-setted key.",
+                    "type": "string"
+                },
                 "decimals": {
                     "description": "NUMERIC: Decimals declare the accuracy of the tagged value.",
                     "type": "number"
