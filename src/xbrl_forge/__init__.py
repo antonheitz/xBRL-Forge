@@ -17,9 +17,14 @@ from .utils.schema_validation import validate_schema
 
 from .file_conversion import doc_to_data
 
+from ._version import retrieve_version
+
 logger = logging.getLogger(__name__)
 
 SCHEMA_FOLDER: str = os.path.join(os.path.dirname(os.path.realpath(__file__)), "schemas")
+
+def get_version() -> str:
+    return retrieve_version()
 
 def convert_document(document_path: str) -> InputData:
     logger.info(f"Converting file {document_path}")

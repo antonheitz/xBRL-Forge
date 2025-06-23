@@ -18,8 +18,35 @@ class ContentDocument:
     content: List['ContentItem']
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'ContentDocument':
+    def new(
+        cls, 
+        name: str, 
+        lang: str = "en", 
+        taxonomy_schema: str = None,
+        xhtml: bool = True,
+        priority: int = 100,
+        namespaces: Dict[str, str] = None,
+        content: List['ContentItem'] = None
+    ) -> 'ContentDocument':
+        document_content: List['ContentItem'] = []
+        if content:
+            document_content = content
+        document_namespaces: Dict[str, str] = {}
+        if namespaces:
+            document_namespaces = namespaces 
         return cls(
+            name=name,
+            taxonomy_schema=taxonomy_schema,
+            lang=lang,
+            xhtml=xhtml,
+            priority=priority,
+            namespaces=document_namespaces,
+            content=document_content
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ContentDocument':
+        return cls.new(
             name=data.get("name"),
             taxonomy_schema=data.get("taxonomy_schema"),
             lang=data.get("lang"),
@@ -102,8 +129,16 @@ class DocumentDimension:
     typed_member_value: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'DocumentDimension':
+    def new(cls, axis: 'Tag', member: 'Tag', typed_member_value: str = None) -> 'DocumentDimension':
         return cls(
+            axis=axis,
+            member=member,
+            typed_member_value=typed_member_value
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'DocumentDimension':
+        return cls.new(
             axis=Tag.from_dict(data.get("axis", {})),
             member=Tag.from_dict(data.get("member", {})),
             typed_member_value=data.get("typed_member_value", None)
@@ -143,8 +178,18 @@ class DocumentUnit:
     unit_id: str = None
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'DocumentUnit':
+    def new(cls, numerator: 'Tag', denominator: 'Tag' = None) -> 'DocumentUnit':
+        unit_denominator: Tag = None
+        if denominator:
+            unit_denominator = denominator
         return cls(
+            numerator=numerator,
+            denominator=unit_denominator
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'DocumentUnit':
+        return cls.new(
             numerator=Tag.from_dict(data.get("numerator", {})),
             denominator=Tag.from_dict(data.get("denominator", {})) if data.get("denominator", False) else None
         )
@@ -187,10 +232,17 @@ class DocumentUnit:
 class EnumerationValue(Tag):
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'EnumerationValue':
+    def new(cls, name: str, namespace: str = None) -> 'EnumerationValue':
         return cls(
-            name = data.get("name"),
-            namespace = data.get("namespace")
+            name=name,
+            namespace=namespace
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'EnumerationValue':
+        return cls.new(
+            name=data.get("name"),
+            namespace=data.get("namespace")
         )
     
     def value(cls, extension_namespace: str) -> str:
@@ -228,8 +280,36 @@ class TagAttributes:
     unit_ref: str = None
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TagAttributes':
+    def new(
+        cls,
+        escape: bool = False,
+        enumeration_values: List[EnumerationValue] = None,
+        continuation_correlation_id: str = None,
+        format: Tag = None,
+        nil: bool = False,
+        decimals: int = 0,
+        scale: int = 0,
+        unit: DocumentUnit = None,
+        sign: bool = False
+    ) -> 'TagAttributes':
+        tag_enumeration_values: List[EnumerationValue] = []
+        if enumeration_values:
+            tag_enumeration_values = enumeration_values
         return cls(
+            escape=escape,
+            enumeration_values=tag_enumeration_values,
+            continuation_correlation_id=continuation_correlation_id,
+            format=format,
+            nil=nil,
+            decimals=decimals,
+            scale=scale,
+            unit=unit,
+            sign=sign
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TagAttributes':
+        return cls.new(
             escape=data.get("escape", False),
             enumeration_values=[EnumerationValue.from_dict(d) for d in data.get("enumeration_values", [])],
             continuation_correlation_id=data.get("continuation_correlation_id", None),
@@ -281,8 +361,38 @@ class AppliedTag(Tag):
     context_id: str = None
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'AppliedTag':
+    def new(
+        cls,
+        name: str,
+        attributes: TagAttributes,
+        entity: str,
+        entity_scheme: str,
+        end_date: str,
+        dimensions: List['DocumentDimension'] = None,
+        start_index: int = None,
+        end_index: int = None,
+        namespace: str = None,
+        start_date: str = None
+    ) -> 'AppliedTag':
+        tag_dimensions: List['DocumentDimension'] = []
+        if dimensions:
+            tag_dimensions = dimensions
         return cls(
+            namespace=namespace,
+            name=name,
+            attributes=attributes,
+            entity=entity,
+            entity_scheme=entity_scheme,
+            start_date=start_date,
+            end_date=end_date,
+            dimensions=tag_dimensions,
+            start_index=start_index,
+            end_index=end_index
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'AppliedTag':
+        return cls.new(
             namespace=data.get("namespace"),
             name=data.get("name"),
             attributes=TagAttributes.from_dict(data.get("attributes", {})),
@@ -297,7 +407,7 @@ class AppliedTag(Tag):
     
     @classmethod
     def empty(cls, start_index: int = 0, end_index: int = 0) -> 'AppliedTag':
-        return cls(
+        return cls.new(
             namespace="",
             name="",
             attributes={},
@@ -460,9 +570,25 @@ class TitleItem(ContentItem):
     level: int
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TitleItem':
+    def new(
+        cls,
+        content: str,
+        level: int,
+        tags: List[AppliedTag] = None
+    ) -> 'TitleItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_TITLE,
+            content=content,
+            level=level,
+            tags=item_tags
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TitleItem':
+        return cls.new(
             content=data.get("content"),
             level=data.get("level"),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
@@ -489,9 +615,23 @@ class ParagraphItem(ContentItem):
     content: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TitleItem':
+    def new(
+        cls,
+        content: str,
+        tags: List[AppliedTag] = None
+    ) -> 'ParagraphItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_PARAGRAPH,
+            content=content,
+            tags=item_tags
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TitleItem':
+        return cls.new(
             content=data.get("content"),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
         )
@@ -516,9 +656,23 @@ class TableItem(ContentItem):
     rows: List['TableRow']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TitleItem':
+    def new(
+        cls,
+        rows: List['TableRow'],
+        tags: List[AppliedTag] = None
+    ) -> 'TableItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_TABLE,
+            rows=rows,
+            tags=item_tags
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TableItem':
+        return cls.new(
             rows=[TableRow.from_dict(row_data) for row_data in data.get("rows", [])],
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
         )
@@ -548,8 +702,17 @@ class TableRow:
     cells: List['TableCell']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TableRow':
+    def new(
+        cls,
+        cells: List['TableCell'],
+    ) -> 'TableRow':
         return cls(
+            cells=cells
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TableRow':
+        return cls.new(
             cells=[TableCell.from_dict(cell_data) for cell_data in data.get("cells", [])]
         )
     
@@ -576,8 +739,23 @@ class TableCell:
     colspan: int
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TableCell':
+    def new(
+        cls,
+        content: List[ContentItem],
+        header: bool = False,
+        rowspan: int = 1,
+        colspan: int = 1
+    ) -> 'TableCell':
         return cls(
+            content=content,
+            header=header,
+            rowspan=rowspan,
+            colspan=colspan
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TableCell':
+        return cls.new(
             content=[ContentItem.from_dict(content_data) for content_data in data.get("content", [])],
             header=data.get("header", False),
             rowspan=data.get("rowspan", 1),
@@ -609,9 +787,25 @@ class ImageItem(ContentItem):
     alt_text: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TitleItem':
+    def new(
+        cls,
+        image_data: str,
+        alt_text: str,
+        tags: List[AppliedTag] = None
+    ) -> 'ImageItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_IMAGE,
+            image_data=image_data,
+            alt_text=alt_text,
+            tags=item_tags
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ImageItem':
+        return cls.new(
             image_data=data.get("image_data"),
             alt_text=data.get("alt_text"),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
@@ -639,9 +833,25 @@ class ListItem(ContentItem):
     ordered: bool
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'ListItem':
+    def new(
+        cls,
+        elements: List['ListElement'],
+        ordered: bool,
+        tags: List[AppliedTag] = None
+    ) -> 'ListItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_LIST,
+            elements=elements,
+            ordered=ordered,
+            tags=item_tags
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ListItem':
+        return cls.new(
             elements=[ListElement.from_dict(element_data) for element_data in data.get("elements", [])],
             ordered=data.get("ordered", False),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
@@ -673,8 +883,17 @@ class ListElement:
     content: List[ContentItem]
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'ListElement':
+    def new(
+        cls,
+        content: List[ContentItem]
+    ) -> 'ListElement':
         return cls(
+            content=content
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ListElement':
+        return cls.new(
             content=[ContentItem.from_dict(element_content) for element_content in data.get("content", [])]
         )
 
@@ -698,9 +917,23 @@ class BaseXbrlItem(ContentItem):
     content: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'BaseXbrlItem':
+    def new(
+        cls,
+        content: str,
+        tags: List[AppliedTag] = None
+    ) -> 'BaseXbrlItem':
+        item_tags: List[AppliedTag] = []
+        if tags:
+            item_tags = tags
         return cls(
-            type=data.get("type"),
+            type=cls.TYPE_BASE_XBRL,
+            content=content,
+            tags=item_tags
+        )
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> 'BaseXbrlItem':
+        return cls.new(
             content=data.get("content"),
             tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
         )
