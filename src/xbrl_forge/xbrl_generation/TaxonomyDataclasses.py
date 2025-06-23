@@ -33,8 +33,56 @@ class TaxonomyDocument:
         return f"{cls.namespace}/{cls.files_base_name}.xsd"
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'TaxonomyDocument':
+    def new(
+        cls,
+        prefix: str, 
+        metadata: 'TaxonomyMetadata',
+        priority: int = 0,
+        namespaces: Dict[str, str] = None,
+        schema_imports: Dict[str, str] = None,
+        elements: List['TaxonomyElement'] = None,
+        linkbase_imports: Dict[str, str] = None,
+        arc_roles_import: Dict[str, str] = None,
+        roles: List['TaxonomyRole'] = None,
+        labels: Dict[str, List['LabelElement']] = None
+    ) -> 'TaxonomyDocument':
+        taxonomy_namespaces: Dict[str, str] = {}
+        if namespaces:
+            taxonomy_namespaces = namespaces
+        taxonomy_schema_imports: Dict[str, str] = {}
+        if schema_imports:
+            taxonomy_schema_imports = schema_imports
+        taxonomy_elements: List['TaxonomyElement'] = []
+        if elements:
+            taxonomy_elements = elements
+        taxonomy_linkbase_imports: Dict[str, str] = {}
+        if linkbase_imports:
+            taxonomy_linkbase_imports = linkbase_imports
+        taxonomy_arc_roles_imports: Dict[str, str] = {}
+        if arc_roles_import:
+            taxonomy_arc_roles_imports = arc_roles_import
+        taxonomy_roles: List['TaxonomyRole'] = []
+        if roles:
+            taxonomy_roles = roles
+        taxonomy_labels: Dict[str, List['LabelElement']] = {}
+        if labels:
+            taxonomy_labels = labels
         return cls(
+            priority=priority,
+            prefix=prefix, 
+            metadata=metadata,
+            namespaces=taxonomy_namespaces,
+            schema_imports=taxonomy_schema_imports,
+            elements=taxonomy_elements,
+            linkbase_imports=taxonomy_linkbase_imports,
+            arc_roles_import=taxonomy_arc_roles_imports,
+            roles=taxonomy_roles,
+            labels=taxonomy_labels
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TaxonomyDocument':
+        return cls.new(
             priority=data.get("priority", 0),
             prefix=data.get("prefix"), 
             metadata=TaxonomyMetadata.from_dict(data.get("metadata", {})),
@@ -128,8 +176,29 @@ class TaxonomyMetadata:
     entrypoints: List['Entrypoint']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TaxonomyMetadata':
+    def new(
+        cls,
+        name: str,
+        description: str, 
+        publisher: str,
+        publisher_url: str,
+        publisher_country: str,
+        publication_date: str,
+        entrypoints: List['Entrypoint']
+    ) -> 'TaxonomyMetadata':
         return cls(
+            name=name,
+            description=description, 
+            publisher=publisher,
+            publisher_url=publisher_url,
+            publisher_country=publisher_country,
+            publication_date=publication_date,
+            entrypoints=entrypoints
+        )        
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TaxonomyMetadata':
+        return cls.new(
             name=data.get("name"),
             description=data.get("description"), 
             publisher=data.get("publisher"),
@@ -158,8 +227,23 @@ class Entrypoint:
     language: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'Entrypoint':
+    def new(
+        cls,
+        name: str,
+        description: str,
+        documents: List[str],
+        language: str
+    ) -> 'Entrypoint':
         return cls(
+            name=name,
+            description=description,
+            documents=documents,
+            language=language
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'Entrypoint':
+        return cls.new(
             name=data.get("name"),
             description=data.get("description"),
             documents=data.get("documents", []),
@@ -186,8 +270,31 @@ class TaxonomyElement:
     typed_domain_ref: TagLocation
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TaxonomyElement':
+    def new(
+        cls,
+        name: str,
+        type: Tag,
+        nillable: bool = False,
+        abstract: bool = False,
+        balance: str = None,
+        period_type: str = None,
+        substitution_group: Tag = None,
+        typed_domain_ref: TagLocation = None
+    ) -> 'TaxonomyElement':
         return cls(
+            balance=balance,
+            period_type=period_type,
+            name=name,
+            nillable=nillable,
+            abstract=abstract,
+            substitution_group=substitution_group,
+            type=type,
+            typed_domain_ref=typed_domain_ref
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TaxonomyElement':
+        return cls.new(
             balance=data.get("balance"),
             period_type=data.get("period_type"),
             name=data.get("name"),
@@ -244,8 +351,38 @@ class TaxonomyRole:
     calculation_linkbase: List['CalculationElement']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'TaxonomyRole':
+    def new(
+        cls,
+        role_name: str,
+        role_id: str,
+        role_uri: str = None,
+        schema_location: str = None,
+        presentation_linkbase: List['PresentationElement'] = None,
+        definition_linkbase: List['DefinitionElement'] = None,
+        calculation_linkbase: List['CalculationElement'] = None
+    ) -> 'TaxonomyRole':
+        role_presentation_linkbase: List['PresentationElement'] = []
+        if presentation_linkbase:
+            role_presentation_linkbase = presentation_linkbase
+        role_definition_linkbase: List['DefinitionElement'] = []
+        if definition_linkbase:
+            role_definition_linkbase = definition_linkbase
+        role_calculation_linkbase: List['CalculationElement'] = []
+        if calculation_linkbase:
+            role_calculation_linkbase = calculation_linkbase
         return cls(
+            role_name=role_name,
+            role_id=role_id,
+            role_uri=role_uri,
+            schema_location=schema_location,
+            presentation_linkbase=role_presentation_linkbase,
+            definition_linkbase=role_definition_linkbase,
+            calculation_linkbase=role_calculation_linkbase
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'TaxonomyRole':
+        return cls.new(
             role_name=data.get("role_name"),
             role_id=data.get("role_id"),
             role_uri=data.get("role_uri"),
@@ -342,8 +479,17 @@ class LinkbaseElement(TagLocation):
     children: List['LinkbaseElement']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'LinkbaseElement':
+    def new(cls, element_id: str, children: List['LinkbaseElement'], schema_location: str = None, arc_role: str = None) -> 'LinkbaseElement':
         return cls(
+            element_id=element_id,
+            schema_location=schema_location,
+            arc_role=arc_role,
+            children=children
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'LinkbaseElement':
+        return cls.new(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
             arc_role=data.get("arc_role"),
@@ -396,8 +542,27 @@ class PresentationElement(LinkbaseElement):
     children: List['PresentationElement']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'PresentationElement':
+    def new(
+        cls, 
+        element_id: str, 
+        children: List['PresentationElement'], 
+        schema_location: str = None, 
+        arc_role: str = None,
+        preferred_label: str = None,
+        order: int = 0
+    ) -> 'PresentationElement':
         return cls(
+            element_id=element_id,
+            children=children,
+            schema_location=schema_location,
+            arc_role=arc_role,
+            preferred_label=preferred_label,
+            order=order
+        )
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> 'PresentationElement':
+        return cls.new(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
             arc_role=data.get("arc_role"),
@@ -447,12 +612,29 @@ class CalculationElement(LinkbaseElement):
     children: List['CalculationElement']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'CalculationElement':
+    def new(
+        cls, 
+        element_id: str, 
+        children: List['CalculationElement'], 
+        schema_location: str = None, 
+        arc_role: str = None,
+        weight: int = 1
+    ) -> 'CalculationElement':
         return cls(
+            element_id=element_id,
+            children=children,
+            schema_location=schema_location,
+            arc_role=arc_role,
+            weight=weight
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'CalculationElement':
+        return cls.new(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
             arc_role=data.get("arc_role"),
-            weight=data.get("weight", 0),
+            weight=data.get("weight", 1),
             children=[CalculationElement.from_dict(child) for child in data.get("children", [])]
         )
 
@@ -492,8 +674,27 @@ class DefinitionElement(LinkbaseElement):
     children: List['DefinitionElement']
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'DefinitionElement':
+    def new(
+        cls, 
+        element_id: str, 
+        children: List['DefinitionElement'], 
+        schema_location: str = None, 
+        arc_role: str = None,
+        context_element: str = None,
+        closed: bool = None
+    ) -> 'DefinitionElement':
         return cls(
+            element_id=element_id,
+            children=children,
+            schema_location=schema_location,
+            arc_role=arc_role,
+            context_element=context_element,
+            closed=closed
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'DefinitionElement':
+        return cls.new(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
             arc_role=data.get("arc_role"),
@@ -544,8 +745,21 @@ class LabelElement:
     labels: List['LabelData']
     
     @classmethod
-    def from_dict(cls, data: dict) -> 'LabelElement':
+    def new(
+        cls,
+        element_id: str,
+        labels: List['LabelData'],
+        schema_location: str = None
+    ) -> 'LabelElement':
         return cls(
+            element_id=element_id,
+            schema_location=schema_location,
+            labels=labels
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'LabelElement':
+        return cls.new(
             element_id=data.get("element_id"),
             schema_location=data.get("schema_location"),
             labels=[LabelData.from_dict(label_data) for label_data in data.get("labels", [])]
@@ -578,8 +792,19 @@ class LabelData:
     label: str
 
     @classmethod
-    def from_dict(cls, data: dict) -> 'LabelData':
+    def new(
+        cls,
+        label: str,
+        label_role: str
+    ) -> 'LabelData':
         return cls(
+            label=label,
+            label_role=label_role
+        )
+
+    @classmethod
+    def from_dict(cls, data: dict) -> 'LabelData':
+        return cls.new(
             label_role=data.get("label_role"),
             label=data.get("label")
         )
