@@ -1,9 +1,11 @@
-from dataclasses import dataclass
-from typing import Dict, List, Tuple
 import os
 import shutil
 import logging
 import zipfile
+
+from dataclasses import dataclass
+from typing import Dict, List, Tuple
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,14 +25,17 @@ class File:
         new_path: str = os.path.join(folder_path, cls.name)
         if remove_existing_files:
             if os.path.isdir(new_path):
+                logger.debug(f"Removing existing folder {new_path}")
                 shutil.rmtree(new_path)
             if os.path.isfile(new_path):
+                logger.debug(f"Removing existing file {new_path}")
                 os.remove(new_path)
         if cls.contained_files:
             os.mkdir(new_path)
             for file in cls.contained_files:
                 file.save_files(new_path, remove_existing_files)
         else:
+            logger.debug(f"Creating file {new_path}")
             with open(new_path, "w+") as f:
                 f.write(cls.content)
 
@@ -38,9 +43,12 @@ class File:
         file_path: str = os.path.join(folder_path, f"{cls.name}.{cls.zip_extension}")
         if remove_existing_package:
             if os.path.isfile(file_path):
+                logger.debug(f"Removing existing package {file_path}")
                 os.remove(file_path)
+        logger.debug(f"Creating package {file_path}")
         with zipfile.ZipFile(file_path, "w") as zip:
             for path, file in cls._list_files():
+                logger.debug(f"Adding file to package {path}")
                 zip.writestr(path, file.content)
         return file_path
 

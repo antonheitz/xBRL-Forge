@@ -1,15 +1,15 @@
-from typing import Dict, Tuple
-from lxml import etree
 import logging
 
+from typing import Dict, Tuple
+from lxml import etree
 
 from .ElementRender import render_content
-
 from .PackageDataclasses import File
 from .ContentDataclasses import AppliedTag, AppliedTagTree, ContentDocument, ContentItem
 from .BaseProducer import BaseProducer, XHTML_NAMESPACE, XML_NAMESPACE, IXBRL_NAMESPACE, LINK_NAMESPACE, XLINK_NAMESPACE, INSTANCE_NAMESPACE, DIMENSIONS_NAMESPACE, XSI_NAMESPACE
 from .utils import xml_to_string
 from .HtmlTemplate import get_xhtml_template
+
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +28,8 @@ class HtmlProducer(BaseProducer):
         cls.xhtml_template = xthml_template
 
     def create_html(cls) -> File:
+        filename: str = f"{cls.content_document.name}.html"
+        logger.debug(f"Creating {'iXBRL' if cls.ixbrl else 'XHTML'} Instance: {filename}")
         # Populate Namespaces
         namespace_map = {
             None: XHTML_NAMESPACE,
@@ -62,6 +64,7 @@ class HtmlProducer(BaseProducer):
             cls.ixbrl_hidden: etree._Element = None
             ixbrl_references: etree._Element = etree.SubElement(cls.ixbrl_header, f"{{{IXBRL_NAMESPACE}}}references", {f"{{{XML_NAMESPACE}}}lang": cls.content_document.lang})
             cls.schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
+            logger.debug(f"Creating taxonomy schema reference to {cls.schema_url}")
             schema_ref: etree._Element = etree.SubElement(
                 ixbrl_references, 
                 f"{{{LINK_NAMESPACE}}}schemaRef",
@@ -82,7 +85,7 @@ class HtmlProducer(BaseProducer):
         for content in cls.content_document.content:
             cls._convert_element(content, xhtml_content_root)
 
-        return File(name=f"{cls.content_document.name}.html", content=xml_to_string(xhtml_root))
+        return File(name=filename, content=xml_to_string(xhtml_root))
     
     def _convert_element(cls, content_item: ContentItem, parent: etree.Element) -> None:
         # check if tags are applied to the whole structure
@@ -113,6 +116,7 @@ class HtmlProducer(BaseProducer):
         # add tag
         # if the tag attributes contain a unit, then it must be a numeric tag
         if tag.attributes.unit_ref:
+            logger.debug(f"Adding nonFraction element for {tag.to_uname(cls.local_namespace)}")
             new_element: etree._Element = etree.SubElement(
                 parent,
                 f"{{{IXBRL_NAMESPACE}}}nonFraction",
@@ -136,6 +140,7 @@ class HtmlProducer(BaseProducer):
             # if its not an enum, it can be tagged inline
             if not tag.attributes.enumeration_values:
                 if previous_element == None:
+                    logger.debug(f"Adding continuation element for {tag.to_uname(cls.local_namespace)}")
                     new_element = etree.SubElement(
                         parent,
                         f"{{{IXBRL_NAMESPACE}}}nonNumeric",
@@ -152,6 +157,7 @@ class HtmlProducer(BaseProducer):
                     if tag.attributes.nil:
                         new_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
                 else:
+                    logger.debug(f"Adding nonNumeric element for {tag.to_uname(cls.local_namespace)}")
                     previous_element.attrib["continuedAt"] = f"{tag_id_base}{id_number}"
                     new_element = etree.SubElement(
                         parent,
@@ -162,6 +168,7 @@ class HtmlProducer(BaseProducer):
                     )
             # enumerations
             else:
+                logger.debug(f"Adding nonNumeric hidden element for {tag.to_uname(cls.local_namespace)}")
                 # check if the hidden element already exists
                 if cls.ixbrl_hidden == None:
                     cls.ixbrl_hidden = etree.SubElement(

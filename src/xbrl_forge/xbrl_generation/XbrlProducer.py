@@ -1,14 +1,14 @@
-from typing import Dict, Tuple
-from lxml import etree
 import logging
-import math
+
+from lxml import etree
 
 from .ElementRender import render_content
-
 from .PackageDataclasses import File
 from .ContentDataclasses import AppliedTagTree, ContentDocument, ContentItem
 from .BaseProducer import BaseProducer, INSTANCE_NAMESPACE, LINK_NAMESPACE, XLINK_NAMESPACE, XML_NAMESPACE, XSI_NAMESPACE, DIMENSIONS_NAMESPACE
 from .utils import xml_to_string
+from .._version import version_comment
+
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,8 @@ class XbrlProducer(BaseProducer):
         )
 
     def create_xbrl(cls) -> File:
+        filename: str = f"{cls.content_document.name}.xbrl"
+        logger.debug(f"Creating xBRL Instace: {filename}")
         # Populate Namespaces
         namespace_map = {
             None: INSTANCE_NAMESPACE,
@@ -42,11 +44,13 @@ class XbrlProducer(BaseProducer):
             f"{{{INSTANCE_NAMESPACE}}}xbrl",
             nsmap=namespace_map
         )
+        version_comment(root_element, 0)
 
         #TODO: xsi:schemaLocation="http://mycompany.com/xbrl/taxonomy 102-01-SpecExample.xsd"
 
         # add schema ref
         cls.schema_url = cls.content_document.taxonomy_schema if cls.content_document.taxonomy_schema else cls.local_taxonomy_schema
+        logger.debug(f"Creating taxonomy schema reference to {cls.schema_url}")
         schema_ref: etree._Element = etree.SubElement(
             root_element, 
             f"{{{LINK_NAMESPACE}}}schemaRef",
@@ -66,7 +70,7 @@ class XbrlProducer(BaseProducer):
         for content in cls.content_document.content:
             cls._convert_element(content, root_element)
 
-        return File(name=f"{cls.content_document.name}.xbrl", content=xml_to_string(root_element))
+        return File(name=filename, content=xml_to_string(root_element))
     
     def _convert_element(cls, content_item: ContentItem, root_element: etree.Element) -> None:
         # check tags on structure
@@ -78,6 +82,7 @@ class XbrlProducer(BaseProducer):
                 applicable_namespace = tag.namespace
             # numeric fact
             if tag.attributes.unit_ref:
+                logger.debug(f"Creating xBRL tag for {tag.to_uname(applicable_namespace)}")
                 new_element: etree._Element = etree.SubElement(
                     root_element,
                     f"{{{applicable_namespace}}}{tag.name}",
@@ -101,6 +106,7 @@ class XbrlProducer(BaseProducer):
                     tag_id_base = f"{applicable_namespace}_{tag.name}_{tag.context_id}_{tag.attributes.continuation_correlation_id or ''}"
                     tag_element: etree._Element = cls.tag_id_tracker.get(tag_id_base, None)
                     if tag_element == None:
+                        logger.debug(f"Creating xBRL tag for {tag.to_uname(applicable_namespace)}")
                         tag_element: etree._Element = etree.SubElement(
                             root_element,
                             f"{{{applicable_namespace}}}{tag.name}",
@@ -111,12 +117,14 @@ class XbrlProducer(BaseProducer):
                         cls.tag_id_tracker[tag_id_base] = tag_element
                     if tag.attributes.nil:
                         tag_element.attrib[f"{{{XSI_NAMESPACE}}}nil"] = "true"
+                    logger.debug(f"Adding text content to xBRL tag for {tag.to_uname(applicable_namespace)}")
                     cls._rec_render_content(
                         content_item,
                         tag_element
                     )
                 # enumerations value
                 else:
+                    logger.debug(f"Creating xBRL tag for {tag.to_uname(applicable_namespace)}")
                     enum_tag_element: etree._Element = etree.SubElement(
                         root_element,
                         f"{{{applicable_namespace}}}{tag.name}",

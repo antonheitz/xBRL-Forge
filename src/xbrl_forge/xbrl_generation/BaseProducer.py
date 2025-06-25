@@ -1,6 +1,12 @@
+import logging
+
 from typing import Dict, List
-from .ContentDataclasses import ContentDocument, DocumentContext, DocumentUnit
 from lxml import etree
+
+from .ContentDataclasses import ContentDocument, DocumentContext, DocumentUnit
+
+
+logger = logging.getLogger(__name__)
 
 XHTML_NAMESPACE: str = "http://www.w3.org/1999/xhtml"
 XML_NAMESPACE: str = "http://www.w3.org/XML/1998/namespace"
@@ -58,6 +64,7 @@ class BaseProducer:
 
     def _add_context_elements(cls, parent_element: etree._Element) -> None:
         for context_id, context in cls.contexts.items():
+            logger.debug(f"Creating element for context with ID {context_id}")
             context_element: etree._Element = etree.SubElement(parent_element, f"{{{INSTANCE_NAMESPACE}}}context", {"id":context_id})
             entity_element: etree._Element = etree.SubElement(context_element, f"{{{INSTANCE_NAMESPACE}}}entity")
             entity_identifier_element: etree._Element = etree.SubElement(
@@ -111,6 +118,7 @@ class BaseProducer:
 
     def _add_unit_elements(cls, parent_element: etree._Element) -> None:
         for unit_id, unit in cls.units.items():
+            logger.debug(f"Creating element for unit with ID {unit_id}")
             unit_element: etree._Element = etree.SubElement(
                 parent_element, 
                 f"{{{INSTANCE_NAMESPACE}}}unit", 

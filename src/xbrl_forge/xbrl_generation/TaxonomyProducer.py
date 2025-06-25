@@ -1,10 +1,16 @@
+import json
+import logging
+
 from typing import Dict, List, Tuple
 from lxml import etree
-import json
 
 from .utils import xml_to_string
-from .TaxonomyDataclasses import CalculationElement, DefinitionElement, PresentationElement, TaxonomyDocument, TaxonomyElement
-from .PackageDataclasses import File, Tag
+from .TaxonomyDataclasses import CalculationElement, DefinitionElement, PresentationElement, TaxonomyDocument
+from .PackageDataclasses import File
+from .._version import version_comment
+
+
+logger = logging.getLogger(__name__)
 
 TAXONOMY_PACKAGE_NAMESPACE: str = "http://xbrl.org/2016/taxonomy-package"
 TAXONOMY_PACKAGE_PREFIX: str = "tp"
@@ -76,6 +82,7 @@ class TaxonomyProducer:
             },
             nsmap=tp_namespace_map
         ) 
+        version_comment(taxonomy_package_element, 0)
         identifier_element: etree.Element = etree.SubElement(
             taxonomy_package_element,
             f"{{{TAXONOMY_PACKAGE_NAMESPACE}}}identifier"
@@ -186,25 +193,34 @@ class TaxonomyProducer:
         return return_files
 
     def _create_taxonomy_files(cls, taxonomy_folder: File) -> None:
+        logger.debug(f"Creating taxonomy schema for namespace {cls.taxonomy_document.namespace}")
         cls._create_schema(taxonomy_folder)
+        presentation_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_pre.xml"
+        logger.debug(f"Creating presentation linkbase {presentation_linkbase_filename}")
         cls._create_linkbase(
-            f"{cls.taxonomy_document.files_base_name}_pre.xml",
+            presentation_linkbase_filename,
             taxonomy_folder,
             cls._create_presentation()
         )
+        calculation_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_cal.xml"
+        logger.debug(f"Creating calculation linkbase {calculation_linkbase_filename}")
         cls._create_linkbase(
-            f"{cls.taxonomy_document.files_base_name}_cal.xml",
+            calculation_linkbase_filename,
             taxonomy_folder,
             cls._create_calculation()
         )
+        definition_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_def.xml"
+        logger.debug(f"Creating defintion linkbase {definition_linkbase_filename}")
         cls._create_linkbase(
-            f"{cls.taxonomy_document.files_base_name}_def.xml",
+            definition_linkbase_filename,
             taxonomy_folder,
             cls._create_definition()
         )
         for labels_lang in cls.taxonomy_document.labels:
+            label_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_lab-{labels_lang}.xml"
+            logger.debug(f"Creating label linkbase language {labels_lang} {label_linkbase_filename}")
             cls._create_linkbase(
-                f"{cls.taxonomy_document.files_base_name}_lab-{labels_lang}.xml",
+                label_linkbase_filename,
                 taxonomy_folder,
                 cls._create_label_linkbase(labels_lang)   
             )
@@ -227,8 +243,10 @@ class TaxonomyProducer:
             },
             nsmap=namespace_map
         )
+        version_comment(schema_root, 0)
         # import schemas
         for import_schema_ns, import_schema_location in cls.taxonomy_document.schema_imports.items():
+            logger.debug(f"Creating import element for schema {import_schema_ns}")
             schema_import_element: etree.Element = etree.SubElement(
                 schema_root,
                 f"{{{SCHEMA_NAMESPACE}}}import",
@@ -256,6 +274,7 @@ class TaxonomyProducer:
             linkbases[f"{cls.taxonomy_document.files_base_name}_lab-{lang}.xml"] = "http://www.xbrl.org/2003/role/labelLinkbaseRef"
         linkbases.update(cls.taxonomy_document.linkbase_imports)
         for linkbase_href, linkbase_role in linkbases.items():
+            logger.debug(f"Creating linkbase reference to {linkbase_href}")
             linkbase_ref_attributes = {
                 f"{{{XLINK_NAMESPACE}}}arcrole": "http://www.w3.org/1999/xlink/properties/linkbase",
                 f"{{{XLINK_NAMESPACE}}}href": linkbase_href,
@@ -271,6 +290,7 @@ class TaxonomyProducer:
         # add roles
         for role in cls.taxonomy_document.roles:
             if not role.schema_location:
+                logger.debug(f"Creating taxonomy role {role.uri(cls.taxonomy_document.namespace)}")
                 role_element: etree.Element = etree.SubElement(
                     appinfo_element,
                     f"{{{LINKBASE_NAMESPACE}}}roleType",
@@ -309,6 +329,7 @@ class TaxonomyProducer:
                 role_link_element.text = "link:labelLink"
         # add taxonomy elements
         for element_data in cls.taxonomy_document.elements:
+            logger.debug(f"Creating taxonomy element {element_data.to_uname(cls.taxonomy_document.namespace)}")
             attributes: Dict[str, str] = {
                     "id": element_data.name,
                     "name": element_data.name,
@@ -347,9 +368,11 @@ class TaxonomyProducer:
             },
             nsmap=namespace_map
         )
+        version_comment(linkbase_root, 0)
         # import arc roles if needed
         for arc_role_uri, arc_role_href in cls.taxonomy_document.arc_roles_import.items():
             if arc_role_uri in used_arcroles:
+                logger.debug(f"Importing role to linkbase {arc_role_uri}")
                 arcrole_ref_element: etree.Element = etree.SubElement(
                     linkbase_root,
                     f"{{{LINKBASE_NAMESPACE}}}arcroleRef",
@@ -370,6 +393,7 @@ class TaxonomyProducer:
         used_arc_roles: List[str] = []
         for role_data in cls.taxonomy_document.roles:
             if role_data.presentation_linkbase:
+                logger.debug(f"Creating presentation for role {role_data.uri(cls.taxonomy_document.namespace)}")
                 role_ref_element: etree.Element = etree.Element(
                     f"{{{LINKBASE_NAMESPACE}}}roleRef",
                     {
@@ -439,6 +463,7 @@ class TaxonomyProducer:
         used_arc_roles: List[str] = []
         for role_data in cls.taxonomy_document.roles:
             if role_data.calculation_linkbase:
+                logger.debug(f"Creating calculation for role {role_data.uri(cls.taxonomy_document.namespace)}")
                 role_ref_element: etree.Element = etree.Element(
                     f"{{{LINKBASE_NAMESPACE}}}roleRef",
                     {
@@ -506,6 +531,7 @@ class TaxonomyProducer:
         used_arc_roles: List[str] = []
         for role_data in cls.taxonomy_document.roles:
             if role_data.definition_linkbase:
+                logger.debug(f"Creating definition for role {role_data.uri(cls.taxonomy_document.namespace)}")
                 role_ref_element: etree.Element = etree.Element(
                     f"{{{LINKBASE_NAMESPACE}}}roleRef",
                     {

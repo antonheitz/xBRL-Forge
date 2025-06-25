@@ -2,12 +2,14 @@ import os
 import shutil
 import logging
 import json
+
 from typing import List
 from fastapi import FastAPI, UploadFile, File, Form, BackgroundTasks
 from fastapi.responses import FileResponse
 
 from ..utils.tmp_dirs import create_tmp_dir, remove_tmp_dir
 from ..__init__ import convert_document, validate_input_data, load_input_data, create_xbrl, InputData
+
 
 logger = logging.getLogger(__name__)
 

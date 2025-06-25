@@ -1,8 +1,11 @@
+import logging
+
 from typing import Dict, Tuple
 from lxml import etree
+
 from .BaseProducer import XHTML_NAMESPACE
-from copy import deepcopy
-import logging
+from .._version import version_comment
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,12 +39,12 @@ DEFAULT_TEMPLATE: str = """
 def get_xhtml_template(name: str, namespace_map: Dict[str, str], xhtml_template: str) -> Tuple[etree._Element, etree._Element, etree._Element]:
     # try to use provided template, else use default
     if xhtml_template:
-        logger.debug("Trying to load custom XHTML Template...")
+        logger.debug(f"Loading custom XHTML Template")
         try:
             return _load_template(name, namespace_map, xhtml_template)
         except Exception as e:
             logger.error(f"Could not use provided custom XHTML Template: {str(e)}")
-    logger.debug("Using default XHTML Template...")
+    logger.debug("Using default XHTML Template")
     return _load_template(name, namespace_map, DEFAULT_TEMPLATE)
 
 def _load_template(name: str, namespace_map: Dict[str, str], xhtml_template: str) -> Tuple[etree._Element, etree._Element, etree._Element]:
@@ -51,6 +54,8 @@ def _load_template(name: str, namespace_map: Dict[str, str], xhtml_template: str
     for child in template_root:
         xhtml_root.append(child)
     xhtml_body: etree._Element = xhtml_root.find("body", { None: XHTML_NAMESPACE })
+    xhtml_head: etree._Element = xhtml_root.find(".//head", { None: XHTML_NAMESPACE })
+    version_comment(xhtml_head, index=0)
     xhtml_title: etree._Element = xhtml_root.find(".//title", { None: XHTML_NAMESPACE })
     xhtml_title.text = name
     xhtml_content_root: etree._Element = xhtml_root.find(".//div[@id='xhtml-content-root']", { None: XHTML_NAMESPACE })
