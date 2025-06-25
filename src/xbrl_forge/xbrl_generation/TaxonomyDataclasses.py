@@ -1,7 +1,12 @@
+import logging
+
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
 from .PackageDataclasses import Tag, TagLocation
+
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class TaxonomyDocument:
@@ -113,6 +118,7 @@ class TaxonomyDocument:
                     while new_name in used_elements:
                         index += 1
                         new_name = f"{new_element.name}_{index}"
+                    logger.debug(f"Updating concept name because of inconsistent duplication {new_element.name} to {new_name}")  
                     element_update_map[new_element.name] = new_name
                     new_element.name = new_name
                     target_taxonomy.elements.append(new_element)
@@ -129,6 +135,7 @@ class TaxonomyDocument:
             new_role_href: str = new_role.href("")
             if new_role_href in target_roles:
                 # combine roles
+                logger.debug(f"Merging roles with uri {new_role.uri(target_taxonomy.namespace)}")
                 target_roles[new_role_href].merge(new_role)
             else:
                 # add new role to taxonomy
@@ -304,6 +311,9 @@ class TaxonomyElement:
             type=Tag.from_dict(data.get("type", {})),
             typed_domain_ref=TagLocation.from_dict(data.get("typed_domain_ref")) if "typed_domain_ref" in data else None
         )
+    
+    def to_uname(cls, namespace: str) -> str:
+        return Tag(namespace=namespace, name=cls.name).to_uname()
 
     def equals(cls, compare_element: "TaxonomyElement") -> bool:
         if cls.balance != compare_element.balance:

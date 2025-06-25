@@ -1,12 +1,19 @@
-from typing import Dict, List
 import jsonschema
 import os
 import json
+import logging
+
+from typing import Dict, List
+
+
+logger = logging.getLogger(__name__)
 
 def validate_schema(data: dict, root_schema_id: str, schema_folder: str) -> None:
     store: Dict[str, dict] = _load_schema_folder(schema_folder)
     for id, schema in store.items():
+        logger.debug(f"Loading json schema {id}")
         jsonschema.Draft202012Validator.check_schema(schema)
+    logger.debug(f"Using root schema {root_schema_id}")
     root_schema: dict = store[root_schema_id]
     resolver = jsonschema.RefResolver(base_uri="", referrer=root_schema, store=store)
     validator = jsonschema.Draft202012Validator(root_schema, resolver=resolver)

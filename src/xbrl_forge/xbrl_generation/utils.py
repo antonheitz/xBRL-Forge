@@ -1,5 +1,9 @@
-from dataclasses import dataclass
+import logging
+
 from lxml import etree
+
+
+logger = logging.getLogger(__name__)
 
 class reversor:
     def __init__(self, obj):

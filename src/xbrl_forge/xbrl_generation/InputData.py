@@ -1,8 +1,13 @@
+import logging
+
 from dataclasses import dataclass
 from typing import Dict, List
 
 from .ContentDataclasses import ContentDocument
 from .TaxonomyDataclasses import TaxonomyDocument
+
+
+logger = logging.getLogger(__name__)
 
 @dataclass
 class InputData:
@@ -18,6 +23,7 @@ class InputData:
     
     @classmethod
     def combine(cls, input_data_list: List["InputData"]) -> 'InputData':
+        logger.debug(f"Combining {len(input_data_list)} InputData Objects")
         # combine taxonomies and update reports if necessary
         available_taxonomy_input_data: List[InputData] = [data for data in input_data_list if data.taxonomy]
         available_taxonomy_input_data.sort(key=lambda data: data.taxonomy.priority, reverse=True)
@@ -45,7 +51,6 @@ class InputData:
             taxonomy=target_taxonomy,
             reports=combined_documents
         )
-        
 
     def to_dict(cls) -> dict:
         return {

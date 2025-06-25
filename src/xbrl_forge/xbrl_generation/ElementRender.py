@@ -1,11 +1,17 @@
-from typing import Callable, Dict, List
-from venv import logger
-from .ContentDataclasses import AppliedTag, AppliedTagTree, BaseXbrlItem, ContentItem, ImageItem, ListItem, ParagraphItem, TableItem, TitleItem
+import logging
+
 from lxml import etree
+from typing import Callable, Dict, List
+
+from .ContentDataclasses import AppliedTag, AppliedTagTree, BaseXbrlItem, ContentItem, ImageItem, ListItem, ParagraphItem, TableItem, TitleItem
+
+
+logger = logging.getLogger(__name__)
 
 XHTML_NAMESPACE: str = "http://www.w3.org/1999/xhtml"
 
 def render_content(content_item: ContentItem, parent: etree.Element, add_text: Callable[[etree.Element, AppliedTagTree, str], None], recusive: Callable[[ContentItem, etree.Element], None], part_tags: List[AppliedTag] = []) -> None:
+    logger.debug(f"Creating content elements for type {content_item.type}")
     match content_item.type:
         case ContentItem.TYPE_TITLE:
             title_item: TitleItem = content_item

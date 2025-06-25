@@ -1,9 +1,11 @@
-from dataclasses import dataclass
 import logging
+
 from typing import Dict, List, Set, Tuple
+from dataclasses import dataclass
 
 from .PackageDataclasses import Tag
 from .utils import reversor
+
 
 logger = logging.getLogger(__name__)
 

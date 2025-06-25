@@ -6,25 +6,18 @@ from .logger_setup import logger_conf
 logger_conf()
 
 from .xbrl_generation.ContentDataclasses import ContentDocument
-
 from .xbrl_generation.XbrlProducer import XbrlProducer
 from .xbrl_generation.PackageDataclasses import File
 from .xbrl_generation.InputData import InputData
 from .xbrl_generation.HtmlProducer import HtmlProducer
 from .xbrl_generation.TaxonomyProducer import TaxonomyProducer
-
 from .utils.schema_validation import validate_schema
-
 from .file_conversion import doc_to_data
 
-from ._version import retrieve_version
 
 logger = logging.getLogger(__name__)
 
 SCHEMA_FOLDER: str = os.path.join(os.path.dirname(os.path.realpath(__file__)), "schemas")
-
-def get_version() -> str:
-    return retrieve_version()
 
 def convert_document(document_path: str) -> InputData:
     logger.info(f"Converting file {document_path}")
