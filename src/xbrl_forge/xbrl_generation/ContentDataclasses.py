@@ -524,6 +524,7 @@ class AppliedTagTree:
 class ContentItem:
     type: str
     tags: List[AppliedTag]
+    classes: List[str]
 
     TYPE_TITLE: str = "TITLE"
     TYPE_PARAGRAPH: str = "PARAGRAPH"
@@ -550,8 +551,9 @@ class ContentItem:
             case _:
                 logger.error(f"Content Item Type '{data.get('type')}' is not implemented yet.")
                 return cls(
-                    data.get("type"), 
-                    [AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+                    type=data.get("type"), 
+                    tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+                    classes=data.get("classes")
                 )
 
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -563,7 +565,8 @@ class ContentItem:
     def to_dict(cls) -> dict:
         return {
             "type": cls.type,
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
 
 @dataclass
@@ -576,16 +579,15 @@ class TitleItem(ContentItem):
         cls,
         content: str,
         level: int,
-        tags: List[AppliedTag] = None
+        tags: List[AppliedTag] = None,
+        classes: List[str] = None
     ) -> 'TitleItem':
-        item_tags: List[AppliedTag] = []
-        if tags:
-            item_tags = tags
         return cls(
             type=cls.TYPE_TITLE,
             content=content,
             level=level,
-            tags=item_tags
+            tags=tags if tags else [],
+            classes=classes if classes else []
         )
 
     @classmethod
@@ -593,7 +595,8 @@ class TitleItem(ContentItem):
         return cls.new(
             content=data.get("content"),
             level=data.get("level"),
-            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+            classes=data.get("classes", [])
         )
     
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -609,7 +612,8 @@ class TitleItem(ContentItem):
             "type": cls.type,
             "content": cls.content,
             "level": cls.level,
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
     
 @dataclass
@@ -620,22 +624,22 @@ class ParagraphItem(ContentItem):
     def new(
         cls,
         content: str,
-        tags: List[AppliedTag] = None
+        tags: List[AppliedTag] = None,
+        classes: List[str] = None
     ) -> 'ParagraphItem':
-        item_tags: List[AppliedTag] = []
-        if tags:
-            item_tags = tags
         return cls(
             type=cls.TYPE_PARAGRAPH,
             content=content,
-            tags=item_tags
+            tags=tags if tags else [],
+            classes=classes if classes else []
         )
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TitleItem':
         return cls.new(
             content=data.get("content"),
-            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+            classes=data.get("classes", [])
         )
 
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -650,7 +654,8 @@ class ParagraphItem(ContentItem):
         return {
             "type": cls.type,
             "content": cls.content,
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
     
 @dataclass
@@ -661,22 +666,22 @@ class TableItem(ContentItem):
     def new(
         cls,
         rows: List['TableRow'],
-        tags: List[AppliedTag] = None
+        tags: List[AppliedTag] = None,
+        classes: List[str] = None
     ) -> 'TableItem':
-        item_tags: List[AppliedTag] = []
-        if tags:
-            item_tags = tags
         return cls(
             type=cls.TYPE_TABLE,
             rows=rows,
-            tags=item_tags
+            tags=tags if tags else [],
+            classes=classes if classes else []
         )
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TableItem':
         return cls.new(
             rows=[TableRow.from_dict(row_data) for row_data in data.get("rows", [])],
-            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+            classes=data.get("classes", [])
         )
 
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -696,26 +701,31 @@ class TableItem(ContentItem):
         return {
             "type": cls.type,
             "rows": [row.to_dict() for row in cls.rows],
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
 
 @dataclass
 class TableRow:
     cells: List['TableCell']
+    classes: List[str]
 
     @classmethod
     def new(
         cls,
         cells: List['TableCell'],
+        classes: List[str] = None
     ) -> 'TableRow':
         return cls(
-            cells=cells
+            cells=cells,
+            classes=classes if classes else []
         )
 
     @classmethod
     def from_dict(cls, data: dict) -> 'TableRow':
         return cls.new(
-            cells=[TableCell.from_dict(cell_data) for cell_data in data.get("cells", [])]
+            cells=[TableCell.from_dict(cell_data) for cell_data in data.get("cells", [])],
+            classes=data.get("classes", [])
         )
     
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -730,7 +740,8 @@ class TableRow:
 
     def to_dict(cls) -> dict:
         return {
-            "cells": [cell.to_dict() for cell in cls.cells]
+            "cells": [cell.to_dict() for cell in cls.cells],
+            "classes": cls.classes
         }
 
 @dataclass
@@ -739,6 +750,7 @@ class TableCell:
     header: bool
     rowspan: int
     colspan: int
+    classes: List[str]
 
     @classmethod
     def new(
@@ -746,13 +758,15 @@ class TableCell:
         content: List[ContentItem],
         header: bool = False,
         rowspan: int = 1,
-        colspan: int = 1
+        colspan: int = 1,
+        classes: List[str] = None
     ) -> 'TableCell':
         return cls(
             content=content,
             header=header,
             rowspan=rowspan,
-            colspan=colspan
+            colspan=colspan,
+            classes=classes if classes else []
         )
 
     @classmethod
@@ -761,7 +775,8 @@ class TableCell:
             content=[ContentItem.from_dict(content_data) for content_data in data.get("content", [])],
             header=data.get("header", False),
             rowspan=data.get("rowspan", 1),
-            colspan=data.get("colspan", 1)
+            colspan=data.get("colspan", 1),
+            classes=data.get("classes", [])
         )
     
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -779,9 +794,9 @@ class TableCell:
             "content": [item.to_dict() for item in cls.content],
             "header": cls.header,
             "rowspan": cls.rowspan,
-            "colspan": cls.colspan
+            "colspan": cls.colspan,
+            "classes": cls.classes
         }
-
 
 @dataclass
 class ImageItem(ContentItem):
@@ -793,16 +808,15 @@ class ImageItem(ContentItem):
         cls,
         image_data: str,
         alt_text: str,
-        tags: List[AppliedTag] = None
+        tags: List[AppliedTag] = None,
+        classes: List[str] = None
     ) -> 'ImageItem':
-        item_tags: List[AppliedTag] = []
-        if tags:
-            item_tags = tags
         return cls(
             type=cls.TYPE_IMAGE,
             image_data=image_data,
             alt_text=alt_text,
-            tags=item_tags
+            tags=tags if tags else [],
+            classes=classes if classes else []
         )
 
     @classmethod
@@ -810,7 +824,8 @@ class ImageItem(ContentItem):
         return cls.new(
             image_data=data.get("image_data"),
             alt_text=data.get("alt_text"),
-            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+            classes=data.get("classes", [])
         )
     
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -826,7 +841,8 @@ class ImageItem(ContentItem):
             "type": cls.type,
             "image_data": cls.image_data,
             "alt_text": cls.alt_text,
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
     
 @dataclass
@@ -839,16 +855,15 @@ class ListItem(ContentItem):
         cls,
         elements: List['ListElement'],
         ordered: bool,
-        tags: List[AppliedTag] = None
+        tags: List[AppliedTag] = None,
+        classes: List[str] = None
     ) -> 'ListItem':
-        item_tags: List[AppliedTag] = []
-        if tags:
-            item_tags = tags
         return cls(
             type=cls.TYPE_LIST,
             elements=elements,
             ordered=ordered,
-            tags=item_tags
+            tags=tags if tags else [],
+            classes=classes if classes else []
         )
 
     @classmethod
@@ -856,7 +871,8 @@ class ListItem(ContentItem):
         return cls.new(
             elements=[ListElement.from_dict(element_data) for element_data in data.get("elements", [])],
             ordered=data.get("ordered", False),
-            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])]
+            tags=[AppliedTag.from_dict(tag_data) for tag_data in data.get("tags", [])],
+            classes=data.get("classes", [])
         )
 
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -877,26 +893,31 @@ class ListItem(ContentItem):
             "type": cls.type,
             "elements": [element.to_dict() for element in cls.elements],
             "ordered": cls.ordered,
-            "tags": [tag.to_dict() for tag in cls.tags]
+            "tags": [tag.to_dict() for tag in cls.tags],
+            "classes": cls.classes
         }
     
 @dataclass
 class ListElement:
     content: List[ContentItem]
+    classes: List[str]
 
     @classmethod
     def new(
         cls,
-        content: List[ContentItem]
+        content: List[ContentItem],
+        classes: List[str] = None
     ) -> 'ListElement':
         return cls(
-            content=content
+            content=content,
+            classes=classes if classes else []
         )
 
     @classmethod
     def from_dict(cls, data: dict) -> 'ListElement':
         return cls.new(
-            content=[ContentItem.from_dict(element_content) for element_content in data.get("content", [])]
+            content=[ContentItem.from_dict(element_content) for element_content in data.get("content", [])],
+            classes=data.get("classes", [])
         )
 
     def update_tags_elements(cls, element_update_map: Dict[str, str]) -> None:
@@ -911,7 +932,8 @@ class ListElement:
 
     def to_dict(cls) -> dict:
         return {
-            "content": [content_item.to_dict() for content_item in cls.content]
+            "content": [content_item.to_dict() for content_item in cls.content],
+            "classes": cls.classes
         }
     
 @dataclass
@@ -930,7 +952,8 @@ class BaseXbrlItem(ContentItem):
         return cls(
             type=cls.TYPE_BASE_XBRL,
             content=content,
-            tags=item_tags
+            tags=item_tags,
+            classes=[]
         )
     
     @classmethod
