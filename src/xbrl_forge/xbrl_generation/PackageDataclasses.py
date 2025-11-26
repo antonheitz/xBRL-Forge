@@ -9,13 +9,19 @@ from typing import Dict, List, Tuple
 
 logger = logging.getLogger(__name__)
 
+@dataclass
+class PACKAGE_EXTENSIONS:
+    ZIP: str = "zip"
+    XBRI: str = "xbri"
+    XBR: str = "xbr"
+
 class File:
     name: str
     content: str 
     contained_files: List['File'] 
     zip_extension: str
 
-    def __init__(cls, name: str, content: str = None, contained_files: List['File'] = None, zip_extension: str = "zip"):
+    def __init__(cls, name: str, content: str = None, contained_files: List['File'] = None, zip_extension: str = PACKAGE_EXTENSIONS.ZIP):
         cls.name = name
         cls.content = content
         cls.contained_files = [] if contained_files == None else contained_files

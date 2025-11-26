@@ -31,28 +31,34 @@ XBRLDT_PREFIX: str = "xbrldt"
 
 class TaxonomyProducer:
     taxonomy_document: TaxonomyDocument
+    taxonomy_root_folder: File
+    taxonomy_folder: File
+    meta_inf_files: List[File]
 
     def __init__(cls, document: TaxonomyDocument):
         cls.taxonomy_document = document
-
-    def create_files(cls, reports_folder: File = None, package_extension: str = "zip") -> File:
-        # create base folder structure
-        root_folder = File(name=f'{"_".join(cls.taxonomy_document.metadata.name.split())}', zip_extension=package_extension)
-        if reports_folder:
-            root_folder.contained_files.append(reports_folder)
+        cls.taxonomy_root_folder = None
+        cls.taxonomy_folder = None
         # create taxonomy files
-        taxonomy_folder = root_folder
         for part in cls.taxonomy_document.rewrite_path:
-            parent_folder = taxonomy_folder
-            taxonomy_folder = File(name=part)
-            parent_folder.contained_files.append(taxonomy_folder)
-        cls._create_taxonomy_files(taxonomy_folder)
-        # create meta information
-        meta_inf_folder = File(name="META-INF", contained_files=cls._create_meta_inf_files(package_extension if reports_folder else None))
-        root_folder.contained_files.append(meta_inf_folder)
-        return root_folder
+            if not cls.taxonomy_root_folder:
+                cls.taxonomy_root_folder = File(name=part)
+                cls.taxonomy_folder = cls.taxonomy_root_folder
+            else:
+                parent_folder = cls.taxonomy_folder
+                cls.taxonomy_folder = File(name=part)
+                parent_folder.contained_files.append(cls.taxonomy_folder)
+        cls._create_taxonomy_files()
+        cls.meta_inf_files = []
+        cls._create_meta_inf_files()
 
-    def _create_meta_inf_files(cls, package_extension: str = None) -> List[File]:
+    def get_taxonomy(cls) -> File:
+        return cls.taxonomy_root_folder
+    
+    def get_meta_inf_files(cls) -> List[File]:
+        return cls.meta_inf_files
+
+    def _create_meta_inf_files(cls) -> List[File]:
         # create catalog file
         catalog_namespace: str = "urn:oasis:names:tc:entity:xmlns:xml:catalog"
         catalog_namespace_map = {
@@ -160,7 +166,7 @@ class TaxonomyProducer:
             )
             ep_lang_element.text = entrypoint.language
 
-        return_files: List[File] = [
+        cls.meta_inf_files = [
             File(
                 name="catalog.xml", 
                 content=xml_to_string(
@@ -176,44 +182,28 @@ class TaxonomyProducer:
             )
         ]
 
-        if package_extension:
-            supported_package_extensions: Dict[str, str] = {
-                "zip": "https://xbrl.org/report-package/2023",
-                "xbri": "https://xbrl.org/report-package/2023/xbri",
-                "xbr": "https://xbrl.org/report-package/2023/xbr"
-            }
-            return_files.append(File(
-                name="reportPackage.json",
-                content=json.dumps({
-                    "documentInfo": {
-                        "documentType": supported_package_extensions.get(package_extension)
-                    }
-                })
-            ))
-        return return_files
-
-    def _create_taxonomy_files(cls, taxonomy_folder: File) -> None:
+    def _create_taxonomy_files(cls) -> None:
         logger.debug(f"Creating taxonomy schema for namespace {cls.taxonomy_document.namespace}")
-        cls._create_schema(taxonomy_folder)
+        cls._create_schema(cls.taxonomy_folder)
         presentation_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_pre.xml"
         logger.debug(f"Creating presentation linkbase {presentation_linkbase_filename}")
         cls._create_linkbase(
             presentation_linkbase_filename,
-            taxonomy_folder,
+            cls.taxonomy_folder,
             cls._create_presentation()
         )
         calculation_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_cal.xml"
         logger.debug(f"Creating calculation linkbase {calculation_linkbase_filename}")
         cls._create_linkbase(
             calculation_linkbase_filename,
-            taxonomy_folder,
+            cls.taxonomy_folder,
             cls._create_calculation()
         )
         definition_linkbase_filename: str = f"{cls.taxonomy_document.files_base_name}_def.xml"
         logger.debug(f"Creating defintion linkbase {definition_linkbase_filename}")
         cls._create_linkbase(
             definition_linkbase_filename,
-            taxonomy_folder,
+            cls.taxonomy_folder,
             cls._create_definition()
         )
         for labels_lang in cls.taxonomy_document.labels:
@@ -221,7 +211,7 @@ class TaxonomyProducer:
             logger.debug(f"Creating label linkbase language {labels_lang} {label_linkbase_filename}")
             cls._create_linkbase(
                 label_linkbase_filename,
-                taxonomy_folder,
+                cls.taxonomy_folder,
                 cls._create_label_linkbase(labels_lang)   
             )
 
