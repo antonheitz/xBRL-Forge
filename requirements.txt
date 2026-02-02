@@ -1,6 +1,6 @@
 lxml == 5.2.1
 jsonschema == 4.23.0
 mammoth == 1.11.0
-fastapi == 0.115.8
+fastapi == 0.128.0
 uvicorn == 0.34.0
 python-multipart == 0.0.20
