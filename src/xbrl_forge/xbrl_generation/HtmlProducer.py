@@ -57,6 +57,10 @@ class HtmlProducer(BaseProducer):
             xhtml_template = cls.xhtml_template
         )
 
+        # add lang to header if set
+        if cls.content_document.lang:
+            xhtml_root.set(f"{{{XML_NAMESPACE}}}lang", cls.content_document.lang)
+
         if cls.ixbrl:
             # create ixbrl header information
             ixbrl_header_container: etree._Element = etree.SubElement(xhtml_body, f"{{{XHTML_NAMESPACE}}}div", {"style":"display:none;"})

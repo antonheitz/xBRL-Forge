@@ -46,6 +46,10 @@ class XbrlProducer(BaseProducer):
         )
         version_comment(root_element, 0)
 
+        # add language to the root
+        if cls.content_document.lang:
+            root_element.set(f"{{{XML_NAMESPACE}}}lang", cls.content_document.lang)
+
         #TODO: xsi:schemaLocation="http://mycompany.com/xbrl/taxonomy 102-01-SpecExample.xsd"
 
         # add schema ref
