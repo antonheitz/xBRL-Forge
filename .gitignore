@@ -1,0 +1,7 @@
+examples/result/*
+!examples/result/.gitkeep
+__pycache__/
+dist/*
+**/**.egg-info
+venv
+.venv

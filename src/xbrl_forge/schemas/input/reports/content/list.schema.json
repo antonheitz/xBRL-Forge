@@ -1,0 +1,46 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/list",
+    "title": "Content: List",
+    "description": "List Content Element",
+    "type": "object",
+    "required": ["type", "ordered", "elements", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'LIST'",
+            "type": "string",
+            "pattern": "^LIST$"
+        },
+        "ordered": {
+            "description": "Normal lists use bullets. With this key true the list will be numbered in ascending order.",
+            "type": "boolean"
+        },
+        "elements": {
+            "description": "Elements are a nested strucure. The content are the normal content structures, this allows for nesting of lists in lists or pragraphs in list",
+            "type": "array",
+            "items": {
+                "description": "A element of the list.",
+                "type": "object",
+                "required": ["content"],
+                "properties": {
+                    "content": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "$ref": "https://xbrl-forge.org/schema/input/reports/content/all-contents"
+                        }
+                    }
+                }
+            },
+            "minItems": 1
+        },
+        "tags": {
+            "description": "Applied Tags for this content. Only tags on the whole structure are allowed in this place (omitting the start_index and end_index keys).",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

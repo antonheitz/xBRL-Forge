@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=75.8.0", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xbrl-forge"
+dynamic = ["version", "dependencies"]
+authors = [
+  { name="Anton Heitz", email="anton.j.heitz@gmail.com" },
+]
+description = "Generate XBRL Instances, iXBRL instances, xBRL Taxonomies and xBRL extension taxonomies from distributed sources"
+readme = "PYPI.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[project.urls]
+Homepage = "https://github.com/antonheitz/xBRL-Forge"
+Issues = "https://github.com/antonheitz/xBRL-Forge/issues"
+
+[tool.setuptools_scm]

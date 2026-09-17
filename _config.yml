@@ -1,0 +1,13 @@
+theme: jekyll-theme-tactile
+
+title: xBRL-Forge
+
+description: Open Source xBRL Generation
+
+github:
+  public: true
+  is_project_page: true
+  repository_url: https://github.com/antonheitz/xBRL-Forge
+  owner_url: https://github.com/antonheitz
+
+mermaid: true

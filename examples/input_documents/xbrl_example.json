@@ -1,0 +1,784 @@
+{
+    "taxonomy": {
+        "priority": 100,
+        "prefix": "test",
+        "metadata": {
+            "name": "Example xBRL Report",
+            "description": "This report is the Example for the non-existent Test Company",
+            "publisher": "Test Company Inc",
+            "publisher_url": "test-company.com",
+            "publication_date": "2024-12-31",
+            "publisher_country": "DE",
+            "entrypoints": [
+                {
+                    "name": "Example Report",
+                    "description": "Report of the Example Company",
+                    "documents": [
+                        "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-lab-de.xml",
+                        "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-gen-de.xml"
+                    ],
+                    "language": "de"
+                }
+            ]
+        },
+        "namespaces": {
+            "http://www.xbrl.org/dtr/type/numeric": "num",
+            "http://www.xbrl.org/2003/instance": "xbrli",
+            "http://www.xbrl.org/dtr/type/non-numeric": "nonum"
+        },
+        "schema_imports": {
+            "http://www.xbrl.org/2003/instance": "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd",
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+            "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd",
+            "http://www.xbrl.org/dtr/type/numeric": "http://www.xbrl.org/dtr/type/numeric-2009-12-16.xsd",
+            "http://www.xbrl.org/dtr/type/non-numeric": "http://www.xbrl.org/dtr/type/nonNumeric-2009-12-16.xsd",
+            "http://xbrl.org/2005/xbrldt": "http://www.xbrl.org/2005/xbrldt-2005.xsd"
+        },
+        "elements": [
+            {
+                "period_type": "duration",
+                "name": "FirstSectionAbstract",
+                "abstract": true,
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "CompleteSection",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/dtr/type/non-numeric",
+                    "name": "textBlockItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "FirstPart",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "PartlyFirstPartAndSecondPart",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "balance": "credit",
+                "period_type": "instant",
+                "name": "InvestmentPropertyExtension",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "monetaryItemType"
+                }
+            }
+        ],
+        "linkbase_imports": {
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-lab-de.xml": "http://www.xbrl.org/2003/role/labelLinkbaseRef",
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-gen-de.xml": null
+        },
+        "arc_roles_import": {
+            "http://xbrl.org/int/dim/arcrole/domain-member": "http://www.xbrl.org/2005/xbrldt-2005.xsd#domain-member",
+            "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd#wider-narrower",
+            "http://xbrl.org/int/dim/arcrole/dimension-domain": "http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-domain",
+            "http://xbrl.org/int/dim/arcrole/hypercube-dimension": "http://www.xbrl.org/2005/xbrldt-2005.xsd#hypercube-dimension",
+            "http://xbrl.org/int/dim/arcrole/all": "http://www.xbrl.org/2005/xbrldt-2005.xsd#all",
+            "http://xbrl.org/int/dim/arcrole/dimension-default": "http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-default"
+        },
+        "roles": [
+            {
+                "role_name": "Text Tags on the first Paragraph",
+                "role_id": "extension_text_tags",
+                "presentation_linkbase": [
+                    {
+                        "element_id": "FirstSectionAbstract",
+                        "order": 0,
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "order": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "order": 2,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "order": 3,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "definition_linkbase": [],
+                "calculation_linkbase": []
+            },
+            {
+                "role_name": "Changes in Equity",
+                "role_id": "cie",
+                "presentation_linkbase": [
+                    {
+                        "element_id": "ifrs-full_StatementOfChangesInEquityAbstract",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "order": 0,
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityTable",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_ComponentsOfEquityAxis",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": [
+                                            {
+                                                "element_id": "ifrs-full_EquityMember",
+                                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                "order": 0,
+                                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                                "children": [
+                                                    {
+                                                        "element_id": "ifrs-full_NoncontrollingInterestsMember",
+                                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                        "order": 0,
+                                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "InvestmentPropertyExtension",
+                                        "order": 1,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 2,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "preferred_label": "http://www.xbrl.org/2003/role/verboseLabel",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "definition_linkbase": [
+                    {
+                        "element_id": "ifrs-full_StatementOfChangesInEquityAbstract",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityTable",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/all",
+                                "context_element": "scenario",
+                                "closed": true,
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_ComponentsOfEquityAxis",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/hypercube-dimension",
+                                        "children": [
+                                            {
+                                                "element_id": "ifrs-full_EquityMember",
+                                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                "arc_role": "http://xbrl.org/int/dim/arcrole/dimension-domain",
+                                                "children": [
+                                                    {
+                                                        "element_id": "ifrs-full_NoncontrollingInterestsMember",
+                                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "InvestmentPropertyExtension",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": [
+                    {
+                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "weight": 0,
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "weight": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
+                                "children": []
+                            },
+                            {
+                                "element_id": "InvestmentPropertyExtension",
+                                "weight": -1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "role_name": "Role 999999",
+                "role_id": "esef_role-999999",
+                "role_uri": "https://www.esma.europa.eu/xbrl/role/cor/esef_role-999999",
+                "schema_location": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+                "presentation_linkbase": [],
+                "definition_linkbase": [
+                    {
+                        "element_id": "esef_cor_LineItemsNotDimensionallyQualifiedPlaceholder",
+                        "schema_location": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+                        "arc_role": null,
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": []
+            },
+            {
+                "role_name": "Anchoring",
+                "role_id": "Anchoring",
+                "presentation_linkbase": [],
+                "definition_linkbase": [
+                    {
+                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "InvestmentPropertyExtension",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_InvestmentProperty",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "element_id": "ifrs-full_DisclosureOfAccountingJudgementsAndEstimatesExplanatory",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": []
+            }
+        ],
+        "labels": {
+            "en": [
+                {
+                    "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                    "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/verboseLabel",
+                            "label": "Verbose label for Assets"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "FirstSectionAbstract",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Abstract for the first Section [Abstract]"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "CompleteSection",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "This Tag contains the whole first section"
+                        },
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/verboseLabel",
+                            "label": "Extension Instant For the whole first section"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "FirstPart",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "First Part of the Paragraph"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "PartlyFirstPartAndSecondPart",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Partly the First Part of the Paragraph and the second part"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "InvestmentPropertyExtension",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Extension built for Investment Proterty with something additional"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "reports": [
+        {
+            "name": "Example xbrl Report",
+            "lang": "de",
+            "xhtml": false,
+            "priority": 1,
+            "namespaces": {
+                "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full": "ifrs-full",
+                "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12": "ixt4",
+                "http://www.xbrl.org/2003/iso4217": "iso4217",
+                "http://www.w3.org/1999/xhtml": "xhtml"
+            },
+            "content": [
+                {
+                    "type": "BASE_XBRL",
+                    "content": "Hello there, General Kenobi.",
+                    "tags": [
+                        {
+                            "name": "FirstPart",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "content": "This Paragraph should be tagged with one whole tag. This sentence is a similar topic but gets a second tag as well. This Sentence and a part of the sentence before are a third tag.",
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "BASE_XBRL",
+                    "content": "Hello there, General Kenobi number 2!",
+                    "tags": [
+                        {
+                            "name": "FirstPart",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TABLE",
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Line Item (K EUR)",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2024 Non-Controlling",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2024",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2023",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Intagible Assets other Than Goodwill",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "23.449,2",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "33.449,5",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "23.449,5",
+                                            "tags": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Investment Property needing an Extension",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "12.882,1",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "15.224,7",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "5.224,7",
+                                            "tags": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Intagible Assets other Than Goodwill",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "36.331,3",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "48.674,2",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "28.674,2",
+                                            "tags": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "BASE_XBRL",
+                    "content": "48674.2",
+                    "tags": [
+                        {
+                            "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                            "name": "PropertyPlantAndEquipment",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": null,
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "decimals": -2,
+                                "scale": 3,
+                                "unit": {
+                                    "numerator": {
+                                        "namespace": "http://www.xbrl.org/2003/iso4217",
+                                        "name": "EUR"
+                                    }
+                                },
+                                "format": {
+                                    "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                    "name": "num-comma-decimal"
+                                },
+                                "sign": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "BASE_XBRL",
+                    "content": "36331.3",
+                    "tags": [
+                        {
+                            "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                            "name": "PropertyPlantAndEquipment",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": null,
+                            "dimensions": [
+                                {
+                                    "axis": {
+                                        "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                        "name": "ComponentsOfEquityAxis"
+                                    },
+                                    "member": {
+                                        "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                        "name": "NoncontrollingInterestsMember"
+                                    },
+                                    "typed_member_value": null
+                                }
+                            ],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "decimals": -2,
+                                "scale": 3,
+                                "unit": {
+                                    "numerator": {
+                                        "namespace": "http://www.xbrl.org/2003/iso4217",
+                                        "name": "EUR"
+                                    }
+                                },
+                                "format": {
+                                    "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                    "name": "num-comma-decimal"
+                                },
+                                "sign": false
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

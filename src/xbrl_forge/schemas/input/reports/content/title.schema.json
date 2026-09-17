@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/content/title",
+    "title": "Content: Title",
+    "description": "Title Content Element",
+    "type": "object",
+    "required": ["type", "content", "level", "tags"],
+    "properties": {
+        "type": {
+            "description": "Identifier for the type must be 'TITLE'",
+            "type": "string",
+            "pattern": "^TITLE$"
+        },
+        "content": {
+            "description": "The Content of the Title",
+            "type": "string"
+        },
+        "level": {
+            "description": "Title level as in HTML Title levels 1-6",
+            "type": "number",
+            "minimum": 1,
+            "maximum": 6
+        },
+        "tags": {
+            "description": "Applied Tags for this content.",
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/applied-tag"
+            },
+            "minItems": 0
+        }
+    }
+}

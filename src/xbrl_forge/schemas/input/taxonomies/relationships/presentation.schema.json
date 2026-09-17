@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/relationships/presentation",
+    "title": "Presentation Relationship",
+    "description": "Presentation Relationship between Elements",
+    "type": "object",
+    "required": ["element_id", "order", "children"],
+    "properties": {
+        "element_id": {
+            "type": "string",
+            "description": "The id of the element to be used. In case of an external element (not defined by this taxonomy) this must be the id of the element as it is defined in the external schema. In case of an element defined by this taxonomy, this must reflect the 'technical_name' value of the defined element"
+        },
+        "schema_location": {
+            "type": "string",
+            "description": "In case of an external element (not defined by this taxonomy) this must be the URL of the schema it was defined in."
+        },
+        "order": {
+            "type": "number",
+            "description": "Presentation content will be odered in an ascending order to the 'order' value"
+        },
+        "arc_role": {
+            "type": ["string", "null"],
+            "description": "Presentation arcrole to be used. It may be necessary to import it!"
+        },
+        "children": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/taxonomies/relationships/presentation"
+            },
+            "minItems": 0,
+            "description": "Children of the presentation object forming hierarchical relationships"
+        }
+    }
+}

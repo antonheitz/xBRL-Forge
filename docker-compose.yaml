@@ -1,0 +1,10 @@
+services:
+  engine:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.engine
+    ports: 
+      - 8000:8000
+    environment:
+      XBRL_FORGE_LOGGING: WARNING
+      XBRL_FORGE_PORT: 8000

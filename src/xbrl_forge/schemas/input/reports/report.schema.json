@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/reports/report",
+    "title": "Report Data",
+    "description": "Report object representing the reported information",
+    "type": "object",
+    "required": ["name", "lang", "priority", "content"],
+    "properties": {
+        "name": {
+            "description": "The report file name and the document title. This is also the key to combine reports from different resources. Example: two parts of the reports are produced by two different systems, matched by the name.",
+            "type": "string"
+        },
+        "taxonomy_schema": {
+            "description": "If this key is given, it should reference an external available taxonomy schema. If this key is omitted, the package taxonomy will be used. In case of pure xhtml files (see detection in the 'resource' object kex 'contexts'), this key will be ignored.",
+            "type": "string"
+        },
+        "lang": {
+            "description": "The language of the information. Please use the ISO Lang code.",
+            "type": "string"
+        },
+        "xhtml": {
+            "description": "If true the document will be a inline XBRL document or untagged XHTML, if not a simple xBRL instance. ATTENTION: if false: only transformations 'num-comma-decimal', 'fixed-zero' and 'num-dot-decimal' can be used. ATTENTION: Only tag-wide (start and end index null) tags can be used and they cannot be nested!",
+            "type": "boolean"
+        },
+        "priority": {
+            "type": "number",
+            "description": "Priority for combining reports, the higher one wins!"
+        },
+        "namespaces": {
+            "type": "object",
+            "description": "In case of pure xhtml, this key will be ignored. Every namespace used by the xbrl content such as the taxonomy namespaces of the elements used and namespaces for transformations/values must be included here. Every namespace used in the resource must be defined here. The namespace for the taxonomy provided in this json file is added automatically. The key must be the namespace URI, while the value must be the namespace prefix.",
+            "patternProperties": {
+                "^.*$": {
+                    "type": "string",
+                    "description": "Prefix for the namespace URI stored in the key of this value"
+                }
+            }
+        },
+        "content": {
+            "description": "Content of the report. Each type of content has their own specific structure.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "$ref": "https://xbrl-forge.org/schema/input/reports/content/all-contents"
+            },
+            "minItems": 0
+        }
+    }
+}

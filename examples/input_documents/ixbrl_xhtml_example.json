@@ -1,0 +1,1183 @@
+{
+    "taxonomy": {
+        "priority": 900,
+        "prefix": "test",
+        "metadata": {
+            "name": "Example Combined Report",
+            "description": "This report is the Example for the non-existent Test Company",
+            "publisher": "Test Company Inc",
+            "publisher_url": "test-company.com",
+            "publication_date": "2024-12-31",
+            "publisher_country": "DE",
+            "entrypoints": [
+                {
+                    "name": "Example Report",
+                    "description": "Report of the Example Company",
+                    "documents": [
+                        "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-lab-de.xml",
+                        "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-gen-de.xml"
+                    ],
+                    "language": "de"
+                }
+            ]
+        },
+        "namespaces": {
+            "http://www.xbrl.org/dtr/type/numeric": "num",
+            "http://www.xbrl.org/2003/instance": "xbrli",
+            "http://www.xbrl.org/dtr/type/non-numeric": "nonum"
+        },
+        "schema_imports": {
+            "http://www.xbrl.org/2003/instance": "http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd",
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+            "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd",
+            "http://www.xbrl.org/dtr/type/numeric": "http://www.xbrl.org/dtr/type/numeric-2009-12-16.xsd",
+            "http://www.xbrl.org/dtr/type/non-numeric": "http://www.xbrl.org/dtr/type/nonNumeric-2009-12-16.xsd",
+            "http://xbrl.org/2005/xbrldt": "http://www.xbrl.org/2005/xbrldt-2005.xsd"
+        },
+        "elements": [
+            {
+                "period_type": "duration",
+                "name": "FirstSectionAbstract",
+                "abstract": true,
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "CompleteSection",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/dtr/type/non-numeric",
+                    "name": "textBlockItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "FirstPart",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "period_type": "duration",
+                "name": "PartlyFirstPartAndSecondPart",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "stringItemType"
+                }
+            },
+            {
+                "balance": "debit",
+                "period_type": "instant",
+                "name": "InvestmentPropertyExtension",
+                "nillable": true,
+                "substitution_group": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "item"
+                },
+                "type": {
+                    "namespace": "http://www.xbrl.org/2003/instance",
+                    "name": "monetaryItemType"
+                }
+            }
+        ],
+        "linkbase_imports": {
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-lab-de.xml": "http://www.xbrl.org/2003/role/labelLinkbaseRef",
+            "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor-gen-de.xml": null
+        },
+        "arc_roles_import": {
+            "http://xbrl.org/int/dim/arcrole/domain-member": "http://www.xbrl.org/2005/xbrldt-2005.xsd#domain-member",
+            "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower": "http://www.xbrl.org/lrr/arcrole/esma-arcrole-2018-11-21.xsd#wider-narrower",
+            "http://xbrl.org/int/dim/arcrole/dimension-domain": "http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-domain",
+            "http://xbrl.org/int/dim/arcrole/hypercube-dimension": "http://www.xbrl.org/2005/xbrldt-2005.xsd#hypercube-dimension",
+            "http://xbrl.org/int/dim/arcrole/all": "http://www.xbrl.org/2005/xbrldt-2005.xsd#all",
+            "http://xbrl.org/int/dim/arcrole/dimension-default": "http://www.xbrl.org/2005/xbrldt-2005.xsd#dimension-default"
+        },
+        "roles": [
+            {
+                "role_name": "Text Tags on the first Paragraph",
+                "role_id": "extension_text_tags",
+                "presentation_linkbase": [
+                    {
+                        "element_id": "FirstSectionAbstract",
+                        "order": 0,
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "order": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "order": 2,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "order": 3,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "definition_linkbase": [],
+                "calculation_linkbase": []
+            },
+            {
+                "role_name": "Changes in Equity",
+                "role_id": "cie",
+                "presentation_linkbase": [
+                    {
+                        "element_id": "ifrs-full_StatementOfChangesInEquityAbstract",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "order": 0,
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityTable",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_ComponentsOfEquityAxis",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": [
+                                            {
+                                                "element_id": "ifrs-full_EquityMember",
+                                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                "order": 0,
+                                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                                "children": [
+                                                    {
+                                                        "element_id": "ifrs-full_NoncontrollingInterestsMember",
+                                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                        "order": 0,
+                                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "order": 0,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 0,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "InvestmentPropertyExtension",
+                                        "order": 1,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "order": 2,
+                                        "arc_role": "http://www.xbrl.org/2003/arcrole/parent-child",
+                                        "preferred_label": "http://www.xbrl.org/2003/role/verboseLabel",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "definition_linkbase": [
+                    {
+                        "element_id": "ifrs-full_StatementOfChangesInEquityAbstract",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityTable",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/all",
+                                "context_element": "scenario",
+                                "closed": true,
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_ComponentsOfEquityAxis",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/hypercube-dimension",
+                                        "children": [
+                                            {
+                                                "element_id": "ifrs-full_EquityMember",
+                                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                "arc_role": "http://xbrl.org/int/dim/arcrole/dimension-domain",
+                                                "children": [
+                                                    {
+                                                        "element_id": "ifrs-full_NoncontrollingInterestsMember",
+                                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "element_id": "ifrs-full_StatementOfChangesInEquityLineItems",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "InvestmentPropertyExtension",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    },
+                                    {
+                                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": [
+                    {
+                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "weight": 0,
+                        "children": [
+                            {
+                                "element_id": "ifrs-full_IntangibleAssetsOtherThanGoodwill",
+                                "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                "weight": 1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
+                                "children": []
+                            },
+                            {
+                                "element_id": "InvestmentPropertyExtension",
+                                "weight": -1,
+                                "arc_role": "http://www.xbrl.org/2003/arcrole/summation-item",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "role_name": "Role 999999",
+                "role_id": "esef_role-999999",
+                "role_uri": "https://www.esma.europa.eu/xbrl/role/cor/esef_role-999999",
+                "schema_location": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+                "presentation_linkbase": [],
+                "definition_linkbase": [
+                    {
+                        "element_id": "esef_cor_LineItemsNotDimensionallyQualifiedPlaceholder",
+                        "schema_location": "https://www.esma.europa.eu/taxonomy/2022-03-24/esef_cor.xsd",
+                        "arc_role": null,
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "arc_role": "http://xbrl.org/int/dim/arcrole/domain-member",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": []
+            },
+            {
+                "role_name": "Anchoring",
+                "role_id": "Anchoring",
+                "presentation_linkbase": [],
+                "definition_linkbase": [
+                    {
+                        "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "InvestmentPropertyExtension",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": [
+                                    {
+                                        "element_id": "ifrs-full_InvestmentProperty",
+                                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                                        "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "element_id": "ifrs-full_DisclosureOfAccountingJudgementsAndEstimatesExplanatory",
+                        "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                        "children": [
+                            {
+                                "element_id": "CompleteSection",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            },
+                            {
+                                "element_id": "FirstPart",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            },
+                            {
+                                "element_id": "PartlyFirstPartAndSecondPart",
+                                "arc_role": "http://www.esma.europa.eu/xbrl/esef/arcrole/wider-narrower",
+                                "children": []
+                            }
+                        ]
+                    }
+                ],
+                "calculation_linkbase": []
+            }
+        ],
+        "labels": {
+            "en": [
+                {
+                    "element_id": "ifrs-full_PropertyPlantAndEquipment",
+                    "schema_location": "https://xbrl.ifrs.org/taxonomy/2022-03-24/full_ifrs/full_ifrs-cor_2022-03-24.xsd",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/verboseLabel",
+                            "label": "Verbose label for Assets"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "FirstSectionAbstract",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Abstract for the first Section [Abstract]"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "CompleteSection",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "This Tag contains the whole first section"
+                        },
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/verboseLabel",
+                            "label": "Extension Instant For the whole first section"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "FirstPart",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "First Part of the Paragraph"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "PartlyFirstPartAndSecondPart",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Partly the First Part of the Paragraph and the second part"
+                        }
+                    ]
+                },
+                {
+                    "element_id": "InvestmentPropertyExtension",
+                    "labels": [
+                        {
+                            "label_role": "http://www.xbrl.org/2003/role/label",
+                            "label": "Extension built for Investment Proterty with something additional"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "reports": [
+        {
+            "name": "Example ESEF iXBRL Report",
+            "lang": "de",
+            "xhtml": true,
+            "priority": 1,
+            "namespaces": {
+                "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full": "ifrs-full",
+                "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12": "ixt4",
+                "http://www.xbrl.org/2003/iso4217": "iso4217"
+            },
+            "content": [
+                {
+                    "type": "TITLE",
+                    "content": "Example Report for Test Company",
+                    "level": 1,
+                    "tags": []
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "content": "This Paragraph should be tagged with one whole tag. This sentence is a similar topic but gets a second tag as well. This Sentence and a part of the sentence before are a third tag.",
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        },
+                        {
+                            "name": "FirstPart",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": 52,
+                            "end_index": 115,
+                            "attributes": {
+                                "escape": false
+                            }
+                        },
+                        {
+                            "name": "PartlyFirstPartAndSecondPart",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": 94,
+                            "end_index": 180,
+                            "attributes": {
+                                "escape": false
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "TABLE",
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Line Item (K EUR)",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2024 Non-Controlling",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2024",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2023",
+                                            "tags": []
+                                        }
+                                    ],
+                                    "header": true
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Intagible Assets other Than Goodwill",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "23.449,2",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "IntangibleAssetsOtherThanGoodwill",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "33.449,5",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "IntangibleAssetsOtherThanGoodwill",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "23.449,5",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "IntangibleAssetsOtherThanGoodwill",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Investment Property needing an Extension",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "12.882,1",
+                                            "tags": [
+                                                {
+                                                    "name": "InvestmentPropertyExtension",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": true
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "15.224,7",
+                                            "tags": [
+                                                {
+                                                    "name": "InvestmentPropertyExtension",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": true
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "5.224,7",
+                                            "tags": [
+                                                {
+                                                    "name": "InvestmentPropertyExtension",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 7,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": true
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Intagible Assets other Than Goodwill",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "36.331,3",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "PropertyPlantAndEquipment",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [
+                                                        {
+                                                            "axis": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "ComponentsOfEquityAxis"
+                                                            },
+                                                            "member": {
+                                                                "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                                "name": "NoncontrollingInterestsMember"
+                                                            },
+                                                            "typed_member_value": null
+                                                        }
+                                                    ],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "48.674,2",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "PropertyPlantAndEquipment",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2024-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "28.674,2",
+                                            "tags": [
+                                                {
+                                                    "namespace": "https://xbrl.ifrs.org/taxonomy/2022-03-24/ifrs-full",
+                                                    "name": "PropertyPlantAndEquipment",
+                                                    "entity": "254900OPPU84GM83MG36",
+                                                    "entity_scheme": "http://standards.iso.org/iso/17442",
+                                                    "end_date": "2023-12-31",
+                                                    "start_date": null,
+                                                    "dimensions": [],
+                                                    "start_index": 0,
+                                                    "end_index": 8,
+                                                    "attributes": {
+                                                        "decimals": -2,
+                                                        "scale": 3,
+                                                        "unit": {
+                                                            "numerator": {
+                                                                "namespace": "http://www.xbrl.org/2003/iso4217",
+                                                                "name": "EUR"
+                                                            }
+                                                        },
+                                                        "format": {
+                                                            "namespace": "http://www.xbrl.org/inlineXBRL/transformation/2020-02-12",
+                                                            "name": "num-comma-decimal"
+                                                        },
+                                                        "sign": false
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "IMAGE",
+                    "image_data": "data:image/jpeg;base64,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ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAK9/Y2+pWE9ldIHgnQo6+x/rXzR4h0S48Pa5c6bcZJib5Hxw6H7rfiK+n64L4o+Fv7Z0T+0raPN7YqWIA5eLqw/DqPx9a48ZR9pDmW6PpOGsz+qYn2U37k/wfR/o/8AgHl3gfxM3hjxDFcOx+xzfurlR/dP8X1B5/Md6+jEdZEV0YMjAFWByCPWvk6vVPBfxLs9I8LvZ6sZZJrTC2youTIh6LnoNvv2x6Vy4LEKF4Teh73E2TzxPLiMPG8tml1XR/L8vQ9fJABJOAO9cB4o+KWmaPvttLC394OCwP7pD7kfe+g/OvN/E/xA1jxKXhL/AGSxPS3hb7w/2j1b+XtXJ1VbHt6U/vMcs4UjG1TGu7/lX6v/AC+809a8Qan4gu/tGpXTzMPup0RB6KvQVmqrO4RFLMxwABkk10vhnwNrHiZ1kgi8izz811MML/wEdWP0/MV7P4Z8DaP4ZRZIIvPvMfNdTDLf8BHRR9PzNc9LDVKz5nt3PWx+d4LLY+ypq8l9ldPXt+fkeb+F/hTf6lsutaZrG1PIhH+tcf8Asv48+1ev6TounaFZi1021jgi77Ryx9WPUn61for1aOHhSXurU+BzHN8Vj5fvZWj2W3/B+YUUUVueWFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFBGRg0UUAfPXxD8L/8ACN+IWaBMWF3mSDHRf7yfgT+RFcjX034l8OWfifSGsLvK8745V+9Gw7j/AArgtO+DEUd5v1HVTNbqeI4Y9jOPcknH4Z+teRXwU/afu1oz9CyvibDLCpYqVpx02bv2fr3PMNJ0XUddvBa6bayTyd9o4UerHoB9a9f8L/Cmw03Zda0yX10ORCP9Uh/9m/Hj2rutN0ux0izW00+1jt4F/hQdT6k9Sfc1brqo4KENZas8TM+JsRirwoe5D8X8+ny+8RVVECIoVVGAAMACloortPmAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==",
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "LIST",
+                    "ordered": false,
+                    "elements": [
+                        {
+                            "content": [
+                                {
+                                    "type": "PARAGRAPH",
+                                    "content": "This is the first unordered list item.",
+                                    "tags": []
+                                },
+                                {
+                                    "type": "LIST",
+                                    "ordered": true,
+                                    "elements": [
+                                        {
+                                            "content": [
+                                                {
+                                                    "type": "PARAGRAPH",
+                                                    "content": "This is the first ordered sublist item.",
+                                                    "tags": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "content": [
+                                                {
+                                                    "type": "PARAGRAPH",
+                                                    "content": "This is the second ordered sublist item.",
+                                                    "tags": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "tags": []
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "type": "PARAGRAPH",
+                                    "content": "This is the second unordered list item.",
+                                    "tags": []
+                                }
+                            ]
+                        }
+                    ],
+                    "tags": [
+                        {
+                            "name": "CompleteSection",
+                            "entity": "254900OPPU84GM83MG36",
+                            "entity_scheme": "http://standards.iso.org/iso/17442",
+                            "end_date": "2024-12-31",
+                            "start_date": "2024-01-01",
+                            "dimensions": [],
+                            "start_index": null,
+                            "end_index": null,
+                            "attributes": {
+                                "escape": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Example ESEF XHTML Report",
+            "priority": 1,
+            "lang": "de",
+            "content": [
+                {
+                    "type": "TITLE",
+                    "content": "Hello There, General Kenobi Number 1!",
+                    "level": 1,
+                    "tags": []
+                },
+                {
+                    "type": "PARAGRAPH",
+                    "content": "This is a very useless paragraph. To include some numbers here is a 1.112 and a 23,2. Pretty cool!",
+                    "tags": []
+                },
+                {
+                    "type": "TABLE",
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Line description",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2024",
+                                            "tags": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "Value xY",
+                                            "tags": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "content": [
+                                        {
+                                            "type": "PARAGRAPH",
+                                            "content": "2.999",
+                                            "tags": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "tags": []
+                },
+                {
+                    "type": "IMAGE",
+                    "image_data": "data:image/jpeg;base64,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ooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAK9/Y2+pWE9ldIHgnQo6+x/rXzR4h0S48Pa5c6bcZJib5Hxw6H7rfiK+n64L4o+Fv7Z0T+0raPN7YqWIA5eLqw/DqPx9a48ZR9pDmW6PpOGsz+qYn2U37k/wfR/o/8AgHl3gfxM3hjxDFcOx+xzfurlR/dP8X1B5/Md6+jEdZEV0YMjAFWByCPWvk6vVPBfxLs9I8LvZ6sZZJrTC2youTIh6LnoNvv2x6Vy4LEKF4Teh73E2TzxPLiMPG8tml1XR/L8vQ9fJABJOAO9cB4o+KWmaPvttLC394OCwP7pD7kfe+g/OvN/E/xA1jxKXhL/AGSxPS3hb7w/2j1b+XtXJ1VbHt6U/vMcs4UjG1TGu7/lX6v/AC+809a8Qan4gu/tGpXTzMPup0RB6KvQVmqrO4RFLMxwABkk10vhnwNrHiZ1kgi8izz811MML/wEdWP0/MV7P4Z8DaP4ZRZIIvPvMfNdTDLf8BHRR9PzNc9LDVKz5nt3PWx+d4LLY+ypq8l9ldPXt+fkeb+F/hTf6lsutaZrG1PIhH+tcf8Asv48+1ev6TounaFZi1021jgi77Ryx9WPUn61for1aOHhSXurU+BzHN8Vj5fvZWj2W3/B+YUUUVueWFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFBGRg0UUAfPXxD8L/8ACN+IWaBMWF3mSDHRf7yfgT+RFcjX034l8OWfifSGsLvK8745V+9Gw7j/AArgtO+DEUd5v1HVTNbqeI4Y9jOPcknH4Z+teRXwU/afu1oz9CyvibDLCpYqVpx02bv2fr3PMNJ0XUddvBa6bayTyd9o4UerHoB9a9f8L/Cmw03Zda0yX10ORCP9Uh/9m/Hj2rutN0ux0izW00+1jt4F/hQdT6k9Sfc1brqo4KENZas8TM+JsRirwoe5D8X8+ny+8RVVECIoVVGAAMACloortPmAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==",
+                    "tags": []
+                },
+                {
+                    "type": "LIST",
+                    "ordered": false,
+                    "elements": [
+                        {
+                            "content": [
+                                {
+                                    "type": "PARAGRAPH",
+                                    "content": "This is the first unordered list item.",
+                                    "tags": []
+                                },
+                                {
+                                    "type": "LIST",
+                                    "ordered": true,
+                                    "elements": [
+                                        {
+                                            "content": [
+                                                {
+                                                    "type": "PARAGRAPH",
+                                                    "content": "This is the first ordered sublist item.",
+                                                    "tags": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "content": [
+                                                {
+                                                    "type": "PARAGRAPH",
+                                                    "content": "This is the second ordered sublist item.",
+                                                    "tags": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "tags": []
+                                }
+                            ]
+                        },
+                        {
+                            "content": [
+                                {
+                                    "type": "PARAGRAPH",
+                                    "content": "This is the second unordered list item.",
+                                    "tags": []
+                                }
+                            ]
+                        }
+                    ],
+                    "tags": []
+                }
+            ]
+        }
+    ]
+}

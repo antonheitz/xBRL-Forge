@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/wrapper",
+    "title": "xBRL-Forge Input Data",
+    "description": "The Input required for the package to create results.",
+    "type": "object",
+    "properties": {
+        "taxonomy": {
+            "description": "The taxonomy json key contains all data necessary to generate a taxonomy or extension taxonomy. If only reports should be generated with no extension taxonomy, this key is omitted",
+            "oneOf": [
+                {
+                    "$ref": "https://xbrl-forge.org/schema/input/taxonomies/taxonomy"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        }, 
+        "reports": {
+            "type": "array",
+            "items": {
+                "$ref": "https://xbrl-forge.org/schema/input/reports/report"
+            },
+            "description": "The reports json key can contain one or more reports. If only a taxonomy gets generated, omit this key."
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://xbrl-forge.org/schema/input/taxonomies/entrypoint",
+    "title": "Taxonomy Entrypoint",
+    "description": "Taxonomy Entrypoint",
+    "type": "object",
+    "required": ["name", "description", "documents", "language"],
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name for the taxonomy entrypoint in the language"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description for the taxonomy entrypoint in the language"
+        },
+        "documents": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 0,
+            "description": "Entrypoints for the taxonomy - the schema from this taxonomy gets added by default. Additional entrypoints can be added. This may be necessary for used base taxonomies" 
+        },
+        "language": {
+            "type": "string",
+            "description": "The language of these entrypoint"
+        }
+    }
+}
